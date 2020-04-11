@@ -1,0 +1,50 @@
+<div class="modal" id="modalIngresar" data-backdrop="static" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Ingresar</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <!--<input type="hidden" name="id" id="id" formControlName="id">-->
+  
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input class="form-control" type="text" placeholder="Ingrese su email"
+              title="Solo se permiten letras, números, puntos (“.”), Guión bajo (“_”), Guion medio (“-”) y Arroba (“@”)"
+              required>
+              <!--<div *ngIf ="formRegistro.controls['email'].invalid &&
+                                      formRegistro.controls['email'].touched"
+                                      class="is-invalid">
+                                      El email es obligatorio.
+                          </div>-->
+            </div>
+  
+            <div class="form-group">
+              <label for="contraseña">Contraseña</label>
+              <input class="form-control" type="password" placeholder="Ingrese su contraseña" required>
+              <!--<div *ngIf ="formRegistro.controls['contraseña'].invalid &&
+                                      formRegistro.controls['contraseña'].touched"
+                                      class="is-invalid">
+                                      La contraseña es obligatoria.
+                          </div>-->
+            </div>
+
+            <br>
+                    <a class="btn btn-block btn-social btn-google buttons">
+                        <span class="fa fa-google"></span> Iniciar con Google
+                      </a>
+                    <br>
+  
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <button type="submit " class="btn btn-primary ">Iniciar sesión</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
