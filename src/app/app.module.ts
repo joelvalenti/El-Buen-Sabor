@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { ModalingresarComponent } from './components/modalingresar/modalingresar.component';
 import { Page404Component } from './components/page404/page404.component';
+import { PerfilusuarioComponent } from './components/perfilusuario/perfilusuario.component'
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { Page404Component } from './components/page404/page404.component';
     HomeComponent,
     ModalregistroComponent,
     ModalingresarComponent,
-    Page404Component
+    Page404Component,
+    PerfilusuarioComponent
   ],
   imports: [
     BrowserModule,
