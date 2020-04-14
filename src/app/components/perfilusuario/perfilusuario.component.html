@@ -1,10 +1,34 @@
-<div class="container mt-5 jumbotron" style="width: 60%;">
+<body>
+<!--Navbar-->
+<header>
+    <nav>
+        <div class="row nav">
+            <img class="logo" src="assets/images/logotipoimg.png" alt="logotipo">
+            <p id="logotipo"><a class="logotipo_fuente" href="#">El Buen Sabor</a></p>
+            <ul class="opciones" style="margin-left: 30%; margin-top: 3%;">
+                <li><a data-toggle="modal" data-target="#modalRegistro">Registro</a>
+                </li>
+                <li><a data-toggle="modal" data-target="#modalIngresar"> Ingresa </a></li>
+                <li><a href=""> Menú </a></li>
+            </ul>
+         </div>
+     </nav>
+</header>
+<div class="container jumbotron" style="width: 70%; margin-left: 15%; margin-bottom: 5%; margin-top: 5%; padding-left: 4%; padding-right: 4%; padding-top: 4%; padding-bottom: 4%;">
     <h4 style="text-align: left;">Perfil de usuario</h4>
     <h6>Aquí puede ver su información, y si desea, modificarla.</h6>
     <br>
     <form>
+        <div class="form-group" style="padding-right: 10%;">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Imagen de perfil</span>
+                </div>
+                <input type="File" class="form-control" placeholder="Seleccione su imagen" aria-label="Username"
+                    aria-describedby="basic-addon1">
+            </div>
+        </div>
         <div class="form-row">
-
             <div class="form-group">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
@@ -122,3 +146,27 @@
         <button type="submit" class="btn btn-primary">Guardar cambios</button>
     </form>
 </div>
+<!--Footer-->
+<footer>
+    <div class="row">
+        <div class="col span-1-of-2">
+            <ul class="footer-nav">
+                <li><a href="">Sobre Nosotros</a> </li>
+                <li><a href="">Privacidad</a> </li>
+                <li><a href="">Empleos</a> </li>
+            </ul>
+        </div>
+        <div class="col span-1-of-2">
+            <ul class="social-links">
+                <li><a href=""><i class="fa fa-facebook-square"></i></a></li>
+                <li><a href=""><i class="fa fa-twitter"></i></a></li>
+                <li><a href=""><i class="fa fa-instagram"></i></a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <p>Sitio Web creado por DAHF Group. Todos los derechos reservados 2018-2020</p>
+        <p>Astorga - Gutierrez - Rocha - Valenti</p>
+    </div>
+</footer>
+</body>
