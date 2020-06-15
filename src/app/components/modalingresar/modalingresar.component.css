@@ -1,0 +1,16 @@
+.google {
+  background-color: red;
+  color: white;
+  font-size: 20px;
+  margin-right: 5px;
+}
+
+.email {
+  background-color: blue;
+  color: white;
+  font-size: 20px;
+}
+
+.link {
+  color: blue;
+}

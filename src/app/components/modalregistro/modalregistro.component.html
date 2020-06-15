@@ -1,0 +1,72 @@
+<div class="modal" id="modalRegistro" data-backdrop="static" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Registro</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <!--<input type="hidden" name="id" id="id" formControlName="id">-->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nombre">Nombre</label>
+                            <input class="form-control" type="text" placeholder="Ingrese su nombre"
+                                title="Solo se permiten letras, letras con tildes y letras con diéresis." required>
+                            <!--<div *ngIf ="formRegistro.controls['nombre'].invalid &&
+                                    formRegistro.controls['nombre'].touched"
+                                    class="is-invalid">
+                                    El nombre es obligatorio.
+                        </div>-->
+                        </div>
+                        <div class="col">
+                            <label for="apellido">Apellido</label>
+                            <input class="form-control" type="text" placeholder="Ingrese su apellido"
+                                title="Solo se permiten letras, letras con tildes y letras con diéresis." required>
+                            <!--<div *ngIf ="formRegistro.controls['apellido'].invalid &&
+                                    formRegistro.controls['apellido'].touched"
+                                    class="is-invalid">
+                                    El apellido es obligatorio.
+                        </div>-->
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="telefono">Telefono</label>
+                            <input class="form-control" type="text" placeholder="Ingrese su telefono"
+                                title="Solo se permiten números" required>
+                            <!--<div *ngIf ="formRegistro.controls['telefono'].invalid &&
+                                            formRegistro.controls['telefono'].touched"
+                                            class="is-invalid">
+                                            El teléfono es obligatorio.
+                                            Solo se permiten números.
+                                </div>-->
+                        </div>
+                        <div class="col">
+                            <label for="fecha_nacimiento">Fecha de nacimiento</label>
+                            <input class="form-control" type="date" title="Ingrese su fecha de nacimiento." required>
+                            <!--<div *ngIf ="formRegistro.controls['telefono'].invalid &&
+                                              formRegistro.controls['telefono'].touched"
+                                              class="is-invalid">
+                                              El teléfono es obligatorio.
+                                              Solo se permiten números.
+                                  </div>-->
+                        </div>
+                    </div>
+                    <div class="modal-footer enLinea">
+                        <a class="btn btn-social btn-google google" (click)="login('google')">
+                            <span class="fa fa-google"> Registrarme con Google</span>
+                        </a>
+                        <a class="btn btn-social btn-microsoft email" (click)="login('')">
+                            <span class="fa fa-envelope"> Registrarme con Email</span>
+                        </a><br>
+                        <a class="link" data-dismiss="modal">¿Ya tienes cuenta? Ingresá</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

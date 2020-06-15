@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "elbuensabor-dahf": {
+      "hosting": {
+        "ElBuenSabor": [
+          "elbuensabor-dahf"
+        ]
+      }
+    }
+  }
+}

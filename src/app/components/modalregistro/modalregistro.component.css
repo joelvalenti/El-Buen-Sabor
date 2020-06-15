@@ -1,0 +1,20 @@
+.google {
+  background-color: red;
+  color: white;
+  font-size: 20px;
+}
+
+.email {
+  background-color: blue;
+  color: white;
+  font-size: 20px;
+}
+
+.enLinea {
+  text-align: center;
+  display: inline-block !important;
+}
+
+.link {
+  color: blue;
+}

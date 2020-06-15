@@ -1,0 +1,250 @@
+/* CONFIGURACIONES GLOBALES */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.nav {
+    padding-top: 3.5% !important;   
+}
+
+.divdireccion {
+    text-align: right !important;
+}
+
+.clearfix {
+  zoom: 1;
+}
+
+.clearfix:after {
+  content: '.';
+  clear: both;
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
+.row {
+  margin: 0 auto;
+}
+
+html {
+  font-family: 'Roboto', sans-serif;
+  background-color: #fff;
+  color: rgb(62, 62, 62);
+  font-weight: 300;
+  font-size: 20px;
+  text-rendering: optimizeLegibility;
+}
+
+section {
+  padding: 88px;
+}
+
+/* Headers */
+header {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.705), rgba(0, 0, 0, 0.705)), url("../images/background.png");
+  background-size: cover;
+  background-attachment: fixed;
+  height: 35vh;
+}
+
+.logo {
+  width: 6%;
+  float: left;
+  margin-top: 15px;
+  margin-left: 50px;
+}
+
+#logotipo {
+  margin-top: 15px;
+  font-size: 54px;
+}
+
+.logotipo_fuente {
+  color: #fff;
+  font-family: 'Pacifico', cursive;
+  text-decoration: none;
+}
+
+.opciones {
+  float: right;
+  list-style: none;
+  margin-top: 10px;
+  margin-right: 70px;
+}
+
+.opciones li {
+  display: inline-block;
+  margin-left: 40px;
+}
+
+.opciones li a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 90%;
+  letter-spacing: 1px;
+  word-spacing: 3px;
+  transition: all 0.1s;
+}
+
+.opciones li a:hover {
+  border-bottom: 2px solid rgb(255, 145, 0);
+}
+
+/* Seccion Principal*/
+.home {
+  background-color: orangered;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.705), rgba(0, 0, 0, 0.705)), url("../images/burrito.png");
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+}
+
+h1 {
+  font-size: 100%;
+  font-size: 50px;
+  word-spacing: 2px;
+  text-align: center;
+  margin-bottom: 30px;
+  letter-spacing: 1px;
+  font-weight: 300;
+}
+
+h1:after {
+  display: block;
+  height: 2px;
+  background-color: rgb(255, 145, 0);
+  content: "";
+  width: 100px;
+  margin: 0 auto;
+  margin-top: 30px;
+}
+
+.descripcion {
+  line-height: 145%;
+  width: 70%;
+  margin-left: 15%;
+  margin-bottom: 90px;
+}
+
+/* Form */
+.search-form {
+  width: 100%;
+  margin: 0 auto;
+
+}
+
+input[type=text] {
+  width: 100%;
+  padding: 7px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  float: left;
+}
+
+input[type=submit] {
+  background-color: rgb(255, 145, 0);
+  padding: 3px 25px;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 100px;
+  border: 2px solid rgb(255, 72, 0);
+  color: white;
+  /* margin-right: 5px; */
+  font-size: 18px;
+  transition: all 1s;
+}
+
+input[type=submit]:hover {
+  background-color: rgb(255, 72, 0);
+  border: 2px solid rgb(255, 255, 255);
+}
+
+label {
+  font-size: 25px;
+  margin-left: 10%;
+}
+
+*:focus {
+  outline: none;
+}
+
+.imagenPaso {
+  height: 40px;
+  margin-bottom: 5%;
+}
+
+.steps {
+  text-align: center;
+  margin-top: 3%;
+}
+
+.steps li {
+  display: inline-block;
+  margin-left: 40px;
+}
+
+/* Footer */
+footer {
+  background-color: rgb(31, 29, 29);
+  padding: 30px;
+  font-size: 80%;
+}
+
+.footer-nav {
+  list-style: none;
+  float: left;
+}
+
+.social-links {
+  list-style: none;
+  float: right;
+}
+
+.footer-nav li,
+.footer-nav li a,
+.social-links li,
+.social-links li a {
+  display: inline-block;
+  margin-right: 20px;
+  text-decoration: none;
+  border: 0;
+  color: #888;
+  -webkit-transition: color 0.2s;
+  transition: 0.2s;
+}
+
+.footer-nav li a:hover,
+.footer-nav li a:active {
+  color: #ddd;
+}
+
+.social-links li a:link,
+.social-links li a:visited {
+  font-size: 160%;
+}
+
+.fa-facebook-square {
+  -webkit-transition: color 0.2s;
+  transition: color 0.2s;
+}
+
+.fa-facebook-square:hover {
+  color: #3b5998;
+}
+
+.fa-twitter:hover {
+  color: #00aced;
+}
+
+.fa-instagram:hover {
+  color: #517fa4;
+}
+
+footer p {
+  color: #888;
+  text-align: center;
+  margin-top: 20px;
+}
