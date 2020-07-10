@@ -1,0 +1,13 @@
+<div class="body">
+    <H1>COCINA</H1>
+    <mat-tab-group>
+        <mat-tab label="Comandas">
+            <div class="row" *ngFor="let comanda of comandas">
+                <app-comanda [comanda]="comanda"></app-comanda>
+            </div>
+        </mat-tab>
+        <mat-tab label="Recetas">
+
+        </mat-tab>
+    </mat-tab-group>
+</div>
