@@ -2,8 +2,8 @@
     <H1>COCINA</H1>
     <mat-tab-group>
         <mat-tab label="Comandas">
-            <div class="row" *ngFor="let comanda of comandas">
-                <app-comanda [comanda]="comanda"></app-comanda>
+            <div class="row">
+                <app-comanda *ngFor="let comanda of comandas" [comanda]="comanda"></app-comanda>
             </div>
         </mat-tab>
         <mat-tab label="Recetas">

@@ -7,9 +7,15 @@ import { FacturaService } from '../../services/factura.service';
   styleUrls: ['./cocina.component.css'],
 })
 export class CocinaComponent implements OnInit {
+  comandas = [];
+  prueba = [{ id: 1 }, { id: 2 }, { id: 3 }];
   constructor(private facturaService: FacturaService) {}
-  public comandas = [];
   ngOnInit(): void {
-    console.log(this.facturaService.getAll());
+    // this.facturaService.getAll().subscribe((data) => {
+    //   this.comandas = data;
+    // });
+    this.prueba.forEach((data) => {
+      this.comandas.push(data);
+    });
   }
 }

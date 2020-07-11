@@ -1,6 +1,26 @@
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">Pedido {{comanda.id}}</h5>
-        <a href="#" class="btn btn-primary">Terminar</a>
+        <h3 class="card-title">Pedido {{comanda.id}}</h3>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Producto</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let producto of productos">
+                <tr>
+                    <td>
+                        {{producto.cantidad}}
+                    </td>
+                    <td>
+                        {{producto.nombre}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="alert alert-danger" role="alert">
+            {{tiempoRestante}} minutos
+        </div>
     </div>
 </div>
