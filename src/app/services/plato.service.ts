@@ -3,10 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class PedidoService {
-  url = 'http://localhost:9000/api/v1/pedido/';
+export class PlatoService {
+  url = 'http://localhost:9000/api/v1/plato/';
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<any[]> {

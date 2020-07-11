@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class PedidoService {
-  url = 'http://localhost:9000/api/v1/pedido/';
+export class DetalleService {
+  url = 'http://localhost:9000/api/v1/detalle/';
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<any[]> {

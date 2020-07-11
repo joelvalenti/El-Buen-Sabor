@@ -3,11 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class PedidoService {
-  url = 'http://localhost:9000/api/v1/pedido/';
-  constructor(private http: HttpClient) {}
+export class DetallePlatoService {
+  url = 'http://localhost:9000/api/v1/detalle/plato/';
+  constructor(private http: HttpClient) { }
 
   getAll(): Observable<any[]> {
     return this.http.get<any[]>(this.url);

@@ -6,14 +6,25 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class FacturaService {
-  _URL = 'http://localhost:9000/api/v1/factura/';
+  url = 'http://localhost:9000/api/v1/factura/';
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<any[]> {
-    return this.http.get<any[]>(this._URL);
+    return this.http.get<any[]>(this.url);
   }
 
   getOne(id: number): Observable<any> {
-    return this.http.get<any>(this._URL + id);
+    return this.http.get<any>(this.url + id);
+  }
+
+  post(instrumento: any): Observable<any> {
+    return this.http.post<any>(this.url, instrumento);
+  }
+
+  put(instrumento: any): Observable<any> {
+    return this.http.put<any>(this.url + instrumento.id, instrumento);
+  }
+  delete(id: number): Observable<any> {
+    return this.http.delete(this.url + id);
   }
 }

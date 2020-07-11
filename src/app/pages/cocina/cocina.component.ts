@@ -8,14 +8,10 @@ import { FacturaService } from '../../services/factura.service';
 })
 export class CocinaComponent implements OnInit {
   comandas = [];
-  prueba = [{ id: 1 }, { id: 2 }, { id: 3 }];
   constructor(private facturaService: FacturaService) {}
   ngOnInit(): void {
-    // this.facturaService.getAll().subscribe((data) => {
-    //   this.comandas = data;
-    // });
-    this.prueba.forEach((data) => {
-      this.comandas.push(data);
+    this.facturaService.getAll().subscribe((facturas) => {
+      this.comandas = facturas;
     });
   }
 }
