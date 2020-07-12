@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DetalleService } from '../../services/detalle.service';
-import { async } from '@angular/core/testing';
 import { PlatoService } from '../../services/plato.service';
 
 @Component({
@@ -18,23 +17,7 @@ export class ComandaComponent implements OnInit {
     private platoService: PlatoService
   ) {}
   ngOnInit(): void {
-    this.comanda.detalle.forEach((detalle) => {
-      console.log('detalle:', detalle);
-      this.detalleService.getOne(detalle.id).subscribe((detalleData) => {
-        console.log('detalleData:', detalleData);
-        if (detalleData.insumo.id !== 12) {
-          this.platoService.getOne(detalleData.plato.id).subscribe((plato) => {
-            console.log('plato:', plato);
-            this.productos.push({
-              id: plato.id,
-              nombre: plato.nombre,
-              cantidad: detalleData.cantidad,
-            });
-            this.calcularTiempoRestante(plato.tiempoPreparacion);
-          });
-        }
-      });
-    });
+    this.cargarTabla();
     this.disminuirTiempo();
   }
   calcularTiempoRestante(tiempo: number): void {
@@ -52,5 +35,48 @@ export class ComandaComponent implements OnInit {
   }
   cancelarInterval(interval: any): void {
     clearInterval(interval);
+  }
+  cargarTabla(): void {
+    setInterval(() => {
+      this.comanda.detalle.forEach((detalle) => {
+        // console.log('detalle:', detalle);
+        this.detalleService.getOne(detalle.id).subscribe((detalleData) => {
+          // console.log('detalleData:', detalleData);
+          if (detalleData.insumo.id !== 12) {
+            this.platoService
+              .getOne(detalleData.plato.id)
+              .subscribe((plato) => {
+                if (this.productos.length === 0) {
+                  this.productos.push({
+                    id: plato.id,
+                    nombre: plato.nombre,
+                    cantidad: detalleData.cantidad,
+                  });
+                  this.calcularTiempoRestante(plato.tiempoPreparacion);
+                } else {
+                  let a = false;
+                  for (let index = 0; index < this.productos.length; index++) {
+                    if (this.productos[index].id === plato.id) {
+                      a = false;
+                    } else {
+                      a = true;
+                      break;
+                    }
+                  }
+                  if (!a) {
+                    // console.log('plato:', plato);
+                    this.productos.push({
+                      id: plato.id,
+                      nombre: plato.nombre,
+                      cantidad: detalleData.cantidad,
+                    });
+                    this.calcularTiempoRestante(plato.tiempoPreparacion);
+                  }
+                }
+              });
+          }
+        });
+      });
+    }, 5000);
   }
 }
