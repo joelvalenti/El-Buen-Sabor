@@ -2,12 +2,21 @@
     <h1>COCINA</h1>
     <mat-tab-group>
         <mat-tab label="Comandas">
-            <div class="row">
-                <app-comanda *ngFor="let comanda of comandas" [comanda]="comanda"></app-comanda>
+            <div>
+                <div *ngIf="this.comandas.length == 0">
+                    <i class="fas fa-sync-alt fa-spin fa-5x m-5"></i>
+                    <h2>Cargando Pedidos</h2>
+                </div>
+                <div class="row">
+                    <app-comanda *ngFor="let comanda of comandas" [comanda]="comanda"></app-comanda>
+                </div>
             </div>
         </mat-tab>
         <mat-tab label="Recetas">
-
+            <div *ngIf="this.recetas.length == 0">
+                <i class="fas fa-sync-alt fa-spin fa-5x m-5"></i>
+                <h2>Cargando Recetas</h2>
+            </div>
         </mat-tab>
     </mat-tab-group>
 </div>

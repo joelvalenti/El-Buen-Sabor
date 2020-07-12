@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FacturaService } from '../../services/factura.service';
+import { PedidoService } from '../../services/pedido.service';
 
 @Component({
   selector: 'app-cocina',
@@ -8,10 +8,42 @@ import { FacturaService } from '../../services/factura.service';
 })
 export class CocinaComponent implements OnInit {
   comandas = [];
-  constructor(private facturaService: FacturaService) {}
+  recetas = [];
+
+  constructor(private pedidoService: PedidoService) {}
+
   ngOnInit(): void {
-    this.facturaService.getAll().subscribe((facturas) => {
-      this.comandas = facturas;
-    });
+    setInterval(() => {
+      this.pedidoService.getAll().subscribe((pedidos) => {
+        pedidos.forEach((pedido) => {
+          this.pedidoService.getOne(pedido.id).subscribe((pedidoUnit) => {
+            if (pedidoUnit.estado.nombre === 'En Preparacion') {
+              if (this.comandas.length === 0) {
+                this.comandas.push(pedidoUnit);
+              } else {
+                let bol = false;
+                for (const com of this.comandas) {
+                  if (com.id === pedidoUnit.id) {
+                    bol = true;
+                    break;
+                  }
+                }
+                if (!bol) {
+                  this.comandas.push(pedidoUnit);
+                }
+              }
+            }
+            if (pedidoUnit.estado.nombre === 'Terminado') {
+              for (let index = 0; index < this.comandas.length; index++) {
+                if (this.comandas[index].id === pedidoUnit.id) {
+                  this.comandas.splice(index, 1);
+                  break;
+                }
+              }
+            }
+          });
+        });
+      });
+    }, 5000);
   }
 }

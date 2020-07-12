@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DetalleService } from '../../services/detalle.service';
 import { PlatoService } from '../../services/plato.service';
+import { PedidoService } from '../../services/pedido.service';
 
 @Component({
   selector: 'app-comanda',
@@ -11,72 +12,53 @@ export class ComandaComponent implements OnInit {
   @Input() comanda;
   productos = [];
   tiempoRestante = 0;
+  cantidad = 0;
+  idDetalle = 0;
 
   constructor(
     private detalleService: DetalleService,
-    private platoService: PlatoService
+    private platoService: PlatoService,
+    private pedidoService: PedidoService
   ) {}
+
   ngOnInit(): void {
     this.cargarTabla();
     this.disminuirTiempo();
   }
+
   calcularTiempoRestante(tiempo: number): void {
     if (this.tiempoRestante < tiempo) {
       this.tiempoRestante = tiempo;
     }
   }
+
   disminuirTiempo(): void {
     const interval = setInterval(() => {
       this.tiempoRestante -= 1;
       if (this.tiempoRestante === 0) {
+        this.pedidoService.updateEstado(1, this.comanda).subscribe();
         this.cancelarInterval(interval);
       }
     }, 60000);
   }
+
   cancelarInterval(interval: any): void {
     clearInterval(interval);
   }
+
   cargarTabla(): void {
-    setInterval(() => {
-      this.comanda.detalle.forEach((detalle) => {
-        // console.log('detalle:', detalle);
-        this.detalleService.getOne(detalle.id).subscribe((detalleData) => {
-          // console.log('detalleData:', detalleData);
-          if (detalleData.insumo.id !== 12) {
-            this.platoService
-              .getOne(detalleData.plato.id)
-              .subscribe((plato) => {
-                if (this.productos.length === 0) {
-                  this.productos.push({
-                    id: plato.id,
-                    nombre: plato.nombre,
-                    cantidad: detalleData.cantidad,
-                  });
-                  this.calcularTiempoRestante(plato.tiempoPreparacion);
-                } else {
-                  let a = false;
-                  for (let index = 0; index < this.productos.length; index++) {
-                    if (this.productos[index].id === plato.id) {
-                      a = false;
-                    } else {
-                      a = true;
-                      break;
-                    }
-                  }
-                  if (!a) {
-                    // console.log('plato:', plato);
-                    this.productos.push({
-                      id: plato.id,
-                      nombre: plato.nombre,
-                      cantidad: detalleData.cantidad,
-                    });
-                    this.calcularTiempoRestante(plato.tiempoPreparacion);
-                  }
-                }
-              });
-          }
-        });
+    this.comanda.detalle.forEach((detalle) => {
+      this.detalleService.getOne(detalle.id).subscribe((detalleData) => {
+        if (detalleData.insumo.nombre === 'Insumo Vacio') {
+          this.platoService.getOne(detalleData.plato.id).subscribe((plato) => {
+            if (plato.nombre !== 'Plato Vacio') {
+              this.productos.push(plato);
+              this.cantidad = detalleData.cantidad;
+              this.calcularTiempoRestante(plato.tiempoPreparacion);
+            }
+          });
+        }
       });
-    }, 5000);
+    });
   }
 }
