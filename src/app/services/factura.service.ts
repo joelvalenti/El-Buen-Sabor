@@ -17,12 +17,12 @@ export class FacturaService {
     return this.http.get<any>(this.url + id);
   }
 
-  post(instrumento: any): Observable<any> {
-    return this.http.post<any>(this.url, instrumento);
+  post(factura: any): Observable<any> {
+    return this.http.post<any>(this.url, factura);
   }
 
-  put(instrumento: any): Observable<any> {
-    return this.http.put<any>(this.url + instrumento.id, instrumento);
+  put(factura: any): Observable<any> {
+    return this.http.put<any>(this.url + factura.id, factura);
   }
   delete(id: number): Observable<any> {
     return this.http.delete(this.url + id);

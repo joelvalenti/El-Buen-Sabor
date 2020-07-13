@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UsuarioService {
   url = 'http://localhost:9000/api/v1/usuario/';
@@ -17,12 +17,12 @@ export class UsuarioService {
     return this.http.get<any>(this.url + id);
   }
 
-  post(instrumento: any): Observable<any> {
-    return this.http.post<any>(this.url, instrumento);
+  post(usuario: any): Observable<any> {
+    return this.http.post<any>(this.url, usuario);
   }
 
-  put(instrumento: any): Observable<any> {
-    return this.http.put<any>(this.url + instrumento.id, instrumento);
+  put(usuario: any): Observable<any> {
+    return this.http.put<any>(this.url + usuario.id, usuario);
   }
   delete(id: number): Observable<any> {
     return this.http.delete(this.url + id);

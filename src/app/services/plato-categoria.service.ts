@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PlatoCategoriaService {
   url = 'http://localhost:9000/api/v1/plato/categoria/';
@@ -17,12 +17,12 @@ export class PlatoCategoriaService {
     return this.http.get<any>(this.url + id);
   }
 
-  post(instrumento: any): Observable<any> {
-    return this.http.post<any>(this.url, instrumento);
+  post(platoCategoria: any): Observable<any> {
+    return this.http.post<any>(this.url, platoCategoria);
   }
 
-  put(instrumento: any): Observable<any> {
-    return this.http.put<any>(this.url + instrumento.id, instrumento);
+  put(platoCategoria: any): Observable<any> {
+    return this.http.put<any>(this.url + platoCategoria.id, platoCategoria);
   }
   delete(id: number): Observable<any> {
     return this.http.delete(this.url + id);
