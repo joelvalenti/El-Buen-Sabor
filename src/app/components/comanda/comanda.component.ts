@@ -6,13 +6,12 @@ import { PedidoService } from '../../services/pedido.service';
 @Component({
   selector: 'app-comanda',
   templateUrl: './comanda.component.html',
-  styleUrls: ['./comanda.component.css'],
 })
 export class ComandaComponent implements OnInit {
   @Input() comanda;
   productos = [];
   tiempoRestante = 0;
-  cantidad = 0;
+  cantidad = [];
   idDetalle = 0;
 
   constructor(
@@ -49,15 +48,13 @@ export class ComandaComponent implements OnInit {
   cargarTabla(): void {
     this.comanda.detalle.forEach((detalle) => {
       this.detalleService.getOne(detalle.id).subscribe((detalleData) => {
-        if (detalleData.insumo.nombre === 'Insumo Vacio') {
-          this.platoService.getOne(detalleData.plato.id).subscribe((plato) => {
-            if (plato.nombre !== 'Plato Vacio') {
-              this.productos.push(plato);
-              this.cantidad = detalleData.cantidad;
-              this.calcularTiempoRestante(plato.tiempoPreparacion);
-            }
-          });
-        }
+        this.platoService.getOne(detalleData.plato.id).subscribe((plato) => {
+          if (plato.nombre !== 'Plato Vacio') {
+            this.productos.push(plato);
+            this.cantidad.push(detalleData.cantidad);
+            this.calcularTiempoRestante(plato.tiempoPreparacion);
+          }
+        });
       });
     });
   }

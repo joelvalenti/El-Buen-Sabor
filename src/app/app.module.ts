@@ -7,16 +7,24 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 // Material
 import { MaterialModule } from './material.module';
 // Paginas
 import { CocinaComponent } from './pages/cocina/cocina.component';
 // Componentes
 import { ComandaComponent } from './components/comanda/comanda.component';
+// Pipes
+import { FilterBuscarRecetaPipe } from './pipes/filter-buscar-receta.pipe';
 
 @NgModule({
   entryComponents: [],
-  declarations: [AppComponent, CocinaComponent, ComandaComponent],
+  declarations: [
+    AppComponent,
+    CocinaComponent,
+    ComandaComponent,
+    FilterBuscarRecetaPipe,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -24,6 +32,7 @@ import { ComandaComponent } from './components/comanda/comanda.component';
     NgxPaginationModule,
     BrowserAnimationsModule,
     MaterialModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
