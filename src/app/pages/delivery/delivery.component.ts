@@ -29,6 +29,7 @@ export class DeliveryComponent implements OnInit {
   }
   aceptarPedido(index: number): void {
     const pedido = this.pedidos[index];
+    this.pedidoService.updateEstado(4, pedido).subscribe();
     this.pedidosAceptados.push(pedido);
     this.pedidos.splice(index, 1);
   }
@@ -40,7 +41,7 @@ export class DeliveryComponent implements OnInit {
   cargarPedidos(): void {
     this.pedidoService.getAll().subscribe((pedidos) => {
       pedidos.forEach((pedidoU) => {
-        if (pedidoU.envioDelivery) {
+        if (pedidoU.envioDelivery && pedidoU.estado.nombre === 'Terminado') {
           if (pedidos.length === 0) {
             this.pedidosUnit(pedidoU);
           } else {
