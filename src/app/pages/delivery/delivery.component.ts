@@ -41,27 +41,31 @@ export class DeliveryComponent implements OnInit {
   cargarPedidos(): void {
     this.pedidoService.getAll().subscribe((pedidos) => {
       pedidos.forEach((pedidoU) => {
-        if (pedidoU.envioDelivery && pedidoU.estado.nombre === 'Terminado') {
-          if (pedidos.length === 0) {
-            this.pedidosUnit(pedidoU);
-          } else {
-            let bool = true;
-            for (const pedidoUnitario of this.pedidos) {
-              if (pedidoUnitario.id === pedidoU.id) {
-                bool = false;
-                break;
+        if (pedidoU.envioDelivery) {
+          this.pedidoService.getOne(pedidoU.id).subscribe((pedi) => {
+            if (pedi.estado.nombre === 'Terminado') {
+              if (pedidos.length === 0) {
+                this.pedidosUnit(pedi);
+              } else {
+                let bool = true;
+                for (const pedidoUnitario of this.pedidos) {
+                  if (pedidoUnitario.id === pedi.id) {
+                    bool = false;
+                    break;
+                  }
+                }
+                for (const pedidoUnitario of this.pedidosAceptados) {
+                  if (pedidoUnitario.id === pedi.id) {
+                    bool = false;
+                    break;
+                  }
+                }
+                if (bool) {
+                  this.pedidosUnit(pedi);
+                }
               }
             }
-            for (const pedidoUnitario of this.pedidosAceptados) {
-              if (pedidoUnitario.id === pedidoU.id) {
-                bool = false;
-                break;
-              }
-            }
-            if (bool) {
-              this.pedidosUnit(pedidoU);
-            }
-          }
+          });
         }
       });
     });
