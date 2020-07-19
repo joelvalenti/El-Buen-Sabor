@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalidadService } from '../../services/localidad.service';
 import { PedidoService } from '../../services/pedido.service';
+import { FacturaService } from '../../services/factura.service';
 
 @Component({
   selector: 'app-delivery',
@@ -11,10 +12,13 @@ export class DeliveryComponent implements OnInit {
   filterB = '';
   localidades = [];
   pedidosAceptados = [];
+  tipoPago = [];
+  total = [];
 
   constructor(
     private localidadService: LocalidadService,
-    private pedidoService: PedidoService
+    private pedidoService: PedidoService,
+    private facturaService: FacturaService
   ) {}
 
   ngOnInit(): void {
@@ -39,7 +43,7 @@ export class DeliveryComponent implements OnInit {
     });
   }
   cargarPedidos(): void {
-    this.pedidoService.getAll().subscribe((pedidos) => {
+    this.pedidoService.getPedidos().subscribe((pedidos) => {
       pedidos.forEach((pedidoU) => {
         if (pedidoU.envioDelivery) {
           this.pedidoService.getOne(pedidoU.id).subscribe((pedi) => {
@@ -65,14 +69,26 @@ export class DeliveryComponent implements OnInit {
                 }
               }
             }
+            if (pedi.estado.nombre === 'Entregado') {
+              const indes = this.pedidosAceptados.indexOf(pedi);
+              if (indes) {
+                this.pedidosAceptados.splice(indes, 1);
+              }
+            }
           });
         }
       });
     });
   }
   pedidosUnit(pedidoU: any): void {
-    this.pedidoService.getOne(pedidoU.id).subscribe((ped) => {
-      this.pedidos.push(ped);
+    this.facturaService.getAll().subscribe((facturas) => {
+      facturas.forEach((factura) => {
+        if (factura.pedido.id === pedidoU.id) {
+          this.total.push(factura.total);
+          this.tipoPago.push(factura.tipoPago);
+          this.pedidos.push(pedidoU);
+        }
+      });
     });
   }
 }

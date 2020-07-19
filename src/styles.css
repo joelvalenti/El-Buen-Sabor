@@ -11,3 +11,6 @@ body {
 .background {
   background-color: cyan;
 }
+.centrar {
+  text-align: center !important;
+}

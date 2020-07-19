@@ -17,6 +17,7 @@ import { DeliveryComponent } from './pages/delivery/delivery.component';
 import { ComandaComponent } from './components/comanda/comanda.component';
 // Pipes
 import { FilterBuscarRecetaPipe } from './pipes/filter-buscar-receta.pipe';
+import { FilterBuscarLocalidadPipe } from './pipes/filter-buscar-localidad.pipe';
 
 @NgModule({
   entryComponents: [],
@@ -25,6 +26,7 @@ import { FilterBuscarRecetaPipe } from './pipes/filter-buscar-receta.pipe';
     CocinaComponent,
     ComandaComponent,
     FilterBuscarRecetaPipe,
+    FilterBuscarLocalidadPipe,
     DeliveryComponent,
   ],
   imports: [

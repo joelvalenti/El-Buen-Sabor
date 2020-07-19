@@ -9,7 +9,9 @@ import { PedidoService } from '../../services/pedido.service';
 })
 export class ComandaComponent implements OnInit {
   @Input() comanda;
-  @Input() delivery: boolean;
+  @Input() delivery;
+  @Input() tipoPago;
+  @Input() total;
   productos = [];
   tiempoRestante = 0;
   cantidad = [];
@@ -48,19 +50,25 @@ export class ComandaComponent implements OnInit {
     clearInterval(interval);
   }
   cargarTabla(tiempo: boolean): void {
-    this.comanda.detalle.forEach((detalle) => {
-      this.detalleService.getOne(detalle.id).subscribe((detalleData) => {
-        this.platoService.getOne(detalleData.plato.id).subscribe((plato) => {
-          if (plato.nombre !== 'Plato Vacio') {
-            this.productos.push(plato);
-            this.cantidad.push(detalleData.cantidad);
-            if (tiempo) {
-              this.calcularTiempoRestante(plato.tiempoPreparacion);
-            }
-          }
+    this.detalleService
+      .buscarPorPedido(this.comanda.id)
+      .subscribe((detalles) => {
+        detalles.forEach((detalle) => {
+          this.detalleService.getOne(detalle.id).subscribe((detalleData) => {
+            this.platoService
+              .getOne(detalleData.plato.id)
+              .subscribe((plato) => {
+                if (plato.nombre !== 'Plato Vacio') {
+                  this.productos.push(plato);
+                  this.cantidad.push(detalleData.cantidad);
+                  if (tiempo) {
+                    this.calcularTiempoRestante(plato.tiempoPreparacion);
+                  }
+                }
+              });
+          });
         });
       });
-    });
   }
   pedidoEntregado(): void {
     this.pedidoService.updateEstado(6, this.comanda).subscribe();

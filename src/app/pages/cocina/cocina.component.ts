@@ -34,7 +34,7 @@ export class CocinaComponent implements OnInit {
     this.modalDetalle = detalle;
   }
   cargarComandas(): void {
-    this.pedidoService.getAll().subscribe((pedidos) => {
+    this.pedidoService.getPedidos().subscribe((pedidos) => {
       pedidos.forEach((pedido) => {
         this.pedidoService.getOne(pedido.id).subscribe((pedidoUnit) => {
           if (pedidoUnit.estado.nombre === 'En Preparacion') {
@@ -86,27 +86,29 @@ export class CocinaComponent implements OnInit {
   }
   cargarRecetas(): void {
     this.comandas.forEach((com) => {
-      com.detalle.forEach((element) => {
-        this.detalleService.getOne(element.id).subscribe((detal) => {
-          // if (detal.insumo.esInsumo) {
-          //   this.insumoService.getOne(detal.insumo.id).subscribe((ins) => {
-          //     this.recetas.push(ins);
-          //   });
-          // }
-          let bolean = false;
-          for (const res of this.recetas) {
-            if (res.nombre === detal.plato.nombre) {
-              bolean = true;
-              break;
-            }
-          }
-          if (!bolean) {
-            if (detal.plato.nombre !== 'Plato Vacio') {
-              this.platoService.getOne(detal.plato.id).subscribe((plat) => {
-                this.recetas.push(plat);
+      this.detalleService.buscarPorPedido(com.id).subscribe((cop) => {
+        cop.forEach((element) => {
+          this.detalleService.getOne(element.id).subscribe((detal) => {
+            if (detal.insumo.esInsumo) {
+              this.insumoService.getOne(detal.insumo.id).subscribe((ins) => {
+                this.recetas.push(ins);
               });
             }
-          }
+            let bolean = false;
+            for (const res of this.recetas) {
+              if (res.nombre === detal.plato.nombre) {
+                bolean = true;
+                break;
+              }
+            }
+            if (!bolean) {
+              if (detal.plato.nombre !== 'Plato Vacio') {
+                this.platoService.getOne(detal.plato.id).subscribe((plat) => {
+                  this.recetas.push(plat);
+                });
+              }
+            }
+          });
         });
       });
     });
