@@ -35,4 +35,8 @@ export class PedidoService {
       pedido
     );
   }
+
+  getPedidos(): Observable<any[]> {
+    return this.http.get<any[]>(this.url + 'getPedidos');
+  }
 }

@@ -12,10 +12,12 @@ import { FormsModule } from '@angular/forms';
 import { MaterialModule } from './material.module';
 // Paginas
 import { CocinaComponent } from './pages/cocina/cocina.component';
+import { DeliveryComponent } from './pages/delivery/delivery.component';
 // Componentes
 import { ComandaComponent } from './components/comanda/comanda.component';
 // Pipes
 import { FilterBuscarRecetaPipe } from './pipes/filter-buscar-receta.pipe';
+import { FilterBuscarLocalidadPipe } from './pipes/filter-buscar-localidad.pipe';
 
 @NgModule({
   entryComponents: [],
@@ -24,6 +26,8 @@ import { FilterBuscarRecetaPipe } from './pipes/filter-buscar-receta.pipe';
     CocinaComponent,
     ComandaComponent,
     FilterBuscarRecetaPipe,
+    FilterBuscarLocalidadPipe,
+    DeliveryComponent,
   ],
   imports: [
     BrowserModule,

@@ -9,6 +9,9 @@ import { PedidoService } from '../../services/pedido.service';
 })
 export class ComandaComponent implements OnInit {
   @Input() comanda;
+  @Input() delivery;
+  @Input() tipoPago;
+  @Input() total;
   productos = [];
   tiempoRestante = 0;
   cantidad = [];
@@ -21,8 +24,12 @@ export class ComandaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.cargarTabla();
-    this.disminuirTiempo();
+    if (this.delivery) {
+      this.cargarTabla(false);
+    } else {
+      this.cargarTabla(true);
+      this.disminuirTiempo();
+    }
   }
 
   calcularTiempoRestante(tiempo: number): void {
@@ -30,7 +37,6 @@ export class ComandaComponent implements OnInit {
       this.tiempoRestante = tiempo;
     }
   }
-
   disminuirTiempo(): void {
     const interval = setInterval(() => {
       this.tiempoRestante -= 1;
@@ -40,22 +46,31 @@ export class ComandaComponent implements OnInit {
       }
     }, 60000);
   }
-
   cancelarInterval(interval: any): void {
     clearInterval(interval);
   }
-
-  cargarTabla(): void {
-    this.comanda.detalle.forEach((detalle) => {
-      this.detalleService.getOne(detalle.id).subscribe((detalleData) => {
-        this.platoService.getOne(detalleData.plato.id).subscribe((plato) => {
-          if (plato.nombre !== 'Plato Vacio') {
-            this.productos.push(plato);
-            this.cantidad.push(detalleData.cantidad);
-            this.calcularTiempoRestante(plato.tiempoPreparacion);
-          }
+  cargarTabla(tiempo: boolean): void {
+    this.detalleService
+      .buscarPorPedido(this.comanda.id)
+      .subscribe((detalles) => {
+        detalles.forEach((detalle) => {
+          this.detalleService.getOne(detalle.id).subscribe((detalleData) => {
+            this.platoService
+              .getOne(detalleData.plato.id)
+              .subscribe((plato) => {
+                if (plato.nombre !== 'Plato Vacio') {
+                  this.productos.push(plato);
+                  this.cantidad.push(detalleData.cantidad);
+                  if (tiempo) {
+                    this.calcularTiempoRestante(plato.tiempoPreparacion);
+                  }
+                }
+              });
+          });
         });
       });
-    });
+  }
+  pedidoEntregado(): void {
+    this.pedidoService.updateEstado(6, this.comanda).subscribe();
   }
 }

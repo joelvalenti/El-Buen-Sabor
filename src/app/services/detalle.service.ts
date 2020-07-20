@@ -24,7 +24,12 @@ export class DetalleService {
   put(detalle: any): Observable<any> {
     return this.http.put<any>(this.url + detalle.id, detalle);
   }
+
   delete(id: number): Observable<any> {
     return this.http.delete(this.url + id);
+  }
+
+  buscarPorPedido(id: number): Observable<any[]> {
+    return this.http.get<any[]>(this.url + 'query/' + id);
   }
 }
