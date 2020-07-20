@@ -13,6 +13,7 @@ import { MaterialModule } from './material.module';
 // Paginas
 import { CocinaComponent } from './pages/cocina/cocina.component';
 import { DeliveryComponent } from './pages/delivery/delivery.component';
+import { CajeroComponent } from './pages/cajero/cajero.component';
 // Componentes
 import { ComandaComponent } from './components/comanda/comanda.component';
 // Pipes
@@ -25,9 +26,10 @@ import { FilterBuscarLocalidadPipe } from './pipes/filter-buscar-localidad.pipe'
     AppComponent,
     CocinaComponent,
     ComandaComponent,
+    DeliveryComponent,
+    CajeroComponent,
     FilterBuscarRecetaPipe,
     FilterBuscarLocalidadPipe,
-    DeliveryComponent,
   ],
   imports: [
     BrowserModule,
