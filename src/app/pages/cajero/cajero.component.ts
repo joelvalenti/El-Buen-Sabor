@@ -13,6 +13,7 @@ import { PlatoService } from '../../services/plato.service';
 })
 export class CajeroComponent implements OnInit {
   facturas = [];
+  facturasConfirmar = [];
   detalles = [];
   constructor(
     private pedidoService: PedidoService,
@@ -37,14 +38,27 @@ export class CajeroComponent implements OnInit {
         } else {
           let bol = false;
           let idx: number;
+          let bool: boolean;
           for (let indx = 0; indx < this.facturas.length; indx++) {
             if (this.facturas[indx].id === fact.id) {
               bol = true;
               idx = indx;
+              bool = true;
               break;
             }
           }
-          if (bol && this.facturas.length > 0) {
+          for (let indx = 0; indx < this.facturasConfirmar.length; indx++) {
+            if (this.facturasConfirmar[indx].id === fact.id) {
+              bol = true;
+              idx = indx;
+              bool = false;
+              break;
+            }
+          }
+          if (bol && this.facturas.length > 0 && bool) {
+            this.cargarUnPedido(fact.id, true, idx);
+          }
+          if (bol && this.facturasConfirmar.length > 0 && !bool) {
             this.cargarUnPedido(fact.id, true, idx);
           }
           if (!bol) {
@@ -57,18 +71,27 @@ export class CajeroComponent implements OnInit {
   cargarUnPedido(id: number, bool: boolean, idx: number): void {
     this.facturaService.getOne(id).subscribe((ped) => {
       this.pedidoService.getOne(ped.pedido.id).subscribe((cop) => {
-        if (
-          cop.estado.nombre !== 'Cancelado' &&
-          cop.estado.nombre !== 'En Aprobacion'
-        ) {
-          ped.pedido = cop;
-          this.usuarioService.getOne(ped.id).subscribe((us) => {
-            ped.usuario = us;
-          });
-          if (bool) {
-            this.facturas.splice(idx, 1, ped);
+        if (cop.estado.nombre !== 'Cancelado') {
+          if (cop.estado.nombre !== 'En Aprobacion') {
+            ped.pedido = cop;
+            this.usuarioService.getOne(ped.id).subscribe((us) => {
+              ped.usuario = us;
+            });
+            if (bool) {
+              this.facturas.splice(idx, 1, ped);
+            } else {
+              this.facturas.push(ped);
+            }
           } else {
-            this.facturas.push(ped);
+            ped.pedido = cop;
+            this.usuarioService.getOne(ped.id).subscribe((us) => {
+              ped.usuario = us;
+            });
+            if (bool) {
+              this.facturasConfirmar.splice(idx, 1, ped);
+            } else {
+              this.facturasConfirmar.push(ped);
+            }
           }
         }
       });
@@ -92,5 +115,22 @@ export class CajeroComponent implements OnInit {
   }
   limpiarDatos(): void {
     this.detalles = [];
+  }
+  cancelarPedido(idx: number): void {
+    this.facturasConfirmar[idx].pedido.estado.id = 3;
+    this.facturasConfirmar[idx].pedido.estado.nombre = 'Cancelado';
+    this.pedidoService
+      .updateEstado(3, this.facturasConfirmar[idx].pedido)
+      .subscribe();
+    this.facturasConfirmar.splice(idx, 1);
+  }
+  aceptarPedido(idx: number): void {
+    this.facturasConfirmar[idx].pedido.estado.id = 2;
+    this.facturasConfirmar[idx].pedido.estado.nombre = 'En Preparacion';
+    this.pedidoService
+      .updateEstado(2, this.facturasConfirmar[idx].pedido)
+      .subscribe();
+    this.facturas.push(this.facturasConfirmar[idx]);
+    this.facturasConfirmar.splice(idx, 1);
   }
 }
