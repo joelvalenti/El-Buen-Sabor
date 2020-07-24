@@ -1,0 +1,57 @@
+<div class="raiz">
+    <div class="nulo" *ngIf="vcategoria === null">
+        <h1 class="titulo">¿QUE QUERES COMER HOY?</h1>
+        <div class="container">
+            <div class="row" >
+                <div class="col-4" *ngFor="let categoria of categorias">
+                    <a (click)="elegirCategoria(categoria.nombre)"><img class="imagencategoria" src="../burrito.png" alt="categoria"></a>
+                    <h2>{{categoria.nombre}}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="seleccion" *ngIf="vcategoria != null">
+        <div class="dou">
+            <div class="row">
+                <div class="col-3" >
+                    <div class="columnauno">
+                        <button type="button" class="btn btn-primary" (click)="volverANulo()"><h4>< Volver</h4></button>
+                        <h1 class="titulocategoria">Categorias</h1>
+                        <hr>
+                        <h3 *ngFor="let categoria of categorias"> 
+                            <a (click)="elegirCategoria(categoria.nombre)">
+                                {{categoria.nombre}}
+                            </a>    
+                        </h3>
+                    </div>
+                </div>
+                <div class="col-6" >
+                    <div class="plato">
+                        <div class="card" *ngFor="let plato of platos">
+                            <div class="card-body">
+                                <img class="imagenplato" src="../burrito.png" alt="plato"/>
+                              <h4 class="card-title">{{plato.nombre}}</h4>
+                              <p class="card-text">${{plato.precioVenta}}</p>
+                              <div class="botones">
+                                <a id="detalleboton" class="btn btn-primary" data-toggle="modal" data-target="#modalDetalle" (click)="verDetalle(plato)">Detalles</a>
+                                <a class="btn btn-primary" (click)="agregarAlPedido(plato)">Añadir</a>
+                              </div>
+                            </div>
+                          </div>    
+                    </div>
+                </div>
+                <div class="col-3">
+                    <h1>Carrito</h1>
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                          <h5 *ngFor="let plato of platosCarrito" class="card-title">{{plato.nombre}} ${{plato.precioVenta}}  <a (click)="eliminarItem(plato)">X</a></h5>
+                          <h5 class="totalpedido">Total: ${{total}}</h5>
+                          <a (click)="enviarPedido()" class="btn btn-primary">Continuar</a>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-detalle-plato [platoDetalle]="platoDetalle"></app-detalle-plato>

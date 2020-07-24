@@ -13,11 +13,25 @@ import { MaterialModule } from './material.module';
 // Paginas
 import { CocinaComponent } from './pages/cocina/cocina.component';
 import { DeliveryComponent } from './pages/delivery/delivery.component';
+import { CatalogoComponent } from './pages/catalogo/catalogo.component';
+import { HomeComponent } from './pages/home/home.component';
+import { NavbarComponent } from './pages/navbar/navbar.component';
+
 // Componentes
 import { ComandaComponent } from './components/comanda/comanda.component';
+import { DetallePlatoComponent } from './components/detalle-plato/detalle-plato.component';
+import { ModalloginComponent } from './components/modallogin/modallogin.component';
+import { ModalregistroComponent } from './components/modalregistro/modalregistro.component';
 // Pipes
 import { FilterBuscarRecetaPipe } from './pipes/filter-buscar-receta.pipe';
 import { FilterBuscarLocalidadPipe } from './pipes/filter-buscar-localidad.pipe';
+//Firebase
+import { environment } from '../environments/environment';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @NgModule({
   entryComponents: [],
@@ -28,6 +42,12 @@ import { FilterBuscarLocalidadPipe } from './pipes/filter-buscar-localidad.pipe'
     FilterBuscarRecetaPipe,
     FilterBuscarLocalidadPipe,
     DeliveryComponent,
+    CatalogoComponent,
+    HomeComponent,
+    NavbarComponent,
+    DetallePlatoComponent,
+    ModalloginComponent,
+    ModalregistroComponent
   ],
   imports: [
     BrowserModule,
@@ -37,8 +57,11 @@ import { FilterBuscarLocalidadPipe } from './pipes/filter-buscar-localidad.pipe'
     BrowserAnimationsModule,
     MaterialModule,
     FormsModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+		AngularFireDatabaseModule,
+		AngularFireStorageModule
   ],
-  providers: [],
+  providers: [AngularFireAuth, AngularFirestore],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

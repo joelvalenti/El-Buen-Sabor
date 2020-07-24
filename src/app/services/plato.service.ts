@@ -1,30 +1,38 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Plato } from '../modelo/plato';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class PlatoService {
-  url = 'http://localhost:9000/api/v1/plato/';
-  constructor(private http: HttpClient) {}
 
-  getAll(): Observable<any[]> {
-    return this.http.get<any[]>(this.url);
+  constructor(private http:HttpClient) { }
+
+  _miUrl : string = 'http://localhost:9000/api/v1/plato/';
+
+  getAll():Observable<Plato[]>{
+    return this.http.get<Plato[]>(this._miUrl);
   }
 
-  getOne(id: number): Observable<any> {
-    return this.http.get<any>(this.url + id);
+  getByCategory(categoria:string):Observable<Plato[]>{
+    return this.http.get<Plato[]>(this._miUrl+'searchByCategory/' + categoria);
   }
 
-  post(plato: any): Observable<any> {
-    return this.http.post<any>(this.url, plato);
+  getOne(id:number):Observable<Plato>{
+    return this.http.get<Plato>(this._miUrl + id);
   }
 
-  put(plato: any): Observable<any> {
-    return this.http.put<any>(this.url + plato.id, plato);
+  post(platoNuevo : Plato):Observable<Plato>{
+    return this.http.post(this._miUrl, platoNuevo);
   }
-  delete(id: number): Observable<any> {
-    return this.http.delete(this.url + id);
+
+  put(id:number, platoNuevo : Plato):Observable<Plato>{
+    return this.http.put(this._miUrl + id, platoNuevo);
+  }
+
+  delete(id:number):Observable<any>{
+    return this.http.delete(this._miUrl+id);
   }
 }

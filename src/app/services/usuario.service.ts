@@ -1,30 +1,58 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { map } from 'rxjs/operators';
+import { auth } from 'firebase/app';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { UserInterface } from '../modelo/user';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class UsuarioService {
-  url = 'http://localhost:9000/api/v1/usuario/';
-  constructor(private http: HttpClient) {}
 
-  getAll(): Observable<any[]> {
-    return this.http.get<any[]>(this.url);
+  constructor(private afsAuth: AngularFireAuth, private afs: AngularFirestore) { }
+
+  registerUser(email: string, pass: string){
+    return new Promise((resolve, reject) =>{
+      this.afsAuth.createUserWithEmailAndPassword(email, pass)
+      .then(userData => {
+        resolve(userData),
+        this.updateUserData(userData.user)
+      }).catch( err => console.log(reject(err)))
+    });
   }
 
-  getOne(id: number): Observable<any> {
-    return this.http.get<any>(this.url + id);
+  loginEmailUser(email: string, pass: string){
+    return new Promise((resolve, reject)=>{
+      this.afsAuth.signInWithEmailAndPassword(email,pass)
+      .then(userData => resolve(userData),
+      err => reject(err));
+    });
   }
 
-  post(usuario: any): Observable<any> {
-    return this.http.post<any>(this.url, usuario);
+  loginGoogleUser(){
+    return this.afsAuth.signInWithPopup( new auth.GoogleAuthProvider())
+    .then(credential => this.updateUserData(credential.user))
   }
 
-  put(usuario: any): Observable<any> {
-    return this.http.put<any>(this.url + usuario.id, usuario);
+  logoutUser(){
+    return this.afsAuth.signOut();
   }
-  delete(id: number): Observable<any> {
-    return this.http.delete(this.url + id);
+
+  isAuth(){
+    return this.afsAuth.authState.pipe(map(auth => auth));
+  }
+
+  private updateUserData(user){
+    const userRef : AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+    const data : UserInterface = {
+      id: user.uid,
+      email: user.email
+    }
+    return userRef.set(data, {merge:true})
+  }
+
+  isUserAdmin(userUid){
+    return this.afs.doc<UserInterface>(`users/${userUid}`).valueChanges();
   }
 }
