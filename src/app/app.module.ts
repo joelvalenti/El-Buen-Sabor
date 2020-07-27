@@ -11,14 +11,11 @@ import { FormsModule } from '@angular/forms';
 // Material
 import { MaterialModule } from './material.module';
 // Paginas
-import { CocinaComponent } from './pages/cocina/cocina.component';
-import { DeliveryComponent } from './pages/delivery/delivery.component';
 import { CatalogoComponent } from './pages/catalogo/catalogo.component';
 import { HomeComponent } from './pages/home/home.component';
 import { NavbarComponent } from './pages/navbar/navbar.component';
 
 // Componentes
-import { ComandaComponent } from './components/comanda/comanda.component';
 import { DetallePlatoComponent } from './components/detalle-plato/detalle-plato.component';
 import { ModalloginComponent } from './components/modallogin/modallogin.component';
 import { ModalregistroComponent } from './components/modalregistro/modalregistro.component';
@@ -37,11 +34,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
   entryComponents: [],
   declarations: [
     AppComponent,
-    CocinaComponent,
-    ComandaComponent,
     FilterBuscarRecetaPipe,
     FilterBuscarLocalidadPipe,
-    DeliveryComponent,
     CatalogoComponent,
     HomeComponent,
     NavbarComponent,
