@@ -3,6 +3,7 @@ import { Categoria } from '../../modelo/categoria';
 import { Plato } from '../../modelo/plato';
 import { PlatocategoriaService } from '../../services/platocategoria.service';
 import { PlatoService } from '../../services/plato.service';
+import { Detalle } from 'src/app/modelo/detalle';
 
 @Component({
   selector: 'app-catalogo',
@@ -17,6 +18,9 @@ export class CatalogoComponent implements OnInit {
   public platosCarrito : Plato[] = [];
   total: number = 0;
   platoDetalle : Plato = {} ;
+  //variables pedido
+  carritoFinal : Detalle[] = [];
+
 
   constructor(private servicioCategoria : PlatocategoriaService, private servicioPlato : PlatoService ) { }
 
@@ -47,9 +51,32 @@ export class CatalogoComponent implements OnInit {
   }
 
   agregarAlPedido( plato : Plato){
-    this.platosCarrito.push(plato);
-    this.total += plato.precioVenta;
-    console.log('Pedido ', this.platosCarrito);
+    let nuevoDetalle : Detalle = {};
+    if (this.carritoFinal.length < 1){
+      nuevoDetalle.plato = plato;
+      console.log('DETALLE PLATO ', nuevoDetalle.plato);
+      nuevoDetalle.cantidad = 1 ;
+      this.carritoFinal.push(nuevoDetalle);
+      this.total += plato.precioVenta;
+      console.log('carrito final 1', this.carritoFinal);
+    }else{
+      let otro : Detalle = {};
+      otro.plato = plato;
+      const indice =  this.carritoFinal.findIndex(ref => ref.plato.nombre == otro.plato.nombre);
+      if( indice != null ){
+        this.carritoFinal[indice].cantidad++;
+        console.log('carrito final 2', this.carritoFinal);
+      }else{
+        let nuevo : Detalle = {};
+        nuevo.plato = plato;
+        console.log('DETALLE PLATO ', nuevo.plato);
+        nuevo.cantidad = 1 ;
+        this.carritoFinal.push(nuevo);
+        this.total += plato.precioVenta;
+        nuevo = {};
+        console.log('carrito final 3', this.carritoFinal);
+      }
+    }
   }
 
   eliminarItem(plato : Plato ){

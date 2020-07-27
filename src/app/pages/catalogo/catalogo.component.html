@@ -44,7 +44,7 @@
                     <h1>Carrito</h1>
                     <div class="card" style="width: 18rem;">
                         <div class="card-body">
-                          <h5 *ngFor="let plato of platosCarrito" class="card-title">{{plato.nombre}} ${{plato.precioVenta}}  <a (click)="eliminarItem(plato)">X</a></h5>
+                          <h5 *ngFor="let detalle of carritoFinal" class="card-title">{{detalle.plato.nombre}} ${{detalle.plato.precioVenta}}  <a (click)="eliminarItem(plato)"  style="color: orangered;"><strong>X</strong></a></h5>
                           <h5 class="totalpedido">Total: ${{total}}</h5>
                           <a (click)="enviarPedido()" class="btn btn-primary">Continuar</a>
                         </div>
