@@ -61,7 +61,7 @@ export class ModalregistroComponent implements OnInit {
       });
       //codigo para agregar nuevo usuario
       this.nuevoUsuario.nombre = this.nombre;
-      this.nuevoUsuario.Rol = 'cliente';
+      this.nuevoUsuario.rol = 'cliente';
       this.nuevoUsuario.apellido = this.apellido;
       this.nuevoUsuario.email = this.email;
       this.nuevoUsuario.esCliente = true;
@@ -76,19 +76,46 @@ export class ModalregistroComponent implements OnInit {
       //end
       this.btnClose.nativeElement.click();
     }).catch ( (error) => console.log('err',error.message));
-    
+    this.nuevoUsuario = {};
   }
 
-  onLoginGoogle() : void {
+   onLoginGoogle() : void {
     this.authService.loginGoogleUser()
     .then((res)=>{
-      alert('Registrado con exito!');
+      this.authService.isAuth().subscribe(res=>{
+        const correo = res.email;
+        this.serviciorol.getEmail(correo).subscribe( res=>{
+          console.log('Usted ya esta registrado cumpa', res);
+        }, err=>{
+          this.nuevoUsuario.email = correo;
+            const displayName = res.displayName;
+            const dnArray = displayName.split(" ");
+            const first = dnArray[0];
+            const last = dnArray[1];
+            this.nuevoUsuario.nombre = first;
+            this.nuevoUsuario.apellido = last;
+            this.nuevoUsuario.rol = 'Cliente';
+            this.nuevoUsuario.esCliente = true;
+            // this.nuevoUsuario.telefono = Number.parseInt(res.phoneNumber);
+           //post user
+            console.log('nuevo usuario que vamos a postear: ', this.nuevoUsuario);
+            this.serviciorol.post(this.nuevoUsuario).subscribe(res =>{
+            console.log('Succesfully posted', res); 
+            }, 
+            err=>{
+              console.log('Something went wrong.'); 
+            });
+        });
+      });
       this.btnClose.nativeElement.click();
     }).catch(err => console.log('err',err.message));
     
+   this.nuevoUsuario = {};
   }
 
   onLoginRedirect(){
     this.router.navigate(['catalogo']);
   }
+
+ 
 }

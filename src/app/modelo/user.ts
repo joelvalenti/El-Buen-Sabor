@@ -9,6 +9,6 @@ export interface UserInterface{
 	 email ?:string;
 	 password ?:string;
 	 imagen ?:string;
-	 Rol ?:string;
+	 rol ?:string;
 	 eliminado?:boolean;
 }

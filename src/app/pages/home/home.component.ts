@@ -1,4 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Plato } from '../../modelo/plato';
+import { PlatoService } from '../../services/plato.service';
 
 @Component({
   selector: 'app-home',
@@ -7,11 +9,32 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private servicio : PlatoService) { }
   
-  
+  platos : Plato [] = [];
 
   ngOnInit(): void {
+    this.traerPlatos();
+  }
+
+  traerPlatos(){
+    this.servicio.getOne(1).subscribe(
+      res => {
+        this.platos.push(res);
+      }, err =>{
+        console.log('error');
+      }
+    );
+    this.servicio.getOne(3).subscribe(res => {
+      this.platos.push(res);
+    }, err =>{
+      console.log('error');
+    });
+    this.servicio.getOne(2).subscribe(res => {
+      this.platos.push(res);
+    }, err =>{
+      console.log('error');
+    });
   }
 
 }

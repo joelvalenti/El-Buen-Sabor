@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Categoria } from '../../modelo/categoria';
 import { Plato } from '../../modelo/plato';
 import { PlatocategoriaService } from '../../services/platocategoria.service';
 import { PlatoService } from '../../services/plato.service';
+import { InsumoService } from '../../services/insumo.service';
 import { Detalle } from 'src/app/modelo/detalle';
+import { Insumo } from 'src/app/modelo/Insumo';
 
 @Component({
   selector: 'app-catalogo',
@@ -12,17 +14,23 @@ import { Detalle } from 'src/app/modelo/detalle';
 })
 export class CatalogoComponent implements OnInit {
 
-  vcategoria : string = null;
+   vcategoria : string = null;
   public categorias : Categoria[];
   public platos : Plato[];
   public platosCarrito : Plato[] = [];
+  gaseosas : Insumo[] = [];
   total: number = 0;
   platoDetalle : Plato = {} ;
+  seleccionBebidas : boolean = false;
   //variables pedido
+  @Output() envioPedido:EventEmitter<Object> = new EventEmitter<Object>();
   carritoFinal : Detalle[] = [];
+  carritoBebidas : Detalle[] = [];
 
 
-  constructor(private servicioCategoria : PlatocategoriaService, private servicioPlato : PlatoService ) { }
+  constructor(private servicioCategoria : PlatocategoriaService,
+               private servicioPlato : PlatoService,
+               private servicioBebida : InsumoService ) { }
 
   ngOnInit(): void {
     this.getCategorias();
@@ -30,6 +38,15 @@ export class CatalogoComponent implements OnInit {
 
   volverANulo(){
     this.vcategoria = null;
+  }
+
+  getBebidas(){
+    this.seleccionBebidas = true;
+    this.servicioBebida.getEsInsumo(false).subscribe(res =>{
+      this.gaseosas = res;
+    }, err =>{
+      console.log('Error al traer bebidas');
+    });
   }
 
   getCategorias(){
@@ -41,6 +58,7 @@ export class CatalogoComponent implements OnInit {
   }
 
   elegirCategoria(categoria:string){
+    this.seleccionBebidas = false;
      this.vcategoria = categoria;
      console.log('categoria: ', this.vcategoria);
      this.servicioPlato.getByCategory(categoria).subscribe(res =>{
@@ -54,7 +72,6 @@ export class CatalogoComponent implements OnInit {
     let nuevoDetalle : Detalle = {};
     if (this.carritoFinal.length < 1){
       nuevoDetalle.plato = plato;
-      console.log('DETALLE PLATO ', nuevoDetalle.plato);
       nuevoDetalle.cantidad = 1 ;
       this.carritoFinal.push(nuevoDetalle);
       this.total += plato.precioVenta;
@@ -63,29 +80,81 @@ export class CatalogoComponent implements OnInit {
       let otro : Detalle = {};
       otro.plato = plato;
       const indice =  this.carritoFinal.findIndex(ref => ref.plato.nombre == otro.plato.nombre);
-      if( indice != null ){
-        this.carritoFinal[indice].cantidad++;
-        console.log('carrito final 2', this.carritoFinal);
-      }else{
-        let nuevo : Detalle = {};
-        nuevo.plato = plato;
-        console.log('DETALLE PLATO ', nuevo.plato);
-        nuevo.cantidad = 1 ;
-        this.carritoFinal.push(nuevo);
-        this.total += plato.precioVenta;
-        nuevo = {};
-        console.log('carrito final 3', this.carritoFinal);
-      }
+      console.log(indice);
+        if(indice < 0){
+          let nuevoPlato : Detalle = {};
+          nuevoPlato.plato = plato;
+          nuevoPlato.cantidad = 1;
+          this.carritoFinal.push(nuevoPlato);
+          this.total += plato.precioVenta;
+          const nuevoIndice = this.carritoFinal.findIndex(ref => ref.plato.nombre == otro.plato.nombre);
+        }else {
+          this.carritoFinal[indice].cantidad++;
+          this.total += plato.precioVenta;
+        }
     }
   }
 
-  eliminarItem(plato : Plato ){
-    const indexPlato = this.platosCarrito.indexOf(plato);
-    this.platosCarrito.splice(indexPlato, 1);
-    this.total =  this.total - plato.precioVenta;
+  agregarGaseosa(bebida){
+    let nuevoDetalle : Detalle = {};
+    if (this.carritoBebidas.length < 1){
+      nuevoDetalle.insumo = bebida;
+      nuevoDetalle.cantidad = 1 ;
+      this.carritoBebidas.push(nuevoDetalle);
+      this.total += bebida.precioVenta;
+      console.log('carrito final 1', this.carritoBebidas);
+    }else{
+      let otro : Detalle = {};
+      otro.insumo = bebida;
+      console.log(otro.insumo.nombre);
+      const indice =  this.carritoBebidas.findIndex(ref => ref.insumo.nombre == otro.insumo.nombre);
+      console.log(indice);
+        if(indice < 0){
+          let nuevoPlato : Detalle = {};
+          nuevoPlato.insumo = bebida;
+          nuevoPlato.cantidad = 1;
+          this.carritoBebidas.push(nuevoPlato);
+          this.total += bebida.precioVenta;
+          const nuevoIndice = this.carritoBebidas.findIndex(ref => ref.insumo.nombre == otro.insumo.nombre);
+        }else {
+          this.carritoBebidas[indice].cantidad++;
+          this.total += bebida.precioVenta;
+        }
+    }
   }
+
+  eliminarItem( detalle : Detalle ){
+    if(detalle.plato != null){
+        const nombreplato = detalle.plato.nombre;
+        const indexPlato = this.carritoFinal.findIndex(ref => ref.plato.nombre == nombreplato);
+      if(this.carritoFinal[indexPlato].cantidad > 1){
+          this.carritoFinal[indexPlato].cantidad--;
+          this.total =  this.total - detalle.plato.precioVenta;
+      }else{
+          this.carritoFinal.splice(indexPlato, 1);
+          this.total =  this.total - detalle.plato.precioVenta;
+      }
+    }else if(detalle.insumo != null){
+      const nombre = detalle.insumo.nombre;
+      const index = this.carritoBebidas.findIndex(ref => ref.insumo.nombre == nombre);
+        if(this.carritoBebidas[index].cantidad > 1){
+        this.carritoBebidas[index].cantidad--;
+        this.total =  this.total - detalle.insumo.precioVenta;
+        }else{
+        this.carritoBebidas.splice(index, 1);
+        this.total =  this.total - detalle.insumo.precioVenta;
+    }
+    }
+    
+  }
+
   enviarPedido(){
-    console.log('pedido final ',this.platosCarrito);
+    console.log('pedido final ',this.carritoFinal);
+    console.log('bebidas',this.carritoBebidas);
+    this.envioPedido.emit({
+      comida: this.carritoFinal,
+      bebidas: this.carritoBebidas
+    });
   }
 
   verDetalle(plato: Plato){

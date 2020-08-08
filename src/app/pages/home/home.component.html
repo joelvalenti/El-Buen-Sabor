@@ -9,16 +9,8 @@
             el pedido en tu casa.
         </p>
     </div>
-    <div class="row" id="forma">
-        <div class="col-4">
-            <label for="direccion">Menú:</label>
-        </div>
-        <div class="col-4">
-            <input type="text" name="direccion" id="direccion" placeholder="Ingresá tu plato favorito: hamburguesa, pizza, lomo..." required>
-        </div>
-        <div class="col-4">
-            <input type="submit" value="Buscar">
-        </div>
+    <div class="row">
+        <h2 id="menuclick" ><a id="menuclick" href="/catalogo">HACE CLICK AQUI Y CONOCE NUESTRO MENU</a></h2>
     </div>
     <div class="row">
         <ul class="steps">
@@ -34,17 +26,9 @@
             <h1 class="platos">ALGUNOS DE NUESTROS MEJORES PLATOS</h1>
         </div>
         <div class="row">
-            <div class="col-4">
+            <div class="col-4" *ngFor="let plato of platos">
                 <img src="../burrito.png" alt="plato" class="plate">
-                <h2>Burrito con Jalapeño</h2>
-            </div>
-            <div class="col-4" >
-                <img src="../burrito.png" alt="plato" class="plate">
-                <h2>Burrito con Jalapeño</h2>
-            </div>
-            <div class="col-4" >
-                <img src="../burrito.png" alt="plato" class="plate">
-                <h2>Burrito con Jalapeño</h2>
+                <h2>{{plato.nombre}}</h2>
             </div>
         </div>
     </div>
