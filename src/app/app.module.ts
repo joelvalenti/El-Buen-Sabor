@@ -14,11 +14,13 @@ import { MaterialModule } from './material.module';
 import { CatalogoComponent } from './pages/catalogo/catalogo.component';
 import { HomeComponent } from './pages/home/home.component';
 import { NavbarComponent } from './pages/navbar/navbar.component';
-
+import { CocinaComponent } from './pages/cocina/cocina.component';
+import { DeliveryComponent } from './pages/delivery/delivery.component';
 // Componentes
 import { DetallePlatoComponent } from './components/detalle-plato/detalle-plato.component';
 import { ModalloginComponent } from './components/modallogin/modallogin.component';
 import { ModalregistroComponent } from './components/modalregistro/modalregistro.component';
+import { ComandaComponent } from './components/comanda/comanda.component';
 // Pipes
 import { FilterBuscarRecetaPipe } from './pipes/filter-buscar-receta.pipe';
 import { FilterBuscarLocalidadPipe } from './pipes/filter-buscar-localidad.pipe';
@@ -38,6 +40,9 @@ import { AngularFirestore } from '@angular/fire/firestore';
     FilterBuscarLocalidadPipe,
     CatalogoComponent,
     HomeComponent,
+    ComandaComponent,
+    CocinaComponent,
+    DeliveryComponent,
     NavbarComponent,
     DetallePlatoComponent,
     ModalloginComponent,
