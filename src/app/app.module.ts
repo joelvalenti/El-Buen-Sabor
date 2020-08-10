@@ -45,6 +45,14 @@ import { UsuarioComponent } from './pages/usuario/usuario.component';
 import { FilterBuscarRecetaPipe } from './pipes/filter-buscar-receta.pipe';
 import { DatePipe } from '@angular/common';
 
+//Firebase
+import { environment } from '../environments/environment';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFirestore } from '@angular/fire/firestore';
+
 @NgModule({
   entryComponents: [],
   declarations: [
@@ -91,7 +99,10 @@ import { DatePipe } from '@angular/common';
     BrowserAnimationsModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+		AngularFireDatabaseModule,
+		AngularFireStorageModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent],
