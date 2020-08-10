@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { PedidoService } from '../../services/pedido.service';
-import { DetalleService } from '../../services/detalle.service';
-import { InsumoService } from '../../services/insumo.service';
-import { PlatoService } from '../../services/plato.service';
+import { PedidoService } from '../../services/allServices/pedido.service';
+import { DetalleService } from '../../services/allServices/detalle.service';
+import { InsumoService } from '../../services/allServices/insumo.service';
+import { PlatoService } from '../../services/allServices/plato.service';
 
 @Component({
   selector: 'app-cocina',

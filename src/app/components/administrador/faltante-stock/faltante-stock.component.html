@@ -1,0 +1,89 @@
+<mat-sidenav-container>
+    <mat-sidenav-content>
+
+
+        <div class="container-btn-new">
+            <mat-select matInput placeholder="Categoria" class="form-group col-md-2">
+                <span *ngFor="let categoria of this.categorias"> 
+                    <mat-option (click)="cargarCategoria(categoria.id)" value="categoria.id">{{categoria.nombre}}</mat-option>
+                </span>
+            </mat-select>
+            <mat-form-field class="form-group col-md-2">
+                <input matInput (keyup)="applyFilter($event)" placeholder="Buscar...">
+            </mat-form-field>
+        </div>
+
+        
+
+        <div class="tabla" class="mat-elevation-z8">
+            <mat-table [dataSource]="dataSource" matSort>
+
+                <!-- Id Column -->
+                <ng-container matColumnDef="id">
+                    <mat-header-cell mat-sort-header *matHeaderCellDef> ID </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="pointer" >
+                        {{element.id}} </mat-cell>
+                </ng-container>
+
+                <!-- Nombre Column -->
+                <ng-container matColumnDef="nombre">
+                    <mat-header-cell mat-sort-header *matHeaderCellDef> Nombre </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="pointer" >
+                        {{element.nombre | titlecase}} </mat-cell>
+                </ng-container>
+
+                <!-- Stock Minimo Column-->
+                <ng-container matColumnDef="stockMinimo">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Stock Mínimo </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="pointer" >
+                        {{element.stockMinimo}} </mat-cell>
+                </ng-container>
+
+                <!-- Stock Actual Column-->
+                <ng-container matColumnDef="stockActual">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Stock Actual </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="pointer" >
+                        {{element.stockActual}} </mat-cell>
+                </ng-container>
+
+                <!-- Stock Máximo Column-->
+                <ng-container matColumnDef="stockMaximo">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Stock Máximo </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="pointer" >
+                        {{element.stockMaximo}} </mat-cell>
+                </ng-container>
+
+                <!-- Unidad Medida Column-->
+                <ng-container matColumnDef="unidadMedida">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Unidad Medida</mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="pointer" >
+                        {{element.unidadMedida.nombre}} </mat-cell>
+                </ng-container>
+
+                <!-- Unidad Pedido Column-->
+                <ng-container matColumnDef="pedido">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Pedido</mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="pointer" >
+                        <span>+&nbsp;&nbsp;</span> <input matInput placeholder="Cantidad" value="0" id="{{element.id}}"> </mat-cell>
+                </ng-container>
+
+                <!-- Acciones Column -->
+                <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let element" style="display: flex; justify-content: center;">
+                        <button mat-mini-fab class="my-editar" matTooltip="Editar" (click)="onSubmit(element)">
+                            <mat-icon [inline]="true">create</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns.concat('actions')"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns.concat('actions');"></mat-row>
+
+            </mat-table>
+            <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons aria-label="etiqueta">
+            </mat-paginator>
+        </div>
+        <!-- </div> -->
+    </mat-sidenav-content>
+</mat-sidenav-container>

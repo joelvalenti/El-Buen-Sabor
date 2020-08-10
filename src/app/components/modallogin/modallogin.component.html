@@ -1,0 +1,35 @@
+<div class="modal fade" id="modalIngreso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" #btnClose>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ingresar</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form #formLogin="ngForm" (submit)="onLogin()">
+                
+                  <label for="email1">Correo Electronico</label>
+                  <input [(ngModel)]="email" [ngModelOptions]="{standalone: true}" name="email" type="email" class="form-control"  aria-describedby="emailHelp" required>
+                 <div>   
+                    <label for="password1">Contraseña</label>
+                    <input [(ngModel)]="password" [ngModelOptions]="{standalone: true}" name="password" type="password" class="form-control" required>
+                </div>
+                
+                <div class="modal-footer">
+                    <a href="/" >¿No tienes una cuenta? Registrate</a> <br>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelar">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" #btnClose  id="ingresar">Ingresar</button>
+                  </div>
+                  <div class="form-group">
+                    <button class="btn btn-block btn-social btn-google" #btnClose (click)="onLoginGoogle()">
+                        <span class="fa fa-google"></span>
+                        Ingresar con Google
+                      </button>
+                </div>
+              </form>
+        </div>
+      </div>
+    </div>
+  </div> 

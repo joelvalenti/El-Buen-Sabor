@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DetalleService } from '../../services/detalle.service';
-import { PlatoService } from '../../services/plato.service';
-import { PedidoService } from '../../services/pedido.service';
+import { DetalleService } from '../../services/allServices/detalle.service';
+import { PlatoService } from '../../services/allServices/plato.service';
+import { PedidoService } from '../../services/allServices/pedido.service';
 
 @Component({
   selector: 'app-comanda',

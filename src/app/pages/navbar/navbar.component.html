@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand" href="/">
+        <img src="../assets/imagenes/logotipoimg.png" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+        El Buen Sabor
+      </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="/catalogo">Menú<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/" data-toggle="modal" data-target="#modalIngreso"*ngIf="!isLogged">Ingresar</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/" data-toggle="modal" data-target="#modalRegistro" *ngIf="!isLogged">Registrarse</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/" data-toggle="modal" *ngIf="isLogged">Mi Perfil</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/" data-toggle="modal" *ngIf="isLogged" (click)="onLogout()">Salir</a>
+        </li>
+        <li>
+          <button (click)="isAuth()">Input</button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <app-modalregistro></app-modalregistro>
+  <app-modallogin (rol)=inputlistener($event)></app-modallogin>

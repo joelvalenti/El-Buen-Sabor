@@ -1,0 +1,97 @@
+<nav>
+    <div class="nav nav-tabs letra" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+            aria-controls="nav-home" aria-selected="true">Usuario</a>
+        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
+            aria-controls="nav-profile" aria-selected="false">Dirección</a>
+    </div>
+</nav>
+<div class="tab-content letra" id="nav-tabContent">
+    <div class="tab-pane fade show active" style="margin: 1%;" id="nav-home" role="tabpanel"
+        aria-labelledby="nav-home-tab">
+        <div style="margin-top: 1%;">
+            <form>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail4">Nombre</label>
+                        <input value="{{usuario.nombre}}" placeholder="Ingrese nombre..." type="text"
+                            class="form-control" id="input1">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputPassword4">Apellido</label>
+                        <input value="{{usuario.apellido}}" placeholder="Ingrese apellido..." type="text"
+                            class="form-control" id="input2">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail4">DNI</label>
+                        <input value="{{usuario.dni}}" placeholder="Ingrese DNI..." type="number" class="form-control"
+                            id="input3">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputPassword4">Fecha de Nacimiento</label>
+                        <input value="{{usuario.fechaNacimiento}}" type="date" class="form-control" id="input4">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail4">Email</label>
+                        <input value="{{usuario.email}}" placeholder="Ingrese email..." type="email"
+                            class="form-control" id="input5">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputPassword4">Password</label>
+                        <input value="{{usuario.password}}" placeholder="Ingrese contraseña..." type="password"
+                            class="form-control" id="input6">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail4">Teléfono</label>
+                        <input value="{{usuario.telefono}}" placeholder="Ingrese teléfono..." type="text"
+                            class="form-control" id="input7">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="exampleFormControlFile1">Imagen de usuario</label>
+                        <input type="file" class="form-control-file" accept="image/*">
+                    </div>
+                </div>
+                <button style="margin-right: 1%;" type="submit" class="btn btn-secondary">Cancelar</button>
+                <button type="submit" class="btn btn-primary" (click)="update(usuario)">Guardar</button>
+            </form>
+        </div>
+    </div>
+    <div class="tab-pane fade letra" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <button type="submit" class="btn btn-primary" data-toggle="modal" 
+        data-target="#modalDomicilio" style="float: right; margin: 0.5%;">Agregar +</button>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Calle</th>
+                    <th scope="col">Número</th>
+                    <th scope="col">Piso</th>
+                    <th scope="col">Departamento</th>
+                    <th scope="col">Localidad</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of domicilios">
+                    <th scope="row">{{item.id}}</th>
+                    <td>{{item.calle}}</td>
+                    <td>{{item.numero}}</td>
+                    <td>{{item.piso}}</td>
+                    <td>{{item.departamento}}</td>
+                    <td>Localidad</td>
+                    <td>
+                    <button type="button" data-toggle="modal" data-target="#modalDomicilio" class="btn btn-warning">Editar</button>
+                        <button type="button" class="btn btn-danger" (click)="deleteDomicilio(item)">Borrar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<app-modal-domicilio></app-modal-domicilio>

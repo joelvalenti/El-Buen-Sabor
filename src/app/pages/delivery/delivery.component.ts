@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { LocalidadService } from '../../services/localidad.service';
-import { PedidoService } from '../../services/pedido.service';
-import { FacturaService } from '../../services/factura.service';
+import { LocalidadService } from '../../services/allServices/localidad.service';
+import { PedidoService } from '../../services/allServices/pedido.service';
+import { FacturaService } from '../../services/allServices/factura.service';
 
 @Component({
   selector: 'app-delivery',
