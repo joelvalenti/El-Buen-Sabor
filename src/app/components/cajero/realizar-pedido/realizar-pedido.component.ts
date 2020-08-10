@@ -1,0 +1,271 @@
+import { Detalle } from './../../../models/Detalle';
+import { DetalleService } from './../../../services/allServices/detalle.service';
+import { DomicilioService } from 'src/app/services/allServices/domicilio.service';
+import { EstadoService } from './../../../services/allServices/estado.service';
+import { UsuarioService } from 'src/app/services/allServices/usuario.service';
+import { PedidoService } from './../../../services/allServices/pedido.service';
+import { PlatoService } from './../../../services/allServices/plato.service';
+import { CategoriaService } from './../../../services/allServices/categoria.service';
+import { Pedido } from './../../../models/Pedido';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalRealizarPedidoUsuarioComponent } from '../modales/modal-realizar-pedido-usuario/modal-realizar-pedido-usuario.component';
+import Swal from 'sweetalert2';
+import { ModalRealizarPedidoDomicilioComponent } from '../modales/modal-realizar-pedido-domicilio/modal-realizar-pedido-domicilio.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Usuario } from 'src/app/models/Usuario';
+import { Domicilio } from 'src/app/models/Domicilio';
+import { Estado } from 'src/app/models/Estado';
+import { Plato } from 'src/app/models/Plato';
+
+@Component({
+  selector: 'app-realizar-pedido',
+  templateUrl: './realizar-pedido.component.html',
+  styleUrls: ['./realizar-pedido.component.css']
+})
+export class RealizarPedidoComponent implements OnInit {
+
+  public localDataCategorias: any;
+  public localDataPlatos: any;
+  public usuario: Usuario;
+  public domicilio: Domicilio;
+  public estado: Estado;
+  public pedido: Pedido;
+  public pedidoSelec: Pedido;
+  public platoSelec:Plato;
+  public localData: any = { ...this.pedido };
+  public detalle: Detalle;
+  public localDataDetalle: any = { ...this.detalle };
+  public localDataDetalles: any = this.detalle;
+  public form3: FormGroup;
+  public form4: FormGroup;
+  public userId: number;
+  public domId: number;
+  public paso1: boolean = false;
+  public paso2: boolean = true;
+  public llave: boolean = true;
+
+  constructor(public dialog: MatDialog, public formBuilder3: FormBuilder, public formBuilder4: FormBuilder,
+    public service: CategoriaService,
+    public service2: PlatoService, public service3: PedidoService, public service4: EstadoService,
+    public service5: UsuarioService, public service6: DomicilioService, public service7: DetalleService) { }
+
+  ngOnInit(): void {
+    this.buildForm3();
+    this.buildForm4();
+    this.getAllCategorias();
+  }
+  obtenerFecha(): String {
+    var d = new Date();
+    let mes: String;
+    let dia: String;
+    if ((d.getMonth() + 1) < 10) {
+      mes = "0" + (d.getMonth() + 1);
+    } else {
+      mes = (d.getMonth() + 1).toString();
+    }
+    if (d.getDate() < 10) {
+      dia = "0" + d.getDate();
+    } else {
+      dia = d.getDate().toString();
+    }
+    return d.getFullYear() + '-' + mes + '-' + dia;
+  }
+
+  public cargarPedido() {
+    var d = new Date();
+    this.form3.controls['horaEstimada'].setValue(d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds());
+    this.form3.controls['fecha'].setValue(this.obtenerFecha());
+    this.form3.controls['envioDelivery'].setValue(true);
+    this.form3.controls['eliminado'].setValue(false);
+    this.agregarEstado();
+  }
+
+  agregarEstado(): void {
+    this.service4.getOne(2).subscribe(data => {
+      this.estado = data;
+      this.form3.controls['estado'].setValue(this.estado);
+      this.agregarUsuario();
+    });
+  }
+  agregarUsuario(): void {
+    this.service5.getOne(this.userId).subscribe(data => {
+      this.usuario = data;
+      this.form3.controls['usuario'].setValue(this.usuario);
+      this.agregarDomicilio();
+    });
+  }
+
+  agregarDomicilio(): void {
+    this.service6.getOne(this.domId).subscribe(data => {
+      this.domicilio = data;
+      this.form3.controls['domicilio'].setValue(this.domicilio);
+      this.crearPedido(this.form3.value);
+    });
+  }
+
+  public crearPedido(element: Pedido) {
+    console.log(element);
+    if (element != null && element != undefined) {
+      this.service3.post(element).subscribe((result) => {
+        this.localData = { ...result };
+        this.pedidoSelec = result;
+        console.log(result.id);
+      });
+    }
+  }
+
+  buildForm3() {
+    this.form3 = this.formBuilder3.group({
+      id: [this.localData.id],
+      horaEstimada: [this.localData.horaEstimada],
+      envioDelivery: [this.localData.envioDelivery],
+      fecha: [this.localData.fecha],
+      estado: [this.localData.estado],
+      usuario: [this.localData.usuario],
+      domicilio: [this.localData.domicilio],
+      eliminado: [this.localData.eliminado]
+    });
+
+  }
+
+
+  buildForm4() {
+    this.form4 = this.formBuilder4.group({
+      id: [this.localData.id],
+      cantidad: [this.localData.cantidad],
+      plato: [this.localData.plato],
+      insumo: [this.localData.insumo],
+      pedido: [this.localData.pedido],
+      eliminado: [this.localData.eliminado]
+    });
+
+  }
+
+  public getAllCategorias(): void {
+    this.service.getAll().subscribe((data) => {
+      this.localDataCategorias = data;
+    });
+  }
+
+  onSubmitUsuario(): void {
+    this.dialog.open(ModalRealizarPedidoUsuarioComponent)
+      .afterClosed().subscribe(result => {
+        this.cargarUsuario(result.data);
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Usuario seleccionado correctamente!',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      });
+  }
+
+  onSubmitDomicilio(): void {
+    this.dialog.open(ModalRealizarPedidoDomicilioComponent, { data: this.userId })
+      .afterClosed().subscribe(result => {
+        this.cargarDomicilio(result.data);
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Domicilio seleccionado correctamente!',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      });
+  }
+
+  public cargarUsuario(element: number) {
+    this.userId = element;
+    this.paso1 = true;
+    this.paso2 = false;
+  }
+
+  public cargarDomicilio(element: number) {
+    this.domId = element;
+    this.paso1 = true;
+    this.paso2 = true;
+    this.cargarPedido();
+  }
+
+  public crearDetalle(element: Plato): void {
+    this.service7.buscarPorPlato(this.pedidoSelec.id, element.id).subscribe((data) => {
+      let contador: number = 0;
+      data.forEach(element => {
+        contador += 1;
+      });
+      this.platoSelec=element;
+      if (contador == 0) {
+        this.form4.controls['cantidad'].setValue(1);
+        this.form4.controls['plato'].setValue(element);
+        this.form4.controls['pedido'].setValue(this.pedidoSelec);
+        this.form4.controls['eliminado'].setValue(false);
+        this.postDetalle();
+      }
+    });
+
+  }
+
+  public postDetalle(): void {
+    this.service7.post(this.form4.value).subscribe((data) => {
+      this.getAllDetalles();
+    });
+  }
+
+  public getAllDetalles(): void {
+    this.service7.buscarPorPedido(this.pedidoSelec.id).subscribe((data) => {
+      this.localDataDetalles = data;
+      this.getOnePedido();
+    })
+  }
+
+  public getOnePedido(): void {
+    this.service3.getOne(this.pedidoSelec.id).subscribe((data) => {
+      this.pedidoSelec = data;
+      (<HTMLInputElement>document.getElementById("total")).value = this.pedidoSelec.monto.toString();
+    });
+  }
+
+  public buscarPlatos(id: number): void {
+    console.log(id);
+    this.service2.buscarPlatoPorCategoria(id).subscribe(data => {
+      console.log("Plato: " + data)
+      this.localDataPlatos = data;
+    });
+
+  }
+
+  public cantidad(incrementar: boolean, detalle: Detalle): void {
+    let cantidad: number=0;
+    if (this.llave) {
+      if (incrementar) {
+        cantidad = Number.parseInt((<HTMLInputElement>document.getElementById("cantidad")).value) + 1;
+        this.actualizarDetalle(cantidad, detalle, false);
+      } else {
+        cantidad = Number.parseInt((<HTMLInputElement>document.getElementById("cantidad")).value) - 1;
+        if(cantidad==0){
+          this.actualizarDetalle(1, detalle, true);
+        }else{
+          this.actualizarDetalle(cantidad, detalle, false);
+        }
+      }
+    }
+    this.llave=false;
+  }
+
+  public actualizarDetalle(cantidad:number,detalle:Detalle, eliminado:boolean):void{
+      this.form4.controls['id'].setValue(detalle.id);
+      this.form4.controls['cantidad'].setValue(cantidad);
+      this.form4.controls['plato'].setValue(detalle.plato);
+      this.form4.controls['pedido'].setValue(detalle.pedido);
+      this.form4.controls['insumo'].setValue(detalle.insumo);
+      this.form4.controls['eliminado'].setValue(eliminado);
+      console.log(this.form4.value)
+      this.service7.put(detalle.id,this.form4.value).subscribe((data)=>{
+        this.getAllDetalles();
+        this.llave=true;
+      })
+  }
+
+}

@@ -1,0 +1,120 @@
+<!-- Agregar navbar aquí -->
+
+<!-- Tabla Carrito -->
+<section style="margin: 1%">
+  <div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-md-10">
+        <h1 class="titulos">Carrito de compras</h1>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col">
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col" hidden>ID</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col">Nombre del Producto</th>
+              <th scope="col">Precio Unitario</th>
+              <th scope="col">Precio Total</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of detalles">
+              <th scope="row" hidden>{{item.id}}</th>
+              <td>{{item.cantidad}}</td>
+              <td>{{item.plato.nombre}}</td>
+              <td>$ {{item.plato.precioVenta}}</td>
+              <td>$ {{item.cantidad * item.plato.precioVenta}}</td>
+              <td>
+                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modalDetalle" (click)="onPreUpdate(item)">Modificar</button>
+                <button type="button" class="btn btn-danger" (click)="delete(item)">Eliminar</button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              <td></td>
+              <td>Total Neto</td>
+              <td>$ {{ getTotalNeto() }}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+<app-modal-detalle [detalleSeleccionado]="detalleSeleccionado"></app-modal-detalle>
+
+<div style="margin-left: 1%; margin-right: 1%;">
+  <h1 class="titulos" style="margin-top: 2%; text-align: center;">¡Envíe su pedido en 3 simples Pasos!</h1>
+  <br>
+  <div class="row">
+
+    <div class="col-xs-12 col-sm-4">
+      <h2 class="titulos">1) Seleccione su método de entrega</h2>
+      <!-- Método de entrega -->
+      <label class="container">Retiro en el local (10% descuento)
+        <input type="radio" name="radio" value="local" (change)="onRadioChange($event.target.value)" />
+        <span class="checkmark"></span>
+      </label>
+      <label class="container">Envío por delivery
+        <input type="radio" name="radio" value="delivery" checked="checked"
+          (change)="onRadioChange($event.target.value)" />
+        <span class="checkmark"></span>
+        <br>
+      </label>
+      <h2 class="titulos">Total a pagar: ${{ getTotalFinal() }}</h2>
+    </div>
+
+    <div class="col-xs-6 col-sm-4">
+      <div *ngIf="flagRadio else empresa">
+        <h2 class="titulos">2) Seleccione su dirección </h2>
+        <!-- Dirección del usuario -->
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">Dirección</label>
+          </div>
+          <select class="custom-select" id="inputGroupSelect01">
+            <option selected>Seleccionar...</option>
+            <option *ngFor="let dom of domicilios" value="domicilio">{{dom.calle}} {{dom.numero}},
+              {{dom.localidad.nombre}}</option>
+          </select>
+        </div>
+        <!-- Agregar nueva dirección -->
+        <button type="button" class="btn btn-primary btn-block" data-toggle="modal" 
+        data-target="#modalDomicilio">+ Agregar Nueva Direccion</button>
+          <app-modal-domicilio [id]="idPersona"></app-modal-domicilio>
+      </div>
+
+      <ng-template class="col-xs-6 col-sm-4" #empresa>
+        <h2 class="titulos">2) Ubicación seleccionada <b>Saltar Paso</b></h2>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelect01">Dirección</label>
+          </div>
+          <select class="custom-select" id="inputGroupSelect01">
+            <option selected>Local "El Buen Sabor"</option>
+          </select>
+        </div>
+        <button type="button" class="btn btn-primary btn-block" disabled>+ Agregar Nueva Direccion</button>
+      </ng-template>
+
+    </div>
+
+    <div class="col-xs-6 col-sm-4">
+      <!-- Realizar Pedido -->
+      <h2 class="titulos">3) Confirme su pedido! </h2>
+      <div class="example-button-row">
+        <a href="#" class="btn btn-success btn-lg active" role="button" aria-pressed="true">Realizar Pedido</a>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+<!-- Agregar footer de la empresa -->

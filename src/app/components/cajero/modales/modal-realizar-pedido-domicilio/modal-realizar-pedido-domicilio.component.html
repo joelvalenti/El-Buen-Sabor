@@ -1,0 +1,45 @@
+
+<mat-sidenav-container>
+    <mat-sidenav-content>
+        <!-- ACA VA TODO EL CONTENIDO PRINCIPAL -->
+        <!-- <div class="contenedor"> -->
+            <div class="container-btn-new">
+                <mat-form-field class="busqueda">
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Buscar...">
+                </mat-form-field>
+                <div class="botonagregar">
+                    <button mat-raised-button class="my-agregar" (click)="onSubmit()">Agregar</button>
+                </div>
+            </div>
+        
+        <div class="tabla" class="mat-elevation-z8">
+            <mat-table [dataSource]="dataSource" matSort>
+  
+                <!-- Dirección Column -->
+                <ng-container matColumnDef="direccion">
+                    <mat-header-cell mat-sort-header *matHeaderCellDef> Dirección </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="pointer">
+                        {{element.calle}} {{element.numero}}, Dpto: {{element.departamento}}, Piso:{{element.piso}}, {{element.localidad.nombre}}</mat-cell>
+                </ng-container>
+  
+  
+                <!-- Acciones Column -->
+                <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let element" style="display: flex; justify-content: center;">
+                        <button mat-mini-fab class="my-editar" matTooltip="Seleccionar" (click)="copiarId(element.id)">
+                            <mat-icon [inline]="true">create</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+  
+                <mat-header-row *matHeaderRowDef="displayedColumns.concat('actions')"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns.concat('actions');"></mat-row>
+  
+            </mat-table>
+            <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons aria-label="etiqueta">
+            </mat-paginator>
+        </div>
+        <!-- </div> -->
+    </mat-sidenav-content>
+  </mat-sidenav-container>

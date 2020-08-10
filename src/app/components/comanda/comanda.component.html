@@ -1,0 +1,32 @@
+<div class="card">
+    <div class="card-body">
+        <h3 class="card-title">Pedido {{comanda.id}}</h3>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Producto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let producto of productos; let index = index">
+                    <td>
+                        {{cantidad[index]}}
+                    </td>
+                    <td>
+                        {{producto.nombre}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="alert alert-danger" role="alert" *ngIf="tiempoRestante > 1">
+            {{tiempoRestante}} minutos
+        </div>
+        <div class="alert alert-danger" role="alert" *ngIf="tiempoRestante == 1">
+            1 minuto
+        </div>
+        <div class="alert alert-danger" role="alert" *ngIf="tiempoRestante == 0">
+            Terminado
+        </div>
+    </div>
+</div>
