@@ -12,9 +12,22 @@
 }
 .imagencategoria{
     width: 100%;
+    transition: all 0.1s;
+}
+.imagencategoria:hover{
+    cursor: pointer;
+    border-bottom: 2px solid whitesmoke;
 }
 .container{
     margin-top: 5%;
+}
+
+.categorianame{
+    transition: all 0.1s;
+}
+.categorianame:hover{
+    cursor: pointer;
+    border-bottom: 2px solid rgb(255, 145, 0);
 }
 h2{
     text-align: center;

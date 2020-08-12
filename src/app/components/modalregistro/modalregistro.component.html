@@ -8,7 +8,7 @@
           </button>
         </div>
         <div class="modal-body">
-            <form #formRegister="ngForm" (ngSubmit)="onAddUser()">
+            <form #formRegister="ngForm" (ngSubmit)="onPrueba()">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="nombre-register">Nombre</label>
@@ -31,7 +31,8 @@
                 </div> 
                   <label for="email-register">Correo Electronico</label>
                   <input type="email" class="form-control" id="email-register" required aria-describedby="emailHelp" [(ngModel)]="email" [ngModelOptions]="{standalone: true}" required>
-                 <div>   
+                  
+                  <div>   
                     <label for="password-register">Contraseña</label>
                     <input type="password" class="form-control" [(ngModel)]="password" [ngModelOptions]="{standalone: true}" required id="password-register">
                     <label for="repeatpassword-register">Repetir Contraseña</label>

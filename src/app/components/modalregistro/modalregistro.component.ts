@@ -118,17 +118,15 @@ export class ModalregistroComponent implements OnInit {
     this.router.navigate(['catalogo']);
   }
 
- onPrueba(){
-  this.nuevoUsuario.nombre = this.nombre;
-  this.nuevoUsuario.rol = 'cliente';
-  this.nuevoUsuario.apellido = this.apellido;
-  this.nuevoUsuario.email = this.email;
-  this.nuevoUsuario.esCliente = true;
-  this.nuevoUsuario.fechaNacimiento =  this.fechaNacimiento;
-  this.nuevoUsuario.password = this.password;
-  this.nuevoUsuario.telefono = this.telefono;
-
-
-  console.log('Usuario a punto de registrarse', this.nuevoUsuario);
- }
+  onPrueba(){
+    this.nuevoUsuario.nombre = this.nombre;
+    this.nuevoUsuario.rol = 'cliente';
+    this.nuevoUsuario.apellido = this.apellido;
+    this.nuevoUsuario.email = this.email;
+    this.nuevoUsuario.esCliente = true;
+    this.nuevoUsuario.fechaNacimiento = this.fechaNacimiento;
+    this.nuevoUsuario.password = this.password;
+    this.nuevoUsuario.telefono = this.telefono;
+    console.log('On Prueba', this.nuevoUsuario);
+  }
 }
