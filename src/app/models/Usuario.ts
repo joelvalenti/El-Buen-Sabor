@@ -3,12 +3,12 @@ export interface Usuario {
     dni?: number;
     telefono?: number;
     esCliente?: boolean;
-    fechaNacimiento?: Date;
+    fechaNacimiento?: Date; //volver a cambiar
     nombre?: string;
     apellido?: string;
     email?: string;
     password?: string;
     imagen?: string;
-    Rol?: string;
+    rol?: string;
     eliminado?: boolean;
 }

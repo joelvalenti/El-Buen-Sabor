@@ -42,7 +42,7 @@ export class ModalloginComponent implements OnInit {
         alert('Ocurrió un gran error');
       });
       //terminamos de usar el servicio
-      this.rol.emit(this.usuarioLogeado.Rol); //esta linea emite el Rol de usuario 
+      this.rol.emit(this.usuarioLogeado.rol); //esta linea emite el Rol de usuario 
     }).catch( err => console.log('err',err.message));
   }
 
@@ -61,7 +61,7 @@ export class ModalloginComponent implements OnInit {
             const last = dnArray[1];
             this.nuevoUsuario.nombre = first;
             this.nuevoUsuario.apellido = last;
-            this.nuevoUsuario.Rol = 'Cliente';
+            this.nuevoUsuario.rol = 'Cliente';
             this.nuevoUsuario.esCliente = true;
             // this.nuevoUsuario.telefono = Number.parseInt(res.phoneNumber);
            //post user

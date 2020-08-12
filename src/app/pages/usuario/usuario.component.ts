@@ -24,7 +24,7 @@ export class UsuarioComponent implements OnInit {
     eliminado: false,
     dni: 0,
     imagen: '',
-    Rol: '',
+    rol: '',
     esCliente: true,
     telefono: 0
   }

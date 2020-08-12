@@ -50,11 +50,5 @@ export class NavbarComponent implements OnInit {
       console.log('email', res.email);
       console.log('res completa', res);
     });
-
-    this.roles.getEmail('elrorropirroro@gmail.com').subscribe(res=>{
-      console.log('RES', res);
-    }, err=>{
-      console.log('ERR',err);
-    });
   }
 }

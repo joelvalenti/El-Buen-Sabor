@@ -24,8 +24,8 @@ export class ModalregistroComponent implements OnInit {
   public password_repeat: string = '';
   public nombre:string = '';
   public apellido:string = '';
-  public telefono:string = '';
-  public fechaNacimiento:string = '';
+  public telefono:number = null;
+  public fechaNacimiento:Date = null;
 
   nuevoUsuario : Usuario = {};
 
@@ -61,13 +61,13 @@ export class ModalregistroComponent implements OnInit {
       });
       //codigo para agregar nuevo usuario
       this.nuevoUsuario.nombre = this.nombre;
-      this.nuevoUsuario.Rol = 'cliente';
+      this.nuevoUsuario.rol = 'cliente';
       this.nuevoUsuario.apellido = this.apellido;
       this.nuevoUsuario.email = this.email;
       this.nuevoUsuario.esCliente = true;
-      //this.nuevoUsuario.fechaNacimiento = this.fechaNacimiento;
+      this.nuevoUsuario.fechaNacimiento = this.fechaNacimiento;
       this.nuevoUsuario.password = this.password;
-      this.nuevoUsuario.telefono = Number.parseInt(this.telefono);
+      this.nuevoUsuario.telefono = this.telefono;
       
       this.serviciorol.post(this.nuevoUsuario).subscribe(
         res => { console.log('Todo bien', res)},
@@ -94,9 +94,10 @@ export class ModalregistroComponent implements OnInit {
             const last = dnArray[1];
             this.nuevoUsuario.nombre = first;
             this.nuevoUsuario.apellido = last;
-            this.nuevoUsuario.Rol = 'Cliente';
+            this.nuevoUsuario.rol = 'Cliente';
             this.nuevoUsuario.esCliente = true;
-            // this.nuevoUsuario.telefono = Number.parseInt(res.phoneNumber);
+            this.nuevoUsuario.fechaNacimiento =  this.fechaNacimiento;
+            this.nuevoUsuario.telefono = this.telefono;
            //post user
             console.log('nuevo usuario que vamos a postear: ', this.nuevoUsuario);
             this.serviciorol.post(this.nuevoUsuario).subscribe(res =>{
@@ -117,5 +118,17 @@ export class ModalregistroComponent implements OnInit {
     this.router.navigate(['catalogo']);
   }
 
- 
+ onPrueba(){
+  this.nuevoUsuario.nombre = this.nombre;
+  this.nuevoUsuario.rol = 'cliente';
+  this.nuevoUsuario.apellido = this.apellido;
+  this.nuevoUsuario.email = this.email;
+  this.nuevoUsuario.esCliente = true;
+  this.nuevoUsuario.fechaNacimiento =  this.fechaNacimiento;
+  this.nuevoUsuario.password = this.password;
+  this.nuevoUsuario.telefono = this.telefono;
+
+
+  console.log('Usuario a punto de registrarse', this.nuevoUsuario);
+ }
 }
