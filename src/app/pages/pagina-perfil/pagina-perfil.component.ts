@@ -78,11 +78,13 @@ export class PaginaPerfilComponent implements OnInit {
   }
 
   updateUsuario(usuario: Usuario) {
+    console.log(this.usuario);
     this.usuarioService.put(usuario.id, usuario).subscribe(
       res => {
-        this.usuario = res;
+        //this.usuario = res;
+        console.log("res: ", res.nombre);
+        console.log(this.usuario);
         this.alertsService.successAlert('El usuario fue actualizado con éxito.');
-        this.getAllDomiciliosXUsuario();
       },
       () => {
         this.alertsService.errorAlert('Opps... :(','Ocurrió un error al actualizar usuario');

@@ -42,6 +42,11 @@
                                 <!-- Buscar manera de mostrar el nombre de la localidad pero que se mande su id. -->
                                 <option *ngFor="let localidad of localidades">{{localidad.nombre}}</option>
                              </select>
+                             <div *ngIf ="formDomicilio.controls['localidad'].invalid &&
+                                        formDomicilio.controls['localidad'].touched"
+                                        class="is-invalid">
+                                        Se requiere localidad.
+                            </div>
                             </div>
                         </div>
 

@@ -92,7 +92,7 @@ export class ModalDomicilioComponent implements OnInit {
         id: ''
       }),
       localidad: this.formBuilder.group({
-        id: ''
+        id: new FormControl('', [Validators.required])
       })
     });
   }

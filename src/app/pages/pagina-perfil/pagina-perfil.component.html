@@ -14,43 +14,43 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="inputEmail4">Nombre</label>
-                        <input value="{{usuario.nombre}}" placeholder="Ingrese nombre..." type="text"
-                            class="form-control" id="input1">
+                        <input value="{{usuario.nombre}}" [(ngModel)]="usuario.nombre" [ngModelOptions]="{standalone: true}" 
+                        placeholder="Ingrese nombre..." type="text" class="form-control" required>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="inputPassword4">Apellido</label>
-                        <input value="{{usuario.apellido}}" placeholder="Ingrese apellido..." type="text"
-                            class="form-control" id="input2">
+                        <input value="{{usuario.apellido}}" [(ngModel)]="usuario.apellido" [ngModelOptions]="{standalone: true}"
+                        placeholder="Ingrese apellido..." type="text" class="form-control" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="inputEmail4">DNI</label>
-                        <input value="{{usuario.dni}}" placeholder="Ingrese DNI..." type="number" class="form-control"
-                            id="input3">
+                        <input value="{{usuario.dni}}" [(ngModel)]="usuario.dni" [ngModelOptions]="{standalone: true}" 
+                        placeholder="Ingrese DNI..." type="number" class="form-control">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="inputPassword4">Fecha de Nacimiento</label>
-                        <input value="{{usuario.fechaNacimiento}}" type="date" class="form-control" id="input4">
+                        <input value="{{usuario.fechaNacimiento}}" [(ngModel)]="usuario.fechaNacimiento" 
+                        [ngModelOptions]="{standalone: true}" type="date" class="form-control">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="inputEmail4">Email</label>
-                        <input value="{{usuario.email}}" placeholder="Ingrese email..." type="email"
-                            class="form-control" id="input5" disabled>
+                        <input value="{{usuario.email}}" placeholder="Ingrese email..." type="email" class="form-control" disabled>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="inputPassword4">Password</label>
-                        <input value="{{usuario.password}}" placeholder="Ingrese contraseña..." type="password"
-                            class="form-control" id="input6">
+                        <input value="{{usuario.password}}" [(ngModel)]="usuario.password" [ngModelOptions]="{standalone: true}" 
+                        placeholder="Ingrese contraseña..." type="password" class="form-control" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="inputEmail4">Teléfono</label>
-                        <input value="{{usuario.telefono}}" placeholder="Ingrese teléfono..." type="text"
-                            class="form-control" id="input7">
+                        <input value="{{usuario.telefono}}" placeholder="Ingrese teléfono..." [(ngModel)]="usuario.telefono" 
+                        [ngModelOptions]="{standalone: true}" type="text" class="form-control">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="exampleFormControlFile1">Imagen de usuario</label>
@@ -63,8 +63,8 @@
         </div>
     </div>
     <div class="tab-pane fade letra" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-        <button type="submit" class="btn btn-primary" data-toggle="modal" 
-        data-target="#modalDomUsuario" style="float: right; margin: 0.5%;" (click)="resetear()">Agregar +</button>
+        <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#modalDomUsuario"
+            style="float: right; margin: 0.5%;" (click)="resetear()">Agregar +</button>
         <table class="table">
             <thead>
                 <tr>
@@ -86,7 +86,8 @@
                     <td>{{item.departamento}}</td>
                     <td>Localidad</td>
                     <td>
-                        <button type="button" data-toggle="modal" data-target="#modalDomUsuario" class="btn btn-warning" (click)="onPreUpdate(item)">Editar</button>
+                        <button type="button" data-toggle="modal" data-target="#modalDomUsuario" class="btn btn-warning"
+                            (click)="onPreUpdate(item)">Editar</button>
                         <button type="button" class="btn btn-danger" (click)="deleteDomicilio(item)">Borrar</button>
                     </td>
                 </tr>
@@ -94,4 +95,15 @@
         </table>
     </div>
 </div>
-<app-modal-dom-usuario [domicilioSeleccionado]="domicilioSeleccionado" [id]="idP" [indicePosicion]="indicePosicion"></app-modal-dom-usuario>
+<div class="footer" style="margin-top: 4%;">
+    <footer>
+        <div class="row">
+            <h4>El Buen Sabor - Laboratorio IV - Universidad Tecnológica Nacional (U.T.N.)</h4>
+        </div>
+        <div class="row">
+            <h4>Sitio web creado por Astorga, Gutierrez Caligaris, Rocha y Valenti.</h4>
+        </div>
+    </footer>
+</div>
+<app-modal-dom-usuario [domicilioSeleccionado]="domicilioSeleccionado" [id]="idP" [indicePosicion]="indicePosicion">
+</app-modal-dom-usuario>
