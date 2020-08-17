@@ -1,11 +1,15 @@
-import { LocalidadService } from './../../../services/allServices/localidad.service';
-import { DomicilioService } from 'src/app/services/allServices/domicilio.service';
-import { UsuarioComponent } from './../../usuario/usuario.component';
-import { Usuario } from './../../../models/Usuario';
-import { Localidad } from './../../../models/Localidad';
+import { CarritoComponent } from './../../pages/carrito/carrito.component';
+import { SweetAlertsService } from './../../services/allServices/sweet-alerts.service';
+import { Localidad } from './../../models/Localidad';
+import { DomicilioService } from './../../services/allServices/domicilio.service';
+import { UsuarioService } from './../../services/allServices/usuario.service';
+import { LocalidadService } from './../../services/allServices/localidad.service';
+import { RolesService } from './../../services/allServices/roles.service';
+import { Domicilio } from './../../models/Domicilio';
+import { Usuario } from './../../models/Usuario';
 import { Component, OnInit, ViewChild, ElementRef, Input, Host } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { Domicilio } from 'src/app/models/Domicilio';
+
 
 @Component({
   selector: 'app-modal-domicilio',
@@ -21,21 +25,27 @@ export class ModalDomicilioComponent implements OnInit {
   public idPropietario: number;
   public domicilios;
   public localidades;
-  usuario: Usuario;
-  localidad: Localidad;
   public edit: boolean = false;
   public idPersona: number;
-  public indiceP: number;
+  public localidadSeleccionada;
+  usuario: Usuario = {
+    id: 0,
+    nombre: '',
+    apellido: '',
+    email: '',
+    password: '',
+    fechaNacimiento: null,
+    eliminado: false,
+    dni: 0,
+    imagen: '',
+    rol: '',
+    esCliente: true,
+    telefono: 0
+  }
 
   @Input() set id(valor: number) {
     if (valor) {
       this.idPropietario = valor;
-    }
-  }
-
-  @Input() set indicePosicion(valor) {
-    if (valor) {
-      this.indiceP = valor;
     }
   }
 
@@ -60,13 +70,14 @@ export class ModalDomicilioComponent implements OnInit {
     }
   }
 
-  constructor(@Host() private tabla: UsuarioComponent,
-  private servicio: DomicilioService, private localidadService: LocalidadService,
-    private formBuilder: FormBuilder) { }
+  constructor(@Host() private carrito: CarritoComponent,private servicio: DomicilioService, 
+    private localidadService: LocalidadService, private formBuilder: FormBuilder, 
+    private usuarioService: UsuarioService, private rolesService: RolesService, 
+    private alertsService: SweetAlertsService) { }
 
   ngOnInit() {
     this.onBuild();
-    this.getAllDomiciliosXUsuario();
+    this.isAuth();
     this.getLocalidades();
   }
 
@@ -78,7 +89,7 @@ export class ModalDomicilioComponent implements OnInit {
       departamento: new FormControl('', [Validators.required]),
       piso: new FormControl('', [Validators.required]),
       propietario: this.formBuilder.group({
-        id: '' //Esto se harcodea según el id del usuario logeado...
+        id: ''
       }),
       localidad: this.formBuilder.group({
         id: ''
@@ -86,63 +97,44 @@ export class ModalDomicilioComponent implements OnInit {
     });
   }
 
-  getAllDomiciliosXUsuario(){
-    //obtener el id del usuario logeado...
-    this.servicio.buscarporUsuario(3).subscribe( response => {
-      this.domicilios = response;
-    },
-    err =>{
-      console.log("Error en get all domicilios - Modal dom");
-    })
+  isAuth() {
+    this.usuarioService.isAuth().subscribe(res => {
+      const email = res.email;
+      this.rolesService.getEmail(email).subscribe(res => {
+        this.usuario = res;
+      })
+    });
   }
 
   getLocalidades(){
     this.localidadService.getAll().subscribe( response => {
       this.localidades = response;
-    },
-    err =>{
-      console.log("Error en get all localidades - Modal dom");
     })
   }
 
   onSave(formDomicilio: FormGroup): void {
-    formDomicilio.value.propietario.id = 3; //Acá se hardcodea el usuario.
-    formDomicilio.value.eliminado = false; //Todo domicilio nuevo tiene false por defecto.
+    formDomicilio.value.propietario.id = this.usuario.id;
+    formDomicilio.value.localidad.id = this.localidadSeleccionada;
+    formDomicilio.value.eliminado = false;
     this.btnClose.nativeElement.click();
-    //Llamar a Host para el método getDomicilios...
-    if (formDomicilio.value.id === null) {
-      // Add
-      this.addDomicilio(formDomicilio.value);
-    } else {
-      // Update
-      this.updateDomicilio(formDomicilio.value);
-    }
+    this.addDomicilio(formDomicilio.value);
   }
 
   addDomicilio(domicilio: Domicilio) {
     this.servicio.post(domicilio).subscribe(
       res => {
-        this.domicilios.push(res);
+        this.alertsService.successAlert('El domicilio fue agregado correctamente');
+        this.carrito.domicilios.push(res);
       },
-      err => {
-        alert('Ocurrió un error al agregar el domicilio'+ err);
+      () => {
+        this.alertsService.errorAlert('Opps...','Ocurrió un error agregando el domicilio');
       }
     );
   }
 
-  updateDomicilio(domicilio: Domicilio) {
-    this.servicio.put(domicilio.id, domicilio).subscribe(
-      res => {
-        alert('El domicilio fue actualizado con éxito');
-        this.tabla.domicilios.splice(this.indiceP, 1, domicilio);
-        this.indiceP = null;
-        alert('El usuario fue actualizado con éxito');
-        this.getAllDomiciliosXUsuario();
-      },
-      err => {
-        alert('Ocurrió un error al actualizar usuario '+ err);
-      }  
-    );
+  onLocalidadChange(value){
+    const localidadFiltrada = this.localidades.filter(x => x.nombre === value);
+    this.localidadSeleccionada = localidadFiltrada[0].id;
   }
 
   onReset(){

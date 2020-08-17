@@ -1,7 +1,5 @@
-<!-- Agregar navbar aquí -->
-
 <!-- Tabla Carrito -->
-<section style="margin: 1%">
+<section style="margin-top: 1%; margin-left: 1%;">
   <div>
     <div class="row">
       <div class="col-xs-12 col-sm-8 col-md-10">
@@ -49,7 +47,7 @@
 </section>
 <app-modal-detalle [detalleSeleccionado]="detalleSeleccionado"></app-modal-detalle>
 
-<div style="margin-left: 1%; margin-right: 1%;">
+<div style="margin-left: 1%;">
   <h1 class="titulos" style="margin-top: 2%; text-align: center;">¡Envíe su pedido en 3 simples Pasos!</h1>
   <br>
   <div class="row">
@@ -78,10 +76,9 @@
           <div class="input-group-prepend">
             <label class="input-group-text" for="inputGroupSelect01">Dirección</label>
           </div>
-          <select class="custom-select" id="inputGroupSelect01">
-            <option selected>Seleccionar...</option>
-            <option *ngFor="let dom of domicilios" value="domicilio">{{dom.calle}} {{dom.numero}},
-              {{dom.localidad.nombre}}</option>
+          <select class="custom-select" id="inputGroupSelect01" required>
+            <option selected disabled value="">Seleccionar...</option>
+            <option *ngFor="let dom of domicilios">{{dom.calle}} {{dom.numero}}</option>
           </select>
         </div>
         <!-- Agregar nueva dirección -->
@@ -115,6 +112,15 @@
     </div>
 
   </div>
-
+  
 </div>
-<!-- Agregar footer de la empresa -->
+<div class="footer">
+  <footer>
+      <div class="row">
+          <h4>El Buen Sabor - Laboratorio IV - Universidad Tecnológica Nacional (U.T.N.)</h4>
+      </div>
+      <div class="row">
+        <h4>Sitio web creado por Astorga, Gutierrez Caligaris, Rocha y Valenti.</h4>
+    </div>
+  </footer>
+</div>

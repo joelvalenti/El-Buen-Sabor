@@ -17,9 +17,6 @@ import { IndexAdminComponent } from './components/administrador/index/index.comp
 import { ModalUsuarioComponent } from './components/administrador/modales/modal-usuario/modal-usuario.component';
 import { ComandaComponent } from './components/comanda/comanda.component';
 import { CarritoComponent } from './pages/carrito/carrito.component';
-import { ModalDomicilioComponent } from './pages/carrito/modal-domicilio/modal-domicilio.component';
-import { ModalDetalleComponent } from './pages/carrito/modal-detalle/modal-detalle.component';
-import { PerfilComponent } from './pages/perfil/perfil.component';
 import { CategoriaComponent } from './components/administrador/categoria/categoria.component';
 import { ModalCategoriaComponent } from './components/administrador/modales/modal-categoria/modal-categoria.component';
 import { PedidoComponent } from './components/administrador/pedido/pedido.component';
@@ -39,7 +36,6 @@ import { ModalRealizarPedidoDomicilioComponent } from './components/cajero/modal
 import { ModalRealizarPedidoUsuarioCrearComponent } from './components/cajero/modales/modal-realizar-pedido-usuario-crear/modal-realizar-pedido-usuario-crear.component';
 import { ModalRealizarPedidoDomicilioCrearComponent } from './components/cajero/modales/modal-realizar-pedido-domicilio-crear/modal-realizar-pedido-domicilio-crear.component';
 import { IndexCajeroComponent } from './components/cajero/index/index.component';
-import { UsuarioComponent } from './pages/usuario/usuario.component';
 import { DetallePlatoComponent } from './components/detalle-plato/detalle-plato.component';
 import { ModalloginComponent } from './components/modallogin/modallogin.component';
 import { ModalregistroComponent } from './components/modalregistro/modalregistro.component';
@@ -47,6 +43,11 @@ import { DeliveryComponent } from './pages/delivery/delivery.component';
 import { CatalogoComponent } from './pages/catalogo/catalogo.component';
 import { NavbarComponent } from './pages/navbar/navbar.component';
 import { HomeComponent } from './pages/home/home.component';
+import { ModalDomicilioComponent } from './components/modal-domicilio/modal-domicilio.component';
+import { PaginaPerfilComponent } from './pages/pagina-perfil/pagina-perfil.component';
+import { ModalDomUsuarioComponent } from './components/modal-domicilio/modal-dom-usuario/modal-dom-usuario.component';
+import { ModalDetalleComponent } from './components/modal-detalle/modal-detalle.component';
+import { UsuarioComponent } from './components/administrador/usuario/usuario.component';
 
 // Pipes
 import { FilterBuscarRecetaPipe } from './pipes/filter-buscar-receta.pipe';
@@ -70,12 +71,10 @@ import { AngularFirestore } from '@angular/fire/firestore';
     CarritoComponent,
     ModalDomicilioComponent,
     ModalDetalleComponent,
-    PerfilComponent,
     FilterBuscarRecetaPipe,
     FilterBuscarLocalidadPipe,
     UsuarioComponent,
-	  IndexAdminComponent,
-    UsuarioComponent,
+	IndexAdminComponent,
     ModalUsuarioComponent,
     CategoriaComponent,
     ModalCategoriaComponent,
@@ -105,7 +104,9 @@ import { AngularFirestore } from '@angular/fire/firestore';
     ModalloginComponent,
     ModalregistroComponent,
     DeliveryComponent,
-    HomeComponent
+    HomeComponent,
+    PaginaPerfilComponent,
+    ModalDomUsuarioComponent
   ],
   imports: [
     BrowserModule,

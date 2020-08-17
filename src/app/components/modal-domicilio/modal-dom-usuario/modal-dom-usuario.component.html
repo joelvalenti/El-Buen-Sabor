@@ -1,8 +1,8 @@
-<div class="modal" id="modalDomicilio" data-backdrop="static" tabindex="-1" role="dialog">
+<div class="modal" id="modalDomUsuario" data-backdrop="static" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title letra">Agregar Domicilio</h2>
+                <h2 class="modal-title letra">Gestionar Domicilio</h2>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -37,10 +37,10 @@
                         <div class="form-group col-md-6" formGroupName="localidad">
                             <div class="form-group">
                               <label>Localidad:</label>
-                              <select class="custom-select" formControlName="id">
+                              <select class="custom-select" formControlName="id" (change)="onLocalidadChange($event.target.value)" required>
                                 <option selected disabled value="">Seleccionar...</option>
                                 <!-- Buscar manera de mostrar el nombre de la localidad pero que se mande su id. -->
-                                <option *ngFor="let localidad of localidades">{{localidad.id}}</option>
+                                <option *ngFor="let localidad of localidades">{{localidad.nombre}}</option>
                              </select>
                             </div>
                         </div>
@@ -80,7 +80,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary letra" data-dismiss="modal" (click)="onReset()" #btnClose>Cerrar</button>
-                        <button type="submit " class="btn btn-primary letra" #btnClose [disabled]="formDomicilio.invalid">Agregar</button>
+                        <button type="submit " class="btn btn-primary letra" #btnClose [disabled]="formDomicilio.invalid">Guardar</button>
                     </div>
 
                 </form>

@@ -38,7 +38,7 @@
                     <div class="form-group col-md-6">
                         <label for="inputEmail4">Email</label>
                         <input value="{{usuario.email}}" placeholder="Ingrese email..." type="email"
-                            class="form-control" id="input5">
+                            class="form-control" id="input5" disabled>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="inputPassword4">Password</label>
@@ -58,13 +58,13 @@
                     </div>
                 </div>
                 <button style="margin-right: 1%;" type="submit" class="btn btn-secondary">Cancelar</button>
-                <button type="submit" class="btn btn-primary" (click)="update(usuario)">Guardar</button>
+                <button type="submit" class="btn btn-primary" (click)="updateUsuario(usuario)">Guardar</button>
             </form>
         </div>
     </div>
     <div class="tab-pane fade letra" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
         <button type="submit" class="btn btn-primary" data-toggle="modal" 
-        data-target="#modalDomicilio" style="float: right; margin: 0.5%;">Agregar +</button>
+        data-target="#modalDomUsuario" style="float: right; margin: 0.5%;" (click)="resetear()">Agregar +</button>
         <table class="table">
             <thead>
                 <tr>
@@ -78,7 +78,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of domicilios">
+                <tr *ngFor="let item of domicilios; let indice=index">
                     <th scope="row">{{item.id}}</th>
                     <td>{{item.calle}}</td>
                     <td>{{item.numero}}</td>
@@ -86,7 +86,7 @@
                     <td>{{item.departamento}}</td>
                     <td>Localidad</td>
                     <td>
-                    <button type="button" data-toggle="modal" data-target="#modalDomicilio" class="btn btn-warning">Editar</button>
+                        <button type="button" data-toggle="modal" data-target="#modalDomUsuario" class="btn btn-warning" (click)="onPreUpdate(item)">Editar</button>
                         <button type="button" class="btn btn-danger" (click)="deleteDomicilio(item)">Borrar</button>
                     </td>
                 </tr>
@@ -94,4 +94,4 @@
         </table>
     </div>
 </div>
-<app-modal-domicilio></app-modal-domicilio>
+<app-modal-dom-usuario [domicilioSeleccionado]="domicilioSeleccionado" [id]="idP" [indicePosicion]="indicePosicion"></app-modal-dom-usuario>
