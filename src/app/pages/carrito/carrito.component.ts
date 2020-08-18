@@ -1,8 +1,13 @@
+import { SweetAlertsService } from './../../services/allServices/sweet-alerts.service';
+import { UsuarioService } from './../../services/allServices/usuario.service';
+import { RolesService } from './../../services/allServices/roles.service';
+import { Usuario } from 'src/app/models/Usuario';
 import { DomicilioService } from './../../services/allServices/domicilio.service';
 import { DetalleService } from './../../services/allServices/detalle.service';
 import { Domicilio } from './../../models/Domicilio';
 import { Detalle } from './../../models/Detalle';
 import { Component, OnInit, Input } from '@angular/core';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-carrito',
@@ -13,10 +18,12 @@ import { Component, OnInit, Input } from '@angular/core';
 export class CarritoComponent implements OnInit {
 
   public detalles: Detalle[] = [];
+  domicilios: Domicilio[];
   indice: number;
   public idPersona: number;
   public flagRadio = true;
-  
+  usuario: Usuario;
+
   public detalleSeleccionado: Detalle = {
     id: 0,
     cantidad: 0,
@@ -27,25 +34,35 @@ export class CarritoComponent implements OnInit {
 
   @Input() set id(valor: number) {
     if (valor) {
-      //this.getAllDomiciliosXUsuario(id);
-      this.idPersona = 3;
+      this.idPersona = this.usuario.id;
     }
   }
 
-  constructor(private detalleService: DetalleService, private servicioDomicilio: DomicilioService) { }
+  constructor(private detalleService: DetalleService, private rolesService: RolesService,
+    private usuarioService: UsuarioService, private servicioDomicilio: DomicilioService,
+    private alertsService: SweetAlertsService) { }
 
   ngOnInit() {
-    this.getAllDetallesxPedido();
+    this.isAuth();
     this.getAllDomiciliosXUsuario();
+    this.getAllDetallesxPedido();
+  }
+
+  isAuth() {
+    this.usuarioService.isAuth().subscribe(res => {
+      const email = res.email;
+      this.rolesService.getEmail(email).subscribe(res => {
+        this.usuario = res;
+      })
+    });
   }
 
   getAllDetallesxPedido() {
-    this.detalleService.buscarPorPedido(1).subscribe(response => {
-      this.detalles = response;
-      console.log(this.detalles);
+    this.detalleService.buscarPorPedido(1).subscribe(res => {
+      this.detalles = res;
     },
-      err => {
-        alert('Error al traer todos los detalles: ' + err);
+      () => {
+        this.alertsService.errorAlert('Opss... :(', 'No se pudo recolectar la información del carrito');
       });
   }
 
@@ -61,26 +78,38 @@ export class CarritoComponent implements OnInit {
   getTotalFinal(): number {
     let totalNeto = this.getTotalNeto();
     let totalFinal = totalNeto - totalNeto * 0.1; //Con 10% de descuento.
-    if(this.flagRadio){
+    if (this.flagRadio) {
       return totalNeto;
-    }else{
+    } else {
       return totalFinal;
     }
   }
 
   delete(detalle: Detalle) {
-    const opcion = confirm('¿Desea eliminar este registro?');
-    if (opcion === true) {
-      this.detalleService.delete(detalle.id).subscribe(
-        res => {
-          alert('El registro fue eliminado con éxito');
-          const indexDetalle = this.detalles.indexOf(detalle);
-          this.detalles.splice(indexDetalle, 1);
-        },
-        err => {
-          alert('Error al eliminar el registro seleccionado: ' + err);
-        });
-    }
+    return Swal.fire({
+      title: 'Proceder con la eliminación?',
+      text: 'El registro no podrá recuperarse',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminalo!'
+    }).then(res => {
+      if (res.value) {
+        Swal.fire(
+          'Eliminado!',
+          'Su registro ha sido eliminado!',
+          'success'
+        )
+        this.detalleService.delete(detalle.id).subscribe(
+          () => {
+            const indexDetalle = this.detalles.indexOf(detalle);
+            this.detalles.splice(indexDetalle, 1);
+          })
+      }
+    }).catch(() => {
+      this.alertsService.errorAlert('Opps... :(', 'No se pudo eliminar el registro');
+    })
   }
 
   onPreUpdate(detalle: Detalle) {
@@ -88,27 +117,17 @@ export class CarritoComponent implements OnInit {
     this.indice = this.detalles.indexOf(detalle);
   }
 
-  onRadioChange(value){
-    console.log("El radio button seleccionado es: ", value);
-    if(value==="local"){
-      this.flagRadio = false;
-    }else{
-      this.flagRadio = true;
-    }
+  onRadioChange(value) {
+    (value=="local") ? this.flagRadio = false : this.flagRadio = true;
   }
 
   //Seleccionar direccion (Paso 2)
-
-  domicilios: Domicilio[];
-
-  getAllDomiciliosXUsuario(){
-    //obtener el id del usuario logeado...
-    this.servicioDomicilio.buscarporUsuario(3).subscribe( response => {
-      this.domicilios = response;
-    },
-    err =>{
-      console.log("Error en get all domicilios - Carrito");
-    })
+  getAllDomiciliosXUsuario() {
+    setTimeout(() => {
+      this.servicioDomicilio.buscarporUsuario(this.usuario.id).subscribe(res => {
+        this.domicilios = res;
+      })
+    }, 2000);
   }
 
 }

@@ -1,0 +1,12 @@
+.letra {
+  font-family: Verdana;
+}
+/* FOOTER */
+.footer {
+  background-color: rgb(48, 46, 46);
+}
+.footer h4 {
+  color: #888;
+  margin-top: 1%;
+  margin-left: 2%;
+}

@@ -1,6 +1,7 @@
-import { DetalleService } from './../../../services/allServices/detalle.service';
-import { Detalle } from '../../../models/Detalle';
-import { CarritoComponent } from '../carrito.component';
+import { SweetAlertsService } from './../../services/allServices/sweet-alerts.service';
+import { Detalle } from './../../models/Detalle';
+import { DetalleService } from './../../services/allServices/detalle.service';
+import { CarritoComponent } from './../../pages/carrito/carrito.component';
 import { Component, OnInit, ViewChild, ElementRef, Host, Input } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
@@ -23,7 +24,7 @@ export class ModalDetalleComponent implements OnInit {
   }
 
   constructor(private servicio: DetalleService, @Host() private tabla: CarritoComponent,
-    private formBuilder: FormBuilder) {}
+    private formBuilder: FormBuilder, private alertsService: SweetAlertsService) { }
 
   @Input() set detalleSeleccionado(valor) {
     this.onBuild();
@@ -41,15 +42,14 @@ export class ModalDetalleComponent implements OnInit {
   onBuild() {
     this.formDetalle = this.formBuilder.group({
       id: null,
-      nombre: new FormControl({value: '', disabled: true}, [Validators.required]),
+      nombre: new FormControl({ value: '', disabled: true }, [Validators.required]),
       cantidad: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]\d*$/)]),
-      precioVenta: new FormControl({value: '', disabled: true}, [Validators.required])
+      precioVenta: new FormControl({ value: '', disabled: true }, [Validators.required])
     });
   }
 
   onSave(formDetalle: FormGroup): void {
     if (formDetalle.value.id !== null) {
-      // Update
       this.update(formDetalle.value);
     }
     this.btnClose.nativeElement.click();
@@ -57,25 +57,22 @@ export class ModalDetalleComponent implements OnInit {
   }
 
   update(detalle: Detalle) {
-    this.servicio.put(detalle.id,detalle).subscribe(
-      res => {
-        alert('El detalle fue actualizado con éxito');
+    this.servicio.put(detalle.id, detalle).subscribe(
+      () => {
+        this.alertsService.successAlert('El carrito fue actualizado con éxito.');
         this.tabla.detalles.splice(this.indice, 1, detalle);
         this.refreshCarrito();
       },
-      err => {
-        alert('Ocurrió un error al actualizar detalle');
-      }  
+      () => {
+        this.alertsService.errorAlert('Opps... :(', 'Algo salió mal actualizando el carrito');
+      }
     );
   }
 
   refreshCarrito() {
     this.servicio.buscarPorPedido(1).subscribe(response => {
       this.tabla.detalles = response;
-    },
-      err => {
-        alert('Error al traer todos los detalles: ' + err);
-      });
+    });
   }
 
   onClose() {

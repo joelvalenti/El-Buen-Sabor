@@ -12,6 +12,7 @@ export class InsumoService extends BaseService<Insumo> {
   protected miUrl3 = 'http://localhost:9000/api/v1/insumo/esInsumo/'+true;
   protected miUrl2 = 'http://localhost:9000/api/v1/insumo/insumoporcategoria/';
   protected miUrl4 = 'http://localhost:9000/api/v1/insumo/stocks/';
+  protected miUrl5 = 'http://localhost:9000/api/v1/insumo/buscarPorCategoriaNoInsumo/';
 
   constructor(protected http: HttpClient) {
     super(http);
@@ -20,12 +21,17 @@ export class InsumoService extends BaseService<Insumo> {
   buscarporCategoria(id:number): Observable<Insumo[]> {
     return this.http.get<Insumo[]>(this.miUrl2 + id);
   }
+
   buscarInsumoporCategoria(): Observable<Insumo[]> {
     return this.http.get<Insumo[]>(this.miUrl3);
   }
 
   getStocks(id:number): Observable<Insumo[]> {
     return this.http.get<Insumo[]>(this.miUrl4+id);
+  }
+
+  buscarPorCategoriaNoInsumo(id:number): Observable<Insumo[]> {
+    return this.http.get<Insumo[]>(this.miUrl5 + id);
   }
 
   getEsInsumo(esInsumo: boolean): Observable<Insumo[]>{

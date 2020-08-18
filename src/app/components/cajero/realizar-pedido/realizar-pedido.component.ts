@@ -1,3 +1,7 @@
+import { FacturaService } from './../../../services/allServices/factura.service';
+import { CategoriaInsumoService } from './../../../services/allServices/categoriaInsumo.service';
+import { CategoriaInsumo } from './../../../models/CategoriaInsumo';
+import { Insumo } from './../../../models/Insumo';
 import { Detalle } from './../../../models/Detalle';
 import { DetalleService } from './../../../services/allServices/detalle.service';
 import { DomicilioService } from 'src/app/services/allServices/domicilio.service';
@@ -17,6 +21,8 @@ import { Usuario } from 'src/app/models/Usuario';
 import { Domicilio } from 'src/app/models/Domicilio';
 import { Estado } from 'src/app/models/Estado';
 import { Plato } from 'src/app/models/Plato';
+import { InsumoService } from 'src/app/services/allServices/insumo.service';
+import { FaltanteStockComponent } from '../../administrador/faltante-stock/faltante-stock.component';
 
 @Component({
   selector: 'app-realizar-pedido',
@@ -26,33 +32,42 @@ import { Plato } from 'src/app/models/Plato';
 export class RealizarPedidoComponent implements OnInit {
 
   public localDataCategorias: any;
+  public localDataCategoriasInsumos:any;
   public localDataPlatos: any;
+  public localDataInsumos: any;
   public usuario: Usuario;
   public domicilio: Domicilio;
   public estado: Estado;
   public pedido: Pedido;
   public pedidoSelec: Pedido;
   public platoSelec:Plato;
+  public insumoSelec:Insumo;
   public localData: any = { ...this.pedido };
   public detalle: Detalle;
+  public detalleInsumo: Detalle;
   public localDataDetalle: any = { ...this.detalle };
   public localDataDetalles: any = this.detalle;
   public form3: FormGroup;
   public form4: FormGroup;
+  public form5: FormGroup;
   public userId: number;
   public domId: number;
   public paso1: boolean = false;
   public paso2: boolean = true;
+  public paso3:boolean=false;
   public llave: boolean = true;
 
   constructor(public dialog: MatDialog, public formBuilder3: FormBuilder, public formBuilder4: FormBuilder,
+    public formBuilder5: FormBuilder,
     public service: CategoriaService,
     public service2: PlatoService, public service3: PedidoService, public service4: EstadoService,
-    public service5: UsuarioService, public service6: DomicilioService, public service7: DetalleService) { }
+    public service5: UsuarioService, public service6: DomicilioService, public service7: DetalleService,
+    public service8: InsumoService, public service9:CategoriaInsumoService, public service10:FacturaService) { }
 
   ngOnInit(): void {
     this.buildForm3();
     this.buildForm4();
+    this.buildForm5();
     this.getAllCategorias();
   }
   obtenerFecha(): String {
@@ -82,7 +97,7 @@ export class RealizarPedidoComponent implements OnInit {
   }
 
   agregarEstado(): void {
-    this.service4.getOne(2).subscribe(data => {
+    this.service4.getOne(1).subscribe(data => {
       this.estado = data;
       this.form3.controls['estado'].setValue(this.estado);
       this.agregarUsuario();
@@ -142,14 +157,31 @@ export class RealizarPedidoComponent implements OnInit {
 
   }
 
+  buildForm5() {
+    this.form5 = this.formBuilder5.group({
+      id: [this.localData.id],
+      total: [this.localData.cantidad],
+      usuario: [this.localData.plato],
+      pedido: [this.localData.insumo],
+      fecha: [this.localData.pedido],
+      tipoPago: [this.localData.pedido],
+      eliminado: [this.localData.eliminado]
+    });
+
+  }
+
   public getAllCategorias(): void {
     this.service.getAll().subscribe((data) => {
       this.localDataCategorias = data;
     });
+    this.service9.buscarporCategoria().subscribe((data)=>{
+      this.localDataCategoriasInsumos=data;
+    })
+    
   }
 
   onSubmitUsuario(): void {
-    this.dialog.open(ModalRealizarPedidoUsuarioComponent)
+    this.dialog.open(ModalRealizarPedidoUsuarioComponent, {width:"1000px"})
       .afterClosed().subscribe(result => {
         this.cargarUsuario(result.data);
         Swal.fire({
@@ -163,7 +195,7 @@ export class RealizarPedidoComponent implements OnInit {
   }
 
   onSubmitDomicilio(): void {
-    this.dialog.open(ModalRealizarPedidoDomicilioComponent, { data: this.userId })
+    this.dialog.open(ModalRealizarPedidoDomicilioComponent, {width:"800px", data: this.userId })
       .afterClosed().subscribe(result => {
         this.cargarDomicilio(result.data);
         Swal.fire({
@@ -189,7 +221,7 @@ export class RealizarPedidoComponent implements OnInit {
     this.cargarPedido();
   }
 
-  public crearDetalle(element: Plato): void {
+  public crearDetallePlato(element: Plato): void {
     this.service7.buscarPorPlato(this.pedidoSelec.id, element.id).subscribe((data) => {
       let contador: number = 0;
       data.forEach(element => {
@@ -199,6 +231,26 @@ export class RealizarPedidoComponent implements OnInit {
       if (contador == 0) {
         this.form4.controls['cantidad'].setValue(1);
         this.form4.controls['plato'].setValue(element);
+        this.form4.controls['insumo'].setValue(null);
+        this.form4.controls['pedido'].setValue(this.pedidoSelec);
+        this.form4.controls['eliminado'].setValue(false);
+        this.postDetalle();
+      }
+    });
+
+  }
+
+  public crearDetalleInsumo(element: Insumo): void {
+    this.service7.buscarPorInsumo(this.pedidoSelec.id, element.id).subscribe((data) => {
+      let contador: number = 0;
+      data.forEach(element => {
+        contador += 1;
+      });
+      this.insumoSelec=element;
+      if (contador == 0) {
+        this.form4.controls['cantidad'].setValue(1);
+        this.form4.controls['insumo'].setValue(element);
+        this.form4.controls['plato'].setValue(null);
         this.form4.controls['pedido'].setValue(this.pedidoSelec);
         this.form4.controls['eliminado'].setValue(false);
         this.postDetalle();
@@ -215,7 +267,7 @@ export class RealizarPedidoComponent implements OnInit {
 
   public getAllDetalles(): void {
     this.service7.buscarPorPedido(this.pedidoSelec.id).subscribe((data) => {
-      this.localDataDetalles = data;
+        this.localDataDetalles = data;
       this.getOnePedido();
     })
   }
@@ -232,6 +284,17 @@ export class RealizarPedidoComponent implements OnInit {
     this.service2.buscarPlatoPorCategoria(id).subscribe(data => {
       console.log("Plato: " + data)
       this.localDataPlatos = data;
+      this.localDataInsumos=null;
+    });
+
+  }
+
+  public buscarInsumos(id: number): void {
+    console.log(id);
+    this.service8.buscarPorCategoriaNoInsumo(id).subscribe(data => {
+      console.log("Insumo: " + data)
+      this.localDataInsumos = data;
+      this.localDataPlatos=null;
     });
 
   }
@@ -240,10 +303,10 @@ export class RealizarPedidoComponent implements OnInit {
     let cantidad: number=0;
     if (this.llave) {
       if (incrementar) {
-        cantidad = Number.parseInt((<HTMLInputElement>document.getElementById("cantidad")).value) + 1;
+        cantidad = Number.parseInt((<HTMLInputElement>document.getElementById("cantidad_" + detalle.id.toString())).value) + 1;
         this.actualizarDetalle(cantidad, detalle, false);
       } else {
-        cantidad = Number.parseInt((<HTMLInputElement>document.getElementById("cantidad")).value) - 1;
+        cantidad = Number.parseInt((<HTMLInputElement>document.getElementById("cantidad_" + detalle.id.toString())).value) - 1;
         if(cantidad==0){
           this.actualizarDetalle(1, detalle, true);
         }else{
@@ -253,6 +316,8 @@ export class RealizarPedidoComponent implements OnInit {
     }
     this.llave=false;
   }
+
+ 
 
   public actualizarDetalle(cantidad:number,detalle:Detalle, eliminado:boolean):void{
       this.form4.controls['id'].setValue(detalle.id);
@@ -266,6 +331,42 @@ export class RealizarPedidoComponent implements OnInit {
         this.getAllDetalles();
         this.llave=true;
       })
+  }
+
+  public terminarPedido():void{
+
+    this.form5.controls['id'].setValue(null);
+    this.form5.controls['total'].setValue(this.pedidoSelec.monto);
+    this.form5.controls['fecha'].setValue(this.obtenerFecha());
+    this.form5.controls['pedido'].setValue(this.pedidoSelec);
+    this.form5.controls['usuario'].setValue(this.usuario);
+    this.form5.controls['tipoPago'].setValue('Efectivo');
+    this.form5.controls['eliminado'].setValue(false);
+
+
+    this.service10.post(this.form5.value).subscribe(data=>{
+      this.paso3=true;
+    });
+    
+
+  }
+
+  public reiniciarPedido():void{
+    this.userId=null;
+    this.domId=null;
+    this.pedidoSelec=null;
+    this.platoSelec=null;
+    this.usuario=null;
+    this.detalle=null;
+    this.domicilio=null;
+    this.estado=null;
+    this.paso1=false;
+    this.paso2=true;
+    this.paso3=false;
+    this.localData=null;
+    this.localDataDetalle=null;
+    this.localDataDetalles=null;
+    this.localDataPlatos=null;
   }
 
 }
