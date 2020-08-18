@@ -8,23 +8,45 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item active">
-          <a class="nav-link" href="/catalogo">Menú<span class="sr-only">(current)</span></a>
-        </li>
+        <!--INGRESAR A LA APP-->
         <li class="nav-item">
           <a class="nav-link" href="/" data-toggle="modal" data-target="#modalIngreso"*ngIf="!isLogged">Ingresar</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/" data-toggle="modal" data-target="#modalRegistro" *ngIf="!isLogged">Registrarse</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/" data-toggle="modal" *ngIf="isLogged">Mi Perfil</a>
+        <!--CLIENTE-->
+        <li class="nav-item active">
+          <a class="nav-link" href="/catalogo" *ngIf="isLogged && rol == 'cliente'">Menú<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/" data-toggle="modal" *ngIf="isLogged" (click)="onLogout()">Salir</a>
+          <a class="nav-link" href="/usuario"  *ngIf="isLogged && rol == 'cliente'">Mi Perfil</a>
+        </li>
+        <!--DELIVERY-->
+        <li class="nav-item">
+          <a class="nav-link" href="/delivery" *ngIf="isLogged && rol == 'delivery'">Delivery</a>
+        </li>
+        <!--CAJERO-->
+        <li class="nav-item">
+          <a class="nav-link" href="/cajero" *ngIf="isLogged && (rol=='cajero')">Cajero</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/carrito" *ngIf="isLogged && (rol == 'cliente' || rol=='cajero')">Carrito</a>
+        </li>
+        <!--COCINERO-->
+        <li class="nav-item">
+          <a class="nav-link" href="/cocina" *ngIf="isLogged && rol == 'cocinero'">Cocina</a>
+        </li>
+        <!--ADMINISTRADOR-->
+        <li class="nav-item">
+          <a class="nav-link" href="/administrador" *ngIf="isLogged && rol == 'administrador'">Administrador</a>
+        </li>
+        <!--SALIR-->
+        <li class="nav-item">
+          <a class="nav-link" href="/" *ngIf="isLogged" (click)="onLogout()">Salir</a>
         </li>
         <li>
-          <button (click)="isAuth()">Input</button>
+          <button (click)="esquere()">Input</button>
         </li>
       </ul>
     </div>

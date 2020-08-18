@@ -10,38 +10,67 @@ import { window } from 'rxjs/operators';
 })
 export class NavbarComponent implements OnInit {
   //constructor
-  constructor(private servicio:UsuarioService, private roles : RolesService ,private router:Router) { }
+  constructor(private servicio:UsuarioService,
+              private roles : RolesService ,
+              private router:Router) { }
 
   //atributos y variables
   public isLogged : boolean = false;
-  @Input() rol = '';
-
+  @Input() rol = ' ';
 
   ngOnInit(): void {
     this.isLoggedMethod();
+    if(this.rol == ' '){
+      this.consultarRol();
+    }
+  }
+
+  consultarRol(){
+    console.log('entra en consultarRol');
+    this.servicio.isAuth().subscribe( user => {
+      if(user != null){
+        this.isLogged = true;
+        if(this.rol == ' '){
+          this.roles.getEmail(user.email).subscribe(
+            res=>{
+              this.rol = res.rol;
+              console.log('se setea el rol');
+            },
+            err=>{
+              console.log(':C');
+            }
+          );
+        }
+      }else{
+        this.rol=' ';
+      }
+    });
   }
 
   isLoggedMethod(){
     this.servicio.isAuth().subscribe( user => {
-      if(user != null){
-        this.isLogged = true;
-      }
-    });
+        if(user != null){
+          this.isLogged = true;
+        }else{
+          this.rol=' ';
+        }
+      });
   }
 
   onLogout(){
     this.servicio.logoutUser();
     this.isLogged = false;
     this.router.navigate(['/']);
-  }
-
-  mostrarInput(){
-    console.log('rol ',this.rol);
+    this.rol=' ';
   }
 
   inputlistener(parameter: any){
       console.log('esto se ejecuto: ', parameter);
       this.rol = parameter;
+  }
+
+  esquere(){
+    console.log('ROL DEL USER ACTUAL: ', this.rol);
   }
 
   isAuth(){

@@ -6,6 +6,8 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 import { Usuario } from 'src/app/models/Usuario';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-modalregistro',
@@ -14,14 +16,14 @@ import { Usuario } from 'src/app/models/Usuario';
 })
 export class ModalregistroComponent implements OnInit {
 
-  constructor( private router: Router, private authService: UsuarioService, private serviciorol : RolesService,private storage: AngularFireStorage) { }
+  constructor( private router: Router, private authService: UsuarioService, private serviciorol : RolesService,private storage: AngularFireStorage, private formBuilder: FormBuilder) { }
 
   @ViewChild('btnClose', { static: true }) btnClose: ElementRef;
   @ViewChild('imageUser',{static:true}) inputImageUser: ElementRef;
   //variables
+  public formRegistro: FormGroup;
   public email: string = '';
   public password: string = '';
-  public password_repeat: string = '';
   public nombre:string = '';
   public apellido:string = '';
   public telefono:number = null;
@@ -33,6 +35,18 @@ export class ModalregistroComponent implements OnInit {
   urlImage: Observable<string>;
 
   ngOnInit(): void {
+    this.onBuild();
+  }
+
+  onBuild() {
+    this.formRegistro = this.formBuilder.group({
+      email: new FormControl('', [Validators.required, Validators.minLength(5)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(5)]),
+      nombre: new FormControl('', [Validators.required]),
+      apellido: new FormControl('', [Validators.required]),
+      telefono: new FormControl('', [Validators.required,  Validators.pattern(/^[0-9]\d*$/)]),
+      fechaNacimiento: new FormControl('', [Validators.required])
+    });
   }
 
   onUpload(e){
@@ -46,36 +60,39 @@ export class ModalregistroComponent implements OnInit {
 
   }
 
-  onAddUser(){
-     this.authService.registerUser(this.email, this.password)
-    .then( (res) => {
-      this.authService.isAuth().subscribe( user =>{
-        if(user){
-          user.updateProfile({
-            displayName: '',
-            photoURL: this.inputImageUser.nativeElement.value
-          }).then( () => {
-            
-          }).catch( (error) => console.log('error',error));
-        }
-      });
-      //codigo para agregar nuevo usuario
-      this.nuevoUsuario.nombre = this.nombre;
-      this.nuevoUsuario.rol = 'cliente';
-      this.nuevoUsuario.apellido = this.apellido;
-      this.nuevoUsuario.email = this.email;
-      this.nuevoUsuario.esCliente = true;
-      this.nuevoUsuario.fechaNacimiento = this.fechaNacimiento;
-      this.nuevoUsuario.password = this.password;
-      this.nuevoUsuario.telefono = this.telefono;
+  onAddUser(formRegistro : FormGroup){
+   this.authService.registerUser(formRegistro.value.email , formRegistro.value.password).then(
+      (res)=> {
+        this.authService.isAuth().subscribe( user =>{
+          if(user){
+            user.updateProfile({
+              displayName: '',
+              photoURL: this.inputImageUser.nativeElement.value
+            }).then( () => {
+              
+            }).catch( (error) => console.log('error',error));
+          }
+        });
+        //codigo para agregar nuevo usuario
+        this.nuevoUsuario.nombre = formRegistro.value.nombre;
+        this.nuevoUsuario.rol = 'cliente';
+        this.nuevoUsuario.apellido = formRegistro.value.apellido;
+        this.nuevoUsuario.email = formRegistro.value.email;
+        this.nuevoUsuario.esCliente = true;
+        this.nuevoUsuario.fechaNacimiento = formRegistro.value.fechaNacimiento;
+        this.nuevoUsuario.password = formRegistro.value.password;
+        this.nuevoUsuario.telefono = formRegistro.value.telefono;
+        
+        this.serviciorol.post(this.nuevoUsuario).subscribe(
+          res => { console.log('Todo bien', res)},
+          err => {console.log('Todo mal', err)}
+        );
+        //end
+        this.btnClose.nativeElement.click();
       
-      this.serviciorol.post(this.nuevoUsuario).subscribe(
-        res => { console.log('Todo bien', res)},
-        err => {console.log('Todo mal', err)}
-      );
-      //end
-      this.btnClose.nativeElement.click();
-    }).catch ( (error) => console.log('err',error.message));
+
+      }
+    ).catch ( (error) => console.log('ERROR ',error.message));
     this.nuevoUsuario = {};
   }
 
@@ -118,15 +135,4 @@ export class ModalregistroComponent implements OnInit {
     this.router.navigate(['catalogo']);
   }
 
-  onPrueba(){
-    this.nuevoUsuario.nombre = this.nombre;
-    this.nuevoUsuario.rol = 'cliente';
-    this.nuevoUsuario.apellido = this.apellido;
-    this.nuevoUsuario.email = this.email;
-    this.nuevoUsuario.esCliente = true;
-    this.nuevoUsuario.fechaNacimiento = this.fechaNacimiento;
-    this.nuevoUsuario.password = this.password;
-    this.nuevoUsuario.telefono = this.telefono;
-    console.log('On Prueba', this.nuevoUsuario);
-  }
 }
