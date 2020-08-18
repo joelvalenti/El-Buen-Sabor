@@ -56,12 +56,12 @@ export class CocinaComponent implements OnInit {
           if (pedidoUnit.estado.nombre === 'Terminado') {
             for (let index = 0; index < this.comandas.length; index++) {
               if (this.comandas[index].id === pedidoUnit.id) {
-                this.comandas[index].detalle.forEach((detalle) => {
-                  this.detalleService
-                    .getOne(detalle.id)
-                    .subscribe((detalleData) => {
+                this.detalleService
+                  .buscarPorPedido(this.comandas[index].id)
+                  .subscribe((detalles) => {
+                    detalles.forEach((detalle) => {
                       this.platoService
-                        .getOne(detalleData.plato.id)
+                        .getOne(detalle.plato.id)
                         .subscribe((plato) => {
                           if (plato.nombre !== 'Plato Vacio') {
                             this.recetas.forEach((rec, ind) => {
@@ -72,7 +72,7 @@ export class CocinaComponent implements OnInit {
                           }
                         });
                     });
-                });
+                  });
                 this.comandas.splice(index, 1);
                 break;
               }
@@ -88,27 +88,20 @@ export class CocinaComponent implements OnInit {
     this.comandas.forEach((com) => {
       this.detalleService.buscarPorPedido(com.id).subscribe((cop) => {
         cop.forEach((element) => {
-          this.detalleService.getOne(element.id).subscribe((detal) => {
-            if (detal.insumo.esInsumo) {
-              this.insumoService.getOne(detal.insumo.id).subscribe((ins) => {
-                this.recetas.push(ins);
+          let bolean = false;
+          for (const res of this.recetas) {
+            if (res.nombre === element.plato.nombre) {
+              bolean = true;
+              break;
+            }
+          }
+          if (!bolean) {
+            if (element.plato.nombre !== 'Plato Vacio') {
+              this.platoService.getOne(element.plato.id).subscribe((plat) => {
+                this.recetas.push(plat);
               });
             }
-            let bolean = false;
-            for (const res of this.recetas) {
-              if (res.nombre === detal.plato.nombre) {
-                bolean = true;
-                break;
-              }
-            }
-            if (!bolean) {
-              if (detal.plato.nombre !== 'Plato Vacio') {
-                this.platoService.getOne(detal.plato.id).subscribe((plat) => {
-                  this.recetas.push(plat);
-                });
-              }
-            }
-          });
+          }
         });
       });
     });

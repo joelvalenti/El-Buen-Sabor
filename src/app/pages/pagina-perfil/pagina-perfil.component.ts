@@ -19,7 +19,6 @@ export class PaginaPerfilComponent implements OnInit {
   public localidades;
   indice: number;
   idP:number;
-  indicePosicion:number;
   usuario: Usuario = {
     id: 0,
     nombre: '',
@@ -34,8 +33,20 @@ export class PaginaPerfilComponent implements OnInit {
     esCliente: true,
     telefono: 0
   }
-
-  public domicilioSeleccionado: Domicilio;
+  public domicilioSeleccionado: Domicilio ={
+    id: 0,
+    calle: '',
+    numero: 0,
+    piso: '',
+    departamento: '',
+    eliminado: false,
+    propietario: {
+      id: this.usuario.id
+    },
+    localidad: {
+      id: null
+    }
+  };
 
   @Input() set id(valor: number) {
     if (valor) {
@@ -59,8 +70,14 @@ export class PaginaPerfilComponent implements OnInit {
       const email = res.email;
       this.rolesService.getEmail(email).subscribe(res => {
         this.usuario = res;
+        this.reformatDateString(this.usuario.fechaNacimiento);
       })
     });
+  }
+
+  reformatDateString(value) {
+    var b = value.split(/\D/);
+    return b.reverse().join('-');
   }
 
   getAllDomiciliosXUsuario() {
@@ -68,7 +85,7 @@ export class PaginaPerfilComponent implements OnInit {
       this.domicilioService.buscarporUsuario(this.usuario.id).subscribe(res => {
         this.domicilios = res;
       })
-    }, 2000);
+    }, 1500);
   }
 
   getLocalidades() {
@@ -78,12 +95,8 @@ export class PaginaPerfilComponent implements OnInit {
   }
 
   updateUsuario(usuario: Usuario) {
-    console.log(this.usuario);
     this.usuarioService.put(usuario.id, usuario).subscribe(
       res => {
-        //this.usuario = res;
-        console.log("res: ", res.nombre);
-        console.log(this.usuario);
         this.alertsService.successAlert('El usuario fue actualizado con éxito.');
       },
       () => {
@@ -119,10 +132,8 @@ export class PaginaPerfilComponent implements OnInit {
     })
   }
 
-  onPreUpdate(domicilio: Domicilio, indice: number) {
+  onPreUpdate(domicilio: Domicilio) {
     this.domicilioSeleccionado = domicilio;
-    this.indice = this.domicilios.indexOf(domicilio);
-    this.indicePosicion = indice;
   }
 
   resetear(){

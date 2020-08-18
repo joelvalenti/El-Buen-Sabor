@@ -39,7 +39,6 @@
                               <label>Localidad:</label>
                               <select class="custom-select" formControlName="id" (change)="onLocalidadChange($event.target.value)" required>
                                 <option selected disabled value="">Seleccionar...</option>
-                                <!-- Buscar manera de mostrar el nombre de la localidad pero que se mande su id. -->
                                 <option *ngFor="let localidad of localidades">{{localidad.nombre}}</option>
                              </select>
                              <div *ngIf ="formDomicilio.controls['localidad'].invalid &&
@@ -75,7 +74,6 @@
                         </div>
                     </div>
 
-                    <!-- hidden porque se hardcodea, no quitar o aparece un error en consola -->
                     <div hidden formGroupName="propietario"> 
                         <div class="form-group">
                           <label>ID Propietario:</label>
@@ -84,7 +82,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary letra" data-dismiss="modal" (click)="onReset()" #btnClose>Cerrar</button>
+                        <button type="button" class="btn btn-secondary letra" data-dismiss="modal" #btnClose>Cerrar</button>
                         <button type="submit " class="btn btn-primary letra" #btnClose [disabled]="formDomicilio.invalid">Guardar</button>
                     </div>
 

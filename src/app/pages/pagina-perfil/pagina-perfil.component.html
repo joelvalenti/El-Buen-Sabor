@@ -78,7 +78,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of domicilios; let indice=index">
+                <tr *ngFor="let item of domicilios">
                     <th scope="row">{{item.id}}</th>
                     <td>{{item.calle}}</td>
                     <td>{{item.numero}}</td>
@@ -95,15 +95,4 @@
         </table>
     </div>
 </div>
-<div class="footer" style="margin-top: 4%;">
-    <footer>
-        <div class="row">
-            <h4>El Buen Sabor - Laboratorio IV - Universidad Tecnológica Nacional (U.T.N.)</h4>
-        </div>
-        <div class="row">
-            <h4>Sitio web creado por Astorga, Gutierrez Caligaris, Rocha y Valenti.</h4>
-        </div>
-    </footer>
-</div>
-<app-modal-dom-usuario [domicilioSeleccionado]="domicilioSeleccionado" [id]="idP" [indicePosicion]="indicePosicion">
-</app-modal-dom-usuario>
+<app-modal-dom-usuario [domicilioSeleccionado]="domicilioSeleccionado" [id]="idP"></app-modal-dom-usuario>
