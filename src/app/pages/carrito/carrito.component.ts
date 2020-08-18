@@ -127,7 +127,7 @@ export class CarritoComponent implements OnInit {
       this.servicioDomicilio.buscarporUsuario(this.usuario.id).subscribe(res => {
         this.domicilios = res;
       })
-    }, 2000);
+    }, 1500);
   }
 
 }

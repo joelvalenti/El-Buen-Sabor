@@ -41,16 +41,9 @@ export class ModalDomUsuarioComponent implements OnInit {
     telefono: 0
   }
 
-
   @Input() set id(valor: number) {
     if (valor) {
       this.idPropietario = valor;
-    }
-  }
-
-  @Input() set indicePosicion(valor) {
-    if (valor) {
-      this.indiceP = valor;
     }
   }
 
@@ -62,10 +55,10 @@ export class ModalDomUsuarioComponent implements OnInit {
         id: valor.id,
         calle: valor.calle,
         numero: valor.numero,
-        localidad: valor.localidad,
         departamento: valor.departamento,
         piso: valor.piso,
-        propietario: valor.propietario
+        propietario: valor.propietario,
+        localidad: valor.localidad.nombre,
       });
       if (valor.id !== 0 || valor.id === null) {
         this.edit = true;
@@ -83,7 +76,6 @@ export class ModalDomUsuarioComponent implements OnInit {
   ngOnInit() {
     this.onBuild();
     this.isAuth();
-    this.getAllDomiciliosXUsuario();
     this.getLocalidades();
   }
 
@@ -110,12 +102,6 @@ export class ModalDomUsuarioComponent implements OnInit {
         this.usuario = res;
       })
     });
-  }
-
-  getAllDomiciliosXUsuario(){
-    this.domicilioService.buscarporUsuario(this.usuario.id).subscribe( response => {
-      this.domicilios = response;
-    })
   }
 
   getLocalidades(){
@@ -154,9 +140,10 @@ export class ModalDomUsuarioComponent implements OnInit {
   updateDomicilio(domicilio: Domicilio) {
     this.domicilioService.put(domicilio.id, domicilio).subscribe(
       () => {
+        const indexDom = this.tabla.domicilios.filter(x => x.id === domicilio.id);
+        let posicion = this.tabla.domicilios.findIndex(ref => ref.id === indexDom[0].id);
         this.alertsService.successAlert('El domicilio fue actualizado correctamente');
-        this.tabla.domicilios.splice(this.indiceP, 1, domicilio);
-        this.indiceP = null;
+        this.tabla.domicilios.splice(posicion, 1, domicilio);
       },
       () => {
         this.alertsService.errorAlert('Opps... :(', 'Ocurrió un error al actualizar el domicilio');
@@ -167,10 +154,6 @@ export class ModalDomUsuarioComponent implements OnInit {
   onLocalidadChange(value){
     const localidadFiltrada = this.localidades.filter(x => x.nombre === value);
     this.localidadSeleccionada = localidadFiltrada[0].id;
-  }
-
-  onReset(){
-    this.domicilioSeleccionado = null;
   }
 
 }

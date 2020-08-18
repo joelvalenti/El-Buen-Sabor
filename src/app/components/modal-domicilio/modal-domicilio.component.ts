@@ -1,6 +1,5 @@
 import { CarritoComponent } from './../../pages/carrito/carrito.component';
 import { SweetAlertsService } from './../../services/allServices/sweet-alerts.service';
-import { Localidad } from './../../models/Localidad';
 import { DomicilioService } from './../../services/allServices/domicilio.service';
 import { UsuarioService } from './../../services/allServices/usuario.service';
 import { LocalidadService } from './../../services/allServices/localidad.service';
@@ -9,7 +8,6 @@ import { Domicilio } from './../../models/Domicilio';
 import { Usuario } from './../../models/Usuario';
 import { Component, OnInit, ViewChild, ElementRef, Input, Host } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-
 
 @Component({
   selector: 'app-modal-domicilio',
@@ -57,10 +55,10 @@ export class ModalDomicilioComponent implements OnInit {
         id: valor.id,
         calle: valor.calle,
         numero: valor.numero,
-        localidad: valor.localidad,
         departamento: valor.departamento,
         piso: valor.piso,
-        propietario: valor.propietario
+        propietario: valor.propietario,
+        localidad: valor.localidad
       });
       if (valor.id !== 0 || valor.id === null) {
         this.edit = true;
