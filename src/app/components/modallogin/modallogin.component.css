@@ -16,3 +16,10 @@
   #cancelar{
       background-color: black;
   }
+  .is-invalid{
+    color:red;
+  }
+  
+  .letra{
+    font-family: Verdana;
+  }

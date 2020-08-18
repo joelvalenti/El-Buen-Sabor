@@ -6,6 +6,7 @@ import { UsuarioService } from '../../services/allServices/usuario.service';
 import { RolesService } from '../../services/allServices/roles.service';
 import {NgForm} from '@angular/forms';
 import { Usuario } from 'src/app/models/Usuario';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-modallogin',
@@ -14,9 +15,12 @@ import { Usuario } from 'src/app/models/Usuario';
 })
 export class ModalloginComponent implements OnInit {
 
-  constructor(public afAuth: AngularFireAuth, private router:Router, private authService: UsuarioService, private servicio: RolesService) { }
+  constructor(public afAuth: AngularFireAuth, private router:Router, private authService: UsuarioService, private servicio: RolesService, private formBuilder: FormBuilder) { }
+  
+  public formLogin: FormGroup;
   public email: string = '';
   public password: string = '';
+  errormsg = '';
   usuarioLogeado: Usuario = {};
   nuevoUsuario : Usuario = {};
 
@@ -24,26 +28,38 @@ export class ModalloginComponent implements OnInit {
   @Output() rol = new EventEmitter<string>();
 
   ngOnInit(): void {
+    this.onBuild();
   }
 
   onLoginRedirect():void{
     this.router.navigate(['catalogo']);
   }
 
-  onLogin():void{
-    this.authService.loginEmailUser(this.email,this.password)
+  onBuild() {
+    this.formLogin = this.formBuilder.group({
+      email: new FormControl('', [Validators.required, Validators.minLength(5)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(5)])
+    });
+  }
+
+  onLogin(formLogin : FormGroup):void{
+    this.authService.loginEmailUser(formLogin.value.email, formLogin.value.password)
     .then((res)=>{
       //this.onLoginRedirect(); 
       this.btnClose.nativeElement.click();
       //comenzamos a estblecer el rol, buscando al usuario
-      this.servicio.getEmail(this.email).subscribe( res =>{
+      this.servicio.getEmail(formLogin.value.email).subscribe( res =>{
         this.usuarioLogeado = res;
+        console.log('Se emite el rol', this.usuarioLogeado.rol);
+       this.rol.emit(this.usuarioLogeado.rol); //esta linea emite el Rol de usuario 
       }, err => {
         alert('Ocurrió un gran error');
       });
-      //terminamos de usar el servicio
-      this.rol.emit(this.usuarioLogeado.rol); //esta linea emite el Rol de usuario 
-    }).catch( err => console.log('err',err.message));
+      this.errormsg = '';
+    }).catch( err => {
+     this.errormsg =  err.message; 
+     console.log('err',err.message); 
+    });
   }
 
   onLoginGoogle() : void {
@@ -62,7 +78,7 @@ export class ModalloginComponent implements OnInit {
             const last = dnArray[1];
             this.nuevoUsuario.nombre = first;
             this.nuevoUsuario.apellido = last;
-            this.nuevoUsuario.rol = 'Cliente';
+            this.nuevoUsuario.rol = 'cliente';
             this.nuevoUsuario.esCliente = true;
             // this.nuevoUsuario.telefono = Number.parseInt(res.phoneNumber);
            //post user
@@ -72,12 +88,16 @@ export class ModalloginComponent implements OnInit {
             this.rol.emit(this.usuarioLogeado.rol);
             }, 
             err=>{
+              this.errormsg =  err.message;
               console.log('Something went wrong.'); 
             });
         });
       });
       this.btnClose.nativeElement.click();
-    }).catch(err => console.log('err',err.message));
+    }).catch(err => {
+      this.errormsg =  err.message;
+      console.log('err',err.message)
+    });
     
    this.nuevoUsuario = {};
   }

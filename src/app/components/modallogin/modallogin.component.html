@@ -8,24 +8,36 @@
           </button>
         </div>
         <div class="modal-body">
-            <form #formLogin="ngForm" (submit)="onLogin()">
+            <form  name="formLogin" [formGroup]="formLogin" (ngSubmit)="onLogin(formLogin)">
                 
                   <label for="email1">Correo Electronico</label>
-                  <input [(ngModel)]="email" [ngModelOptions]="{standalone: true}" name="email" type="email" class="form-control"  aria-describedby="emailHelp" required>
-                 <div>   
-                    <label for="password1">Contraseña</label>
-                    <input [(ngModel)]="password" [ngModelOptions]="{standalone: true}" name="password" type="password" class="form-control" required>
-                </div>
+                  <input formControlName="email" name="email" type="email" class="form-control"  aria-describedby="emailHelp" required>
+                  <div *ngIf ="formLogin.controls['email'].invalid &&
+                                    formLogin.controls['email'].touched"
+                                class="is-invalid">
+                          Ingrese un correo electronico valido.
+                  </div>
+                  <div>   
+                    <label for="password">Contraseña</label>
+                    <input formControlName="password" name="password" type="password" class="form-control" required>
+                    <div *ngIf ="formLogin.controls['password'].invalid &&
+                                    formLogin.controls['password'].touched"
+                                class="is-invalid">
+                                La contraseña debe tener al menos 5 caracteres
+                    </div> 
+                  </div>
                 
                 <div class="modal-footer">
-                    <a href="/" >¿No tienes una cuenta? Registrate</a> <br>
+                    <div class="is-invalid" *ngIf="errormsg != ''">
+                        {{errormsg}}
+                    </div>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelar">Cancelar</button>
                     <button type="submit" class="btn btn-primary" #btnClose  id="ingresar">Ingresar</button>
                   </div>
                   <div class="form-group">
                     <button class="btn btn-block btn-social btn-google" #btnClose (click)="onLoginGoogle()">
                         <span class="fa fa-google"></span>
-                        Ingresar con Google
+                        Ingresar con Google 
                       </button>
                 </div>
               </form>

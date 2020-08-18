@@ -28,6 +28,7 @@ export class ModalregistroComponent implements OnInit {
   public apellido:string = '';
   public telefono:number = null;
   public fechaNacimiento:Date = null;
+  errormsg = '';
 
   nuevoUsuario : Usuario = {};
 
@@ -90,9 +91,13 @@ export class ModalregistroComponent implements OnInit {
         //end
         this.btnClose.nativeElement.click();
       
-
+        this.errormsg = '';
       }
-    ).catch ( (error) => console.log('ERROR ',error.message));
+      
+    ).catch ( (error) => {
+      this.errormsg = error.message;
+      console.log('ERROR ',error.message);
+      });
     this.nuevoUsuario = {};
   }
 
@@ -111,7 +116,7 @@ export class ModalregistroComponent implements OnInit {
             const last = dnArray[1];
             this.nuevoUsuario.nombre = first;
             this.nuevoUsuario.apellido = last;
-            this.nuevoUsuario.rol = 'Cliente';
+            this.nuevoUsuario.rol = 'cliente';
             this.nuevoUsuario.esCliente = true;
             this.nuevoUsuario.fechaNacimiento =  this.fechaNacimiento;
             this.nuevoUsuario.telefono = this.telefono;
@@ -126,7 +131,10 @@ export class ModalregistroComponent implements OnInit {
         });
       });
       this.btnClose.nativeElement.click();
-    }).catch(err => console.log('err',err.message));
+    }).catch ( (error) => {
+      this.errormsg = error.message;
+      console.log('ERROR ',error.message);
+      });
     
    this.nuevoUsuario = {};
   }
