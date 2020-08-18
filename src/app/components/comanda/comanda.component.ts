@@ -40,8 +40,10 @@ export class ComandaComponent implements OnInit {
   disminuirTiempo(): void {
     const interval = setInterval(() => {
       this.tiempoRestante -= 1;
+      this.pedidoService.updateTiempoRestante(this.comanda.id, this.tiempoRestante).subscribe();
       if (this.tiempoRestante === 0) {
         this.pedidoService.updateEstado(1, this.comanda).subscribe();
+        this.pedidoService.updateTiempoRestante(this.comanda.id, 0).subscribe();
         this.cancelarInterval(interval);
       }
     }, 60000);
@@ -62,7 +64,7 @@ export class ComandaComponent implements OnInit {
                   this.productos.push(plato);
                   this.cantidad.push(detalleData.cantidad);
                   if (tiempo) {
-                    this.calcularTiempoRestante(plato.tiempoPreparacion);
+                    this.calcularTiempoRestante(this.comanda.tiempoPreparacion);
                   }
                 }
               });
