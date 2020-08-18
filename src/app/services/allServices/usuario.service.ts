@@ -6,16 +6,24 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { map } from 'rxjs/operators';
 import { auth } from 'firebase/app';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { RolesService } from './roles.service';
+
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService extends BaseService<Usuario> {
 
+  public userData : Observable<firebase.User>;
+  public rolEmail : string;
   protected miUrl = 'http://localhost:9000/api/v1/usuario/';
 
-  constructor(private afsAuth: AngularFireAuth, private afs: AngularFirestore, public http: HttpClient) {
+  constructor(private afsAuth: AngularFireAuth, private afs: AngularFirestore, public http: HttpClient, private servroles: RolesService) {
     super(http);
+    this.userData = afsAuth.authState;
+
    }
+
 
   registerUser(email: string, pass: string){
     return new Promise((resolve, reject) =>{
@@ -52,7 +60,8 @@ export class UsuarioService extends BaseService<Usuario> {
     const userRef : AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     const data : Usuario = {
       id: user.uid,
-      email: user.email
+      email: user.email/*,
+      rol: "admin"*/
     }
     return userRef.set(data, {merge:true})
   }
