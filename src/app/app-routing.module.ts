@@ -9,15 +9,19 @@ import { CatalogoComponent } from './pages/catalogo/catalogo.component';
 import { HomeComponent } from './pages/home/home.component';
 import { PaginaPerfilComponent } from './pages/pagina-perfil/pagina-perfil.component';
 
+//import Guards
+import { AuthGuard } from './guards/auth.guard';
+
+
 const routes: Routes = [
   { path : '', component: HomeComponent },
-  { path: 'catalogo', component: CatalogoComponent},
-  { path: 'delivery', component: DeliveryComponent},
-  { path: 'carrito', component: CarritoComponent},
-  { path: 'usuario', component: PaginaPerfilComponent},
-  { path: 'cocina', component: CocinaComponent },
-  { path: 'administrador', component: IndexAdminComponent},
-  { path: 'cajero', component: IndexCajeroComponent}
+  { path: 'catalogo', component: CatalogoComponent, canActivate:[AuthGuard]},
+  { path: 'delivery', component: DeliveryComponent, canActivate:[AuthGuard]},
+  { path: 'carrito', component: CarritoComponent, canActivate:[AuthGuard]},
+  { path: 'usuario', component: PaginaPerfilComponent, canActivate:[AuthGuard]},
+  { path: 'cocina', component: CocinaComponent, canActivate:[AuthGuard] },
+  { path: 'administrador', component: IndexAdminComponent, canActivate:[AuthGuard]},
+  { path: 'cajero', component: IndexCajeroComponent, canActivate:[AuthGuard]}
 ];
 
 @NgModule({

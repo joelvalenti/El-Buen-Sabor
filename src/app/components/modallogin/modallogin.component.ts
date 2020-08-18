@@ -33,7 +33,7 @@ export class ModalloginComponent implements OnInit {
   onLogin():void{
     this.authService.loginEmailUser(this.email,this.password)
     .then((res)=>{
-      this.onLoginRedirect(); 
+      //this.onLoginRedirect(); 
       this.btnClose.nativeElement.click();
       //comenzamos a estblecer el rol, buscando al usuario
       this.servicio.getEmail(this.email).subscribe( res =>{
@@ -53,6 +53,7 @@ export class ModalloginComponent implements OnInit {
         const correo = res.email;
         this.servicio.getEmail(correo).subscribe( res=>{
           console.log('Usted ya esta registrado cumpa', res);
+          this.rol.emit(res.rol);
         }, err=>{
           this.nuevoUsuario.email = correo;
             const displayName = res.displayName;
@@ -68,6 +69,7 @@ export class ModalloginComponent implements OnInit {
             console.log('nuevo usuario que vamos a postear: ', this.nuevoUsuario);
             this.servicio.post(this.nuevoUsuario).subscribe(res =>{
             console.log('Succesfully posted', res); 
+            this.rol.emit(this.usuarioLogeado.rol);
             }, 
             err=>{
               console.log('Something went wrong.'); 

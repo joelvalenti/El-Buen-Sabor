@@ -1,3 +1,4 @@
+import { FacturaService } from './../../../services/allServices/factura.service';
 import { CategoriaInsumoService } from './../../../services/allServices/categoriaInsumo.service';
 import { CategoriaInsumo } from './../../../models/CategoriaInsumo';
 import { Insumo } from './../../../models/Insumo';
@@ -48,6 +49,7 @@ export class RealizarPedidoComponent implements OnInit {
   public localDataDetalles: any = this.detalle;
   public form3: FormGroup;
   public form4: FormGroup;
+  public form5: FormGroup;
   public userId: number;
   public domId: number;
   public paso1: boolean = false;
@@ -56,14 +58,16 @@ export class RealizarPedidoComponent implements OnInit {
   public llave: boolean = true;
 
   constructor(public dialog: MatDialog, public formBuilder3: FormBuilder, public formBuilder4: FormBuilder,
+    public formBuilder5: FormBuilder,
     public service: CategoriaService,
     public service2: PlatoService, public service3: PedidoService, public service4: EstadoService,
     public service5: UsuarioService, public service6: DomicilioService, public service7: DetalleService,
-    public service8: InsumoService, public service9:CategoriaInsumoService) { }
+    public service8: InsumoService, public service9:CategoriaInsumoService, public service10:FacturaService) { }
 
   ngOnInit(): void {
     this.buildForm3();
     this.buildForm4();
+    this.buildForm5();
     this.getAllCategorias();
   }
   obtenerFecha(): String {
@@ -93,7 +97,7 @@ export class RealizarPedidoComponent implements OnInit {
   }
 
   agregarEstado(): void {
-    this.service4.getOne(2).subscribe(data => {
+    this.service4.getOne(1).subscribe(data => {
       this.estado = data;
       this.form3.controls['estado'].setValue(this.estado);
       this.agregarUsuario();
@@ -153,6 +157,19 @@ export class RealizarPedidoComponent implements OnInit {
 
   }
 
+  buildForm5() {
+    this.form5 = this.formBuilder5.group({
+      id: [this.localData.id],
+      total: [this.localData.cantidad],
+      usuario: [this.localData.plato],
+      pedido: [this.localData.insumo],
+      fecha: [this.localData.pedido],
+      tipoPago: [this.localData.pedido],
+      eliminado: [this.localData.eliminado]
+    });
+
+  }
+
   public getAllCategorias(): void {
     this.service.getAll().subscribe((data) => {
       this.localDataCategorias = data;
@@ -164,7 +181,7 @@ export class RealizarPedidoComponent implements OnInit {
   }
 
   onSubmitUsuario(): void {
-    this.dialog.open(ModalRealizarPedidoUsuarioComponent)
+    this.dialog.open(ModalRealizarPedidoUsuarioComponent, {width:"1000px"})
       .afterClosed().subscribe(result => {
         this.cargarUsuario(result.data);
         Swal.fire({
@@ -178,7 +195,7 @@ export class RealizarPedidoComponent implements OnInit {
   }
 
   onSubmitDomicilio(): void {
-    this.dialog.open(ModalRealizarPedidoDomicilioComponent, { data: this.userId })
+    this.dialog.open(ModalRealizarPedidoDomicilioComponent, {width:"800px", data: this.userId })
       .afterClosed().subscribe(result => {
         this.cargarDomicilio(result.data);
         Swal.fire({
@@ -317,8 +334,23 @@ export class RealizarPedidoComponent implements OnInit {
   }
 
   public terminarPedido():void{
-    this.paso3=true;
+
+    this.form5.controls['id'].setValue(null);
+    this.form5.controls['total'].setValue(this.pedidoSelec.monto);
+    this.form5.controls['fecha'].setValue(this.obtenerFecha());
+    this.form5.controls['pedido'].setValue(this.pedidoSelec);
+    this.form5.controls['usuario'].setValue(this.usuario);
+    this.form5.controls['tipoPago'].setValue('Efectivo');
+    this.form5.controls['eliminado'].setValue(false);
+
+
+    this.service10.post(this.form5.value).subscribe(data=>{
+      this.paso3=true;
+    });
+    
+
   }
+
   public reiniciarPedido():void{
     this.userId=null;
     this.domId=null;
