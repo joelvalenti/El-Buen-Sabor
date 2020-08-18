@@ -76,7 +76,7 @@ export class CocinaPedidoComponent implements OnInit {
         if (cop.estado.nombre !== 'Cancelado') {
           if (cop.estado.nombre !== 'En Aprobacion') {
             ped.pedido = cop;
-            this.usuarioService.getOne(ped.id).subscribe((us) => {
+            this.usuarioService.getOne(ped.usuario.id).subscribe((us) => {
               ped.usuario = us;
             });
             if (bool) {
@@ -86,7 +86,7 @@ export class CocinaPedidoComponent implements OnInit {
             }
           } else {
             ped.pedido = cop;
-            this.usuarioService.getOne(ped.id).subscribe((us) => {
+            this.usuarioService.getOne(ped.usuario.id).subscribe((us) => {
               ped.usuario = us;
             });
             if (bool) {
