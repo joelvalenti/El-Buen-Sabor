@@ -21,7 +21,6 @@ export class CarritoComponent implements OnInit {
 
   public detalles: Detalle[] = [];
   domicilios: Domicilio[];
-  indice: number;
   public idPersona: number;
   public flagRadio = true;
   usuario: Usuario;
@@ -128,7 +127,6 @@ export class CarritoComponent implements OnInit {
 
   onPreUpdate(detalle: Detalle) {
     this.detalleSeleccionado = detalle;
-    this.indice = this.detalles.indexOf(detalle);
   }
 
   onRadioChange(value) {

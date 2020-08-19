@@ -1,3 +1,8 @@
+import { Pedido } from 'src/app/models/Pedido';
+import { RolesService } from './../../services/allServices/roles.service';
+import { UsuarioService } from 'src/app/services/allServices/usuario.service';
+import { Usuario } from 'src/app/models/Usuario';
+import { PedidoService } from 'src/app/services/allServices/pedido.service';
 import { SweetAlertsService } from './../../services/allServices/sweet-alerts.service';
 import { Detalle } from './../../models/Detalle';
 import { DetalleService } from './../../services/allServices/detalle.service';
@@ -17,14 +22,17 @@ export class ModalDetalleComponent implements OnInit {
 
   public formDetalle: FormGroup;
   public detalle: any;
-  public indice: number;
+  public usuario: Usuario;
+  public pedidos: Pedido [] = [];
 
   ngOnInit() {
     this.onBuild();
   }
 
-  constructor(private servicio: DetalleService, @Host() private tabla: CarritoComponent,
-    private formBuilder: FormBuilder, private alertsService: SweetAlertsService) { }
+  constructor(private detalleService: DetalleService, @Host() private tabla: CarritoComponent,
+    private formBuilder: FormBuilder, private pedidoService: PedidoService, 
+    private usuarioService: UsuarioService, private rolesService: RolesService, 
+    private alertsService: SweetAlertsService) { }
 
   @Input() set detalleSeleccionado(valor) {
     this.onBuild();
@@ -53,15 +61,16 @@ export class ModalDetalleComponent implements OnInit {
       this.update(formDetalle.value);
     }
     this.btnClose.nativeElement.click();
-    this.tabla.indice = null;
   }
 
   update(detalle: Detalle) {
-    this.servicio.put(detalle.id, detalle).subscribe(
+    this.detalleService.put(detalle.id, detalle).subscribe(
       () => {
+        const indexDom = this.tabla.detalles.filter(x => x.id === detalle.id);
+        let posicion = this.tabla.detalles.findIndex(ref => ref.id === indexDom[0].id);
+        this.tabla.detalles.splice(posicion, 1, detalle);
+        this.tabla.getPedidosXUsuario();
         this.alertsService.successAlert('El carrito fue actualizado con éxito.');
-        this.tabla.detalles.splice(this.indice, 1, detalle);
-        this.refreshCarrito();
       },
       () => {
         this.alertsService.errorAlert('Opps... :(', 'Algo salió mal actualizando el carrito');
@@ -69,8 +78,8 @@ export class ModalDetalleComponent implements OnInit {
     );
   }
 
-  refreshCarrito() {
-    this.servicio.buscarPorPedido(1).subscribe(response => {
+  refreshCarrito(id: number) {
+    this.detalle.buscarPorPedido(id).subscribe(response => {
       this.tabla.detalles = response;
     });
   }
