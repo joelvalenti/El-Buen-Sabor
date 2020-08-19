@@ -1,3 +1,5 @@
+import { Pedido } from 'src/app/models/Pedido';
+import { PedidoService } from 'src/app/services/allServices/pedido.service';
 import { SweetAlertsService } from './../../services/allServices/sweet-alerts.service';
 import { UsuarioService } from './../../services/allServices/usuario.service';
 import { RolesService } from './../../services/allServices/roles.service';
@@ -23,7 +25,7 @@ export class CarritoComponent implements OnInit {
   public idPersona: number;
   public flagRadio = true;
   usuario: Usuario;
-
+  public pedidos: Pedido[] = [];
   public detalleSeleccionado: Detalle = {
     id: 0,
     cantidad: 0,
@@ -40,12 +42,10 @@ export class CarritoComponent implements OnInit {
 
   constructor(private detalleService: DetalleService, private rolesService: RolesService,
     private usuarioService: UsuarioService, private servicioDomicilio: DomicilioService,
-    private alertsService: SweetAlertsService) { }
+    private pedidoService: PedidoService, private alertsService: SweetAlertsService) { }
 
   ngOnInit() {
     this.isAuth();
-    this.getAllDomiciliosXUsuario();
-    this.getAllDetallesxPedido();
   }
 
   isAuth() {
@@ -53,12 +53,26 @@ export class CarritoComponent implements OnInit {
       const email = res.email;
       this.rolesService.getEmail(email).subscribe(res => {
         this.usuario = res;
+        this.getAllDomiciliosXUsuario();
+        this.getPedidosXUsuario();
       })
     });
   }
 
-  getAllDetallesxPedido() {
-    this.detalleService.buscarPorPedido(1).subscribe(res => {
+  getPedidosXUsuario() {
+    this.pedidoService.getPedidoEstado(this.usuario.id, 7).subscribe(res => {
+      this.pedidos = res;
+      res.forEach(element => {
+        this.getDetallesXPedido(element.id);
+      });
+    },
+      () => {
+        this.alertsService.errorAlert('Opss... :(', 'No se pudo recolectar la información del carrito');
+      });
+  }
+
+  getDetallesXPedido(id: number) {
+    this.detalleService.buscarPorPedido(id).subscribe(res => {
       this.detalles = res;
     },
       () => {
@@ -118,16 +132,14 @@ export class CarritoComponent implements OnInit {
   }
 
   onRadioChange(value) {
-    (value=="local") ? this.flagRadio = false : this.flagRadio = true;
+    (value == "local") ? this.flagRadio = false : this.flagRadio = true;
   }
 
   //Seleccionar direccion (Paso 2)
   getAllDomiciliosXUsuario() {
-    setTimeout(() => {
-      this.servicioDomicilio.buscarporUsuario(this.usuario.id).subscribe(res => {
-        this.domicilios = res;
-      })
-    }, 1500);
+    this.servicioDomicilio.buscarporUsuario(this.usuario.id).subscribe(res => {
+      this.domicilios = res;
+    })
   }
 
 }

@@ -182,9 +182,9 @@ export class CatalogoComponent implements OnInit {
 
   setearPedido() {
     let estado: Estado = {
-      id: 5,
+      id: 7,
       eliminado: false,
-      nombre: 'En Aprobacion'
+      nombre: 'En Pedido'
     };
     this.pedidoNuevo.usuario = this.usuario;
     this.pedidoNuevo.estado = estado;
