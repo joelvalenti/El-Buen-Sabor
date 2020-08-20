@@ -51,11 +51,10 @@ export class RealizarPedidoComponent implements OnInit {
   public form4: FormGroup;
   public form5: FormGroup;
   public userId: number;
+  public paso:number=1;
   public domId: number;
-  public paso1: boolean = false;
-  public paso2: boolean = true;
-  public paso3:boolean=false;
   public llave: boolean = true;
+  public retirarLocal:boolean=false;
 
   constructor(public dialog: MatDialog, public formBuilder3: FormBuilder, public formBuilder4: FormBuilder,
     public formBuilder5: FormBuilder,
@@ -112,11 +111,17 @@ export class RealizarPedidoComponent implements OnInit {
   }
 
   agregarDomicilio(): void {
-    this.service6.getOne(this.domId).subscribe(data => {
-      this.domicilio = data;
-      this.form3.controls['domicilio'].setValue(this.domicilio);
+    if(this.retirarLocal){
+      this.form3.controls['domicilio'].setValue(null);
       this.crearPedido(this.form3.value);
-    });
+    }else{
+      this.service6.getOne(this.domId).subscribe(data => {
+        this.domicilio = data;
+        this.form3.controls['domicilio'].setValue(this.domicilio);
+        this.crearPedido(this.form3.value);
+      });
+    }
+    
   }
 
   public crearPedido(element: Pedido) {
@@ -194,8 +199,9 @@ export class RealizarPedidoComponent implements OnInit {
       });
   }
 
-  onSubmitDomicilio(): void {
-    this.dialog.open(ModalRealizarPedidoDomicilioComponent, {width:"800px", data: this.userId })
+  onSubmitDomicilio(op:boolean): void {
+    if(op){
+      this.dialog.open(ModalRealizarPedidoDomicilioComponent, {width:"800px", data: this.userId })
       .afterClosed().subscribe(result => {
         this.cargarDomicilio(result.data);
         Swal.fire({
@@ -206,18 +212,22 @@ export class RealizarPedidoComponent implements OnInit {
           timer: 1500
         })
       });
+    }else{
+      this.retirarLocal=true;
+      this.paso = 3;
+      this.cargarPedido();
+    }
+    
   }
 
   public cargarUsuario(element: number) {
     this.userId = element;
-    this.paso1 = true;
-    this.paso2 = false;
+    this.paso = 2;
   }
 
   public cargarDomicilio(element: number) {
     this.domId = element;
-    this.paso1 = true;
-    this.paso2 = true;
+    this.paso = 3;
     this.cargarPedido();
   }
 
@@ -345,7 +355,7 @@ export class RealizarPedidoComponent implements OnInit {
 
 
     this.service10.post(this.form5.value).subscribe(data=>{
-      this.paso3=true;
+      this.paso = 4;
     });
     
 
@@ -360,9 +370,8 @@ export class RealizarPedidoComponent implements OnInit {
     this.detalle=null;
     this.domicilio=null;
     this.estado=null;
-    this.paso1=false;
-    this.paso2=true;
-    this.paso3=false;
+    this.paso=1;
+    this.retirarLocal=false;
     this.localData=null;
     this.localDataDetalle=null;
     this.localDataDetalles=null;
