@@ -1,14 +1,12 @@
 /* CATEGORIAS */
-.nulo{
-    background-color: rgb(0, 0, 0);
-    background-image: url('imagen/background.png');
-    background-size: cover;
-    height: 100vh;
-}
-.titulo{
-    color: whitesmoke;
-    font-size: 320%;
+
+.titulocatalogo{
+    margin-top: 2%;
+    color: rgb(7, 7, 7);
+    font-size: 200%;
+    font-weight: bolder;
     text-align: center;
+    font-family: Verdana;
 }
 .imagencategoria{
     width: 100%;
@@ -16,7 +14,7 @@
 }
 .imagencategoria:hover{
     cursor: pointer;
-    border-bottom: 2px solid whitesmoke;
+    border-bottom: 2px solid rgb(7, 7, 7);;
 }
 .container{
     margin-top: 5%;
@@ -27,17 +25,14 @@
 }
 .categorianame:hover{
     cursor: pointer;
-    border-bottom: 2px solid rgb(255, 145, 0);
+    border-bottom: 2px solid rgb(7, 7, 7);;
 }
 h2{
     text-align: center;
-    color: whitesmoke;
+    color: rgb(7, 7, 7);
 }
 /* CATALOGO */
-.raiz{
-    background-color: rgb(244, 245, 212);
-    height: 100vh;
-}
+
 .btn{
     background-color: rgb(255, 145, 0);
 }
@@ -77,4 +72,25 @@ h1{
 .totalpedido{
     color: orangered;
     font-weight: bold;
+}
+/* RESPONSIVE */ 
+@media screen and (max-width: 600px){
+    .categories{
+        display: none;
+    }
+
+    .cart{
+        display: none;
+    }
+
+    .botonesresponsive{
+        text-align: center;
+        margin: 1%;
+        margin-top: 3%;
+    }
+}
+@media screen and (min-width: 600px){
+    .categoriesmobile{
+        display:none;
+    }
 }

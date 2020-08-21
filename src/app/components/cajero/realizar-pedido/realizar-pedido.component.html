@@ -1,20 +1,22 @@
-<div *ngIf="this.paso1==false" class="botonesUsuario">
+<div *ngIf="this.paso==1" class="botonesUsuario">
     <button class="myButton" (click)="onSubmitUsuario()">Seleccionar Usuario</button>
 </div>
-<div *ngIf="this.paso1==true" class="botonesUsuario">
+<div *ngIf="this.paso==2 || this.paso==3 || this.paso==4" class="botonesUsuario">
     <div class="alert alert-success" role="alert">
         Paso 1 -> Usuario Seleccionado Correctamente ✅
     </div>
 </div>
-<div *ngIf="this.paso2==false" class="botonesUsuario">
-    <button class="myButton" (click)="onSubmitDomicilio()">Seleccionar Domicilio</button>
+<div *ngIf="this.paso==2" class="botonesUsuario">
+    <button class="myButton" (click)="onSubmitDomicilio(true)">Seleccionar Domicilio</button>
+    &nbsp;&nbsp;
+    <button class="myButton" (click)="onSubmitDomicilio(false)">Retirar en Local</button>
 </div>
-<div *ngIf="this.paso2==true && this.paso1==true" class="botonesUsuario">
+<div *ngIf="this.paso==3 || this.paso==4" class="botonesUsuario">
     <div class="alert alert-success" role="alert">
         Paso 2 -> Domicilio Seleccionado Correctamente ✅
     </div>
 </div>
-<div *ngIf="this.paso3==true" class="botonesUsuario">
+<div *ngIf="this.paso==4" class="botonesUsuario">
     <div class="alert alert-success" role="alert">
         Paso 3 -> Pedido Realizado Correctamente ✅
     </div>
@@ -22,7 +24,7 @@
         <button class="myButton" (click)="reiniciarPedido()">Realizar un nuevo pedido</button>
     </div>
 </div>
-<table class="tg" *ngIf="this.paso2==true && this.paso1==true && this.paso3==false">
+<table class="tg" *ngIf="this.paso==3">
     <thead>
         <tr>
             <th class="tg-u8eq anchocolum1">
