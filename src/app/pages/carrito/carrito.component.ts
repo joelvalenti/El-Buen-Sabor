@@ -1,3 +1,4 @@
+import { Estado } from 'src/app/models/Estado';
 import { Pedido } from 'src/app/models/Pedido';
 import { PedidoService } from 'src/app/services/allServices/pedido.service';
 import { SweetAlertsService } from './../../services/allServices/sweet-alerts.service';
@@ -20,11 +21,14 @@ import Swal from 'sweetalert2';
 export class CarritoComponent implements OnInit {
 
   public detalles: Detalle[] = [];
-  domicilios: Domicilio[];
+  public domicilios: Domicilio[];
   public idPersona: number;
-  public flagRadio = true;
-  usuario: Usuario;
+  public flagRadioDireccion = true;
+  public flagTarjeta;
+  public habilitarBotonFinal;
+  public usuario: Usuario;
   public pedidos: Pedido[] = [];
+  public direccionElegida;
   public detalleSeleccionado: Detalle = {
     id: 0,
     cantidad: 0,
@@ -91,7 +95,7 @@ export class CarritoComponent implements OnInit {
   getTotalFinal(): number {
     let totalNeto = this.getTotalNeto();
     let totalFinal = totalNeto - totalNeto * 0.1; //Con 10% de descuento.
-    if (this.flagRadio) {
+    if (this.flagRadioDireccion) {
       return totalNeto;
     } else {
       return totalFinal;
@@ -130,14 +134,58 @@ export class CarritoComponent implements OnInit {
   }
 
   onRadioChange(value) {
-    (value == "local") ? this.flagRadio = false : this.flagRadio = true;
+    (value == "local") ? this.flagRadioDireccion = false : this.flagRadioDireccion = true;
   }
 
-  //Seleccionar direccion (Paso 2)
+
+  onRadioChangePago(value){
+    (value == "tarjeta") ? this.flagTarjeta = true : this.flagTarjeta = false;
+  }
+
+  onChangeDireccion(value){
+    this.direccionElegida = this.domicilios.filter(x => x.calle === value);
+  }
+
   getAllDomiciliosXUsuario() {
     this.servicioDomicilio.buscarporUsuario(this.usuario.id).subscribe(res => {
       this.domicilios = res;
     })
+  }
+
+  habilitarBtnGuardar(){
+    /*
+      To do: with habilitarBotonFinal;
+    */
+  }
+
+  realizarPedido(){
+    let estado: Estado = {
+      id: 7,
+      eliminado: false,
+      nombre: 'En Aprobacion'
+    };
+    this.pedidos[0].estado = estado;
+    this.pedidos[0].envioDelivery = this.flagRadioDireccion;
+    var utc = new Date().toJSON().slice(0,10);
+    this.pedidos[0].fecha = new Date(utc);
+    let monto = new Float64Array(this.getTotalFinal());
+    this.pedidos[0].monto = monto;
+    if(this.flagRadioDireccion == false){
+      let domBuenSabor : Domicilio = {
+        id : this.usuario.id + 99,
+        calle: 'El Buen Sabor',
+        numero: 1,
+        eliminado: false,
+        departamento: 'Cero',
+        piso: 'Cero',
+        localidad: null,
+        propietario: null
+      }
+      this.pedidos[0].domicilio = domBuenSabor;
+    }else{
+      this.pedidos[0].domicilio = this.direccionElegida;
+    }
+    console.log('Pedido enviado a Cajero: ',this.pedidos[0]);
   }
 
 }

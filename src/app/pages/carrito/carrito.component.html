@@ -1,48 +1,39 @@
 <!-- Tabla Carrito -->
-<section style="margin-top: 1%; margin-left: 1%;">
-  <div>
-    <div class="row">
-      <div class="col-xs-12 col-sm-8 col-md-10">
-        <h1 class="titulos">Carrito de compras</h1>
-      </div>
-    </div>
-    <div class="row mt-2">
-      <div class="col">
-        <table class="table">
-          <thead class="thead-dark">
-            <tr>
-              <th scope="col" hidden>ID</th>
-              <th scope="col">Cantidad</th>
-              <th scope="col">Nombre del Producto</th>
-              <th scope="col">Precio Unitario</th>
-              <th scope="col">Precio Total</th>
-              <th scope="col">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of detalles">
-              <th scope="row" hidden>{{item.id}}</th>
-              <td>{{item.cantidad}}</td>
-              <td>{{item.plato.nombre}}</td>
-              <td>$ {{item.plato.precioVenta}}</td>
-              <td>$ {{item.cantidad * item.plato.precioVenta}}</td>
-              <td>
-                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modalDetalle" (click)="onPreUpdate(item)">Modificar</button>
-                <button type="button" class="btn btn-danger" (click)="delete(item)">Eliminar</button>
-              </td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td></td>
-              <td></td>
-              <td>Total Neto</td>
-              <td>$ {{ getTotalNeto() }}</td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-    </div>
+<section style="margin-left: 1%;">
+  <h1 class="titulos" style="margin-top: 1%;">Carrito de compras</h1>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col" hidden>ID</th>
+          <th scope="col">Cantidad</th>
+          <th scope="col">Nombre del Producto</th>
+          <th scope="col">Precio Unitario</th>
+          <th scope="col">Precio Total</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of detalles">
+          <th scope="row" hidden>{{item.id}}</th>
+          <td>{{item.cantidad}}</td>
+          <td>{{item.plato.nombre}}</td>
+          <td>$ {{item.plato.precioVenta}}</td>
+          <td>$ {{item.cantidad * item.plato.precioVenta}}</td>
+          <td>
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modalDetalle"
+              (click)="onPreUpdate(item)">Editar</button>
+            <button type="button" class="btn btn-danger" (click)="delete(item)">Borrar</button>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td class="table-info" colspan="2" style="text-align: center;">Total Neto</td>
+          <td class="table-info" colspan="3" style="text-align: center;">$ {{ getTotalNeto() }}</td>
+        </tr>
+      </tfoot>
+    </table>
   </div>
 </section>
 <app-modal-detalle [detalleSeleccionado]="detalleSeleccionado"></app-modal-detalle>
@@ -52,15 +43,14 @@
   <br>
   <div class="row">
 
-    <div class="col-xs-12 col-sm-4">
+    <div class="col-xs-12 col-sm-3">
       <h2 class="titulos">1) Seleccione su método de entrega</h2>
-      <!-- Método de entrega -->
-      <label class="container">Retiro en el local (10% descuento)
-        <input type="radio" name="radio" value="local" (change)="onRadioChange($event.target.value)" />
+      <label class="container titulos">Retiro en local(-10%)
+        <input type="radio" name="radio0" value="local" (change)="onRadioChange($event.target.value)" />
         <span class="checkmark"></span>
       </label>
-      <label class="container">Envío por delivery
-        <input type="radio" name="radio" value="delivery" checked="checked"
+      <label class="container titulos">Envío por delivery
+        <input type="radio" name="radio0" value="delivery" checked="checked"
           (change)="onRadioChange($event.target.value)" />
         <span class="checkmark"></span>
         <br>
@@ -68,49 +58,65 @@
       <h2 class="titulos">Total a pagar: ${{ getTotalFinal() }}</h2>
     </div>
 
+    <div class="col-xs-12 col-sm-3">
+      <h2 class="titulos">2) Método de Pago </h2>
+      <label class="container titulos">Con Efectivo
+        <input type="radio" name="radio" value="efectivo" checked="checked"
+          (change)="onRadioChangePago($event.target.value)" />
+        <span class="checkmark"></span>
+      </label>
+      <label class="container titulos">Con Tarjeta
+        <input type="radio" name="radio" value="tarjeta" (change)="onRadioChangePago($event.target.value)" />
+        <span class="checkmark"></span>
+      </label>
+      <div *ngIf="flagTarjeta"> 
+        <label for="formGroupExampleInput" style="color: red">*Campo Requerido</label>
+        <input type="number" class="form-control" id="nroTarjeta" value="nroTarjeta" 
+          placeholder="Número de tarjeta...">
+      </div>
+    </div>
+
     <div class="col-xs-6 col-sm-4">
-      <div *ngIf="flagRadio else empresa">
-        <h2 class="titulos">2) Seleccione su dirección </h2>
-        <!-- Dirección del usuario -->
+      <div *ngIf="flagRadioDireccion else empresa">
+        <h2 class="titulos">3) Seleccione su dirección</h2>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <label class="input-group-text" for="inputGroupSelect01">Dirección</label>
+            <label class="input-group-text titulos" for="inputGroupSelect01">Dirección</label>
           </div>
-          <select class="custom-select" id="inputGroupSelect01" required>
+          <select class="custom-select" (change)="onChangeDireccion($event.target.value)" required>
             <option selected disabled value="">Seleccionar...</option>
-            <option *ngFor="let dom of domicilios">{{dom.calle}} {{dom.numero}}</option>
+            <option *ngFor="let dom of domicilios">{{dom.calle}}</option>
           </select>
         </div>
         <!-- Agregar nueva dirección -->
-        <button type="button" class="btn btn-primary btn-block" data-toggle="modal" 
-        data-target="#modalDomicilio">+ Agregar Nueva Direccion</button>
-          <app-modal-domicilio [id]="idPersona"></app-modal-domicilio>
+        <button type="button" class="btn btn-primary btn-block titulos" data-toggle="modal"
+          data-target="#modalDomicilio">+ Agregar Direccion</button>
+        <app-modal-domicilio [id]="idPersona"></app-modal-domicilio>
       </div>
 
       <ng-template class="col-xs-6 col-sm-4" #empresa>
-        <h2 class="titulos">2) Ubicación seleccionada <b>Saltar Paso</b></h2>
+        <h2 class="titulos">3) Seleccionado <b>Saltar Paso</b></h2>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <label class="input-group-text" for="inputGroupSelect01">Dirección</label>
+            <label class="input-group-text">Dirección</label>
           </div>
-          <select class="custom-select" id="inputGroupSelect01">
+          <select class="custom-select">
             <option selected>Local "El Buen Sabor"</option>
           </select>
         </div>
-        <button type="button" class="btn btn-primary btn-block" disabled>+ Agregar Nueva Direccion</button>
+        <button type="button" class="btn btn-primary btn-block titulos" disabled>+ Agregar Direccion</button>
       </ng-template>
 
     </div>
 
-    <div class="col-xs-6 col-sm-4">
-      <!-- Realizar Pedido -->
-      <h2 class="titulos">3) Confirme su pedido! </h2>
+    <div class="col-xs-6 col-sm-2">
+      <h2 class="titulos">¡Confirmar pedido!</h2>
       <div class="example-button-row">
-        <a href="#" class="btn btn-success btn-lg active" role="button" aria-pressed="true">Realizar Pedido</a>
+        <a class="btn btn-success btn-lg active" role="button" 
+        aria-pressed="true" (click)="realizarPedido()" disabled="{{habilitarBotonFinal}}">Realizar Pedido</a>
       </div>
-
     </div>
 
   </div>
-  
+
 </div>
