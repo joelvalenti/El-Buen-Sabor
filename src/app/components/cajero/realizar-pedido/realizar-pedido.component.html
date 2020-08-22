@@ -1,7 +1,7 @@
 <div *ngIf="this.paso==1" class="botonesUsuario">
     <button class="myButton" (click)="onSubmitUsuario()">Seleccionar Usuario</button>
 </div>
-<div *ngIf="this.paso==2 || this.paso==3 || this.paso==4" class="botonesUsuario">
+<div *ngIf="this.paso==2 || this.paso==3 || this.paso==4"  class="botonesUsuario">
     <div class="alert alert-success" role="alert">
         Paso 1 -> Usuario Seleccionado Correctamente ✅
     </div>
@@ -16,15 +16,23 @@
         Paso 2 -> Domicilio Seleccionado Correctamente ✅
     </div>
 </div>
-<div *ngIf="this.paso==4" class="botonesUsuario">
+<div *ngIf="this.paso==3" class="botonesUsuario">
+    <button class="myButton" (click)="pagar(true)">Pagar con Tarjeta</button>
+    <input type="text" id="tarjeta" value="---- ---- ---- ----" (focus)="focusTarjeta()"/>
+    &nbsp;&nbsp;
+    <button class="myButton" (click)="pagar(false)">Pagar en Efectivo</button>
+</div>
+<div *ngIf="this.paso==4 " class="botonesUsuario">
     <div class="alert alert-success" role="alert">
-        Paso 3 -> Pedido Realizado Correctamente ✅
+        Paso 3 -> Tipo de Pago Correctamente ✅
     </div>
+</div>
+<div *ngIf="this.paso==5" class="botonesUsuario">
     <div class="nuevopedido">
         <button class="myButton" (click)="reiniciarPedido()">Realizar un nuevo pedido</button>
     </div>
 </div>
-<table class="tg" *ngIf="this.paso==3">
+<table class="tg" *ngIf="this.paso==4">
     <thead>
         <tr>
             <th class="tg-u8eq anchocolum1">
@@ -131,6 +139,7 @@
                     <input hidden formControlName="total">
                     <input hidden formControlName="pedido">
                     <input hidden formControlName="usuario">
+                    <input hidden formControlName="nroTarjeta">
                     <input hidden formControlName="tipoPago">
                     <input hidden formControlName="fecha">
                     <input hidden formControlName="eliminado">

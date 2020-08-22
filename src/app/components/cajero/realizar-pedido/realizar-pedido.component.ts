@@ -96,7 +96,7 @@ export class RealizarPedidoComponent implements OnInit {
   }
 
   agregarEstado(): void {
-    this.service4.getOne(1).subscribe(data => {
+    this.service4.getOne(5).subscribe(data => {
       this.estado = data;
       this.form3.controls['estado'].setValue(this.estado);
       this.agregarUsuario();
@@ -169,7 +169,8 @@ export class RealizarPedidoComponent implements OnInit {
       usuario: [this.localData.plato],
       pedido: [this.localData.insumo],
       fecha: [this.localData.pedido],
-      tipoPago: [this.localData.pedido],
+      tipoPago: [this.localData.tipoPago],
+      nroTarjeta:[this.localData.nroTarjeta],
       eliminado: [this.localData.eliminado]
     });
 
@@ -230,7 +231,18 @@ export class RealizarPedidoComponent implements OnInit {
     this.paso = 3;
     this.cargarPedido();
   }
-
+public focusTarjeta():void{
+  (<HTMLInputElement>document.getElementById("tarjeta")).value="";
+}
+  public pagar(op:boolean):void {
+    if(op){ 
+      this.form5.controls['nroTarjeta'].setValue((<HTMLInputElement>document.getElementById("tarjeta")).value);
+      this.form5.controls['tipoPago'].setValue("Tarjeta");
+    }else{
+      this.form5.controls['tipoPago'].setValue("Efectivo");
+    }
+    this.paso=4;
+  }
   public crearDetallePlato(element: Plato): void {
     this.service7.buscarPorPlato(this.pedidoSelec.id, element.id).subscribe((data) => {
       let contador: number = 0;
@@ -350,12 +362,11 @@ export class RealizarPedidoComponent implements OnInit {
     this.form5.controls['fecha'].setValue(this.obtenerFecha());
     this.form5.controls['pedido'].setValue(this.pedidoSelec);
     this.form5.controls['usuario'].setValue(this.usuario);
-    this.form5.controls['tipoPago'].setValue('Efectivo');
     this.form5.controls['eliminado'].setValue(false);
 
 
     this.service10.post(this.form5.value).subscribe(data=>{
-      this.paso = 4;
+      this.paso = 5;
     });
     
 
