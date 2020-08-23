@@ -151,12 +151,12 @@ export class CarritoComponent implements OnInit {
   }
 
   onRadioChange(value) {
-    if(value == "local"){
+    if (value == "local") {
       this.flagRadioDireccion = false;
       this.direccionElegida = undefined;
-    }else{
+    } else {
       this.flagRadioDireccion = true;
-    } 
+    }
     this.habilitarBtnFinal();
   }
 
@@ -170,7 +170,7 @@ export class CarritoComponent implements OnInit {
     (this.direccionElegida != undefined) ? this.habilitarBotonFinal = true : this.habilitarBotonFinal = false;
   }
 
-  onRadioChangeNroTarjeta(value){
+  onRadioChangeNroTarjeta(value) {
     (value == null || value == '') ? this.habilitarBotonFinal = false : this.habilitarBotonFinal = true;
     this.habilitarBtnFinal();
   }
@@ -179,20 +179,20 @@ export class CarritoComponent implements OnInit {
     //Si es "retiro en local" y se paga con efectivo...
     if (this.flagRadioDireccion == false && (this.flagTarjeta == false || this.flagTarjeta == undefined)) {
       this.habilitarBotonFinal = true;
-    //Si es "retiro en local" y se paga con tarjeta...
-    }else if(this.flagRadioDireccion == false && this.flagTarjeta == true){
+      //Si es "retiro en local" y se paga con tarjeta...
+    } else if (this.flagRadioDireccion == false && this.flagTarjeta == true) {
       (document.getElementById("nroTarjeta") != null)
         ? this.habilitarBotonFinal = true
         : this.habilitarBotonFinal = false
     }
     //Si es "Envio Delivery" y se paga con efectivo.
-    if(this.flagRadioDireccion == true && this.flagTarjeta == false && this.direccionElegida != undefined){
+    if (this.flagRadioDireccion == true && this.flagTarjeta == false && this.direccionElegida != undefined) {
       this.habilitarBotonFinal = true;
-    //Si es "Envio Delivery" y se paga con tarjeta...
-    }else if(this.flagRadioDireccion == true && this.flagTarjeta == true ){
-    (document.getElementById("nroTarjeta") != null && this.direccionElegida != undefined)
-      ? this.habilitarBotonFinal = true 
-      : this.habilitarBotonFinal = false;
+      //Si es "Envio Delivery" y se paga con tarjeta...
+    } else if (this.flagRadioDireccion == true && this.flagTarjeta == true) {
+      (document.getElementById("nroTarjeta") != null && this.direccionElegida != undefined)
+        ? this.habilitarBotonFinal = true
+        : this.habilitarBotonFinal = false;
     }
   }
 
@@ -212,10 +212,11 @@ export class CarritoComponent implements OnInit {
     if (this.flagRadioDireccion == false) {
       this.pedidos[0].domicilio = this.domBuenSabor;
     } else {
-      this.pedidos[0].domicilio = this.direccionElegida;
+      console.log(this.direccionElegida);
+      this.pedidos[0].domicilio = this.direccionElegida[0];
     }
     console.log('Pedido enviado a Cajero: ', this.pedidos[0]);
-    this.pedidoService.put(this.pedidos[0].id, this.pedidos[0]).subscribe(()=>{
+    this.pedidoService.put(this.pedidos[0].id, this.pedidos[0]).subscribe(() => {
       this.router.navigate(['/cajero']);
     })
   }
