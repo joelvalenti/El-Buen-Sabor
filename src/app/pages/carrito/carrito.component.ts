@@ -134,7 +134,12 @@ export class CarritoComponent implements OnInit {
   }
 
   onRadioChange(value) {
-    (value == "local") ? this.flagRadioDireccion = false : this.flagRadioDireccion = true;
+    if(value == "local"){
+      this.flagRadioDireccion = false;
+      this.direccionElegida = undefined;
+    }else{
+      this.flagRadioDireccion = true;
+    } 
     this.habilitarBtnFinal();
   }
 
