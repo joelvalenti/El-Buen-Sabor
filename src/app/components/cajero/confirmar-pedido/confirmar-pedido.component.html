@@ -25,8 +25,9 @@
             <td>{{(factura.pedido.envioDelivery === true)? "Si" : "No"}}</td>
             <td>{{factura.fecha}}</td>
             <td>{{factura.usuario.nombre}} {{factura.usuario.apellido}}</td>
-            <td>{{factura.pedido.domicilio.calle}} {{factura.pedido.domicilio.numero}},
-                {{factura.pedido.domicilio.localidad.nombre}}</td>
+            <td><span *ngIf="factura.pedido.domicilio!=null">{{factura.pedido.domicilio.calle}} {{factura.pedido.domicilio.numero}},
+                {{factura.pedido.domicilio.localidad.nombre}}</span>
+            <span *ngIf="factura.pedido.domicilio==null">Retira por Local</span></td>
             <td>{{factura.usuario.telefono}}</td>
             <td>{{factura.tipoPago}}</td>
             <td>{{factura.pedido.estado.nombre}}</td>
