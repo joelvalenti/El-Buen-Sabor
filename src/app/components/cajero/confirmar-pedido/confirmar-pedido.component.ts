@@ -31,7 +31,7 @@ export class ConfirmarPedidoComponent implements OnInit {
   ngOnInit(): void {
     setInterval(() => {
       this.cargarFacturas();
-    }, 5000);
+    }, 60000);
   }
 
   cargarFacturas(): void {
