@@ -25,7 +25,7 @@ export class CarritoComponent implements OnInit {
   public idPersona: number;
   public flagRadioDireccion = true;
   public flagTarjeta;
-  public habilitarBotonFinal;
+  public habilitarBotonFinal = false;
   public usuario: Usuario;
   public pedidos: Pedido[] = [];
   public direccionElegida;
@@ -135,15 +135,48 @@ export class CarritoComponent implements OnInit {
 
   onRadioChange(value) {
     (value == "local") ? this.flagRadioDireccion = false : this.flagRadioDireccion = true;
+    this.habilitarBtnFinal();
   }
 
-
-  onRadioChangePago(value){
+  onRadioChangePago(value) {
     (value == "tarjeta") ? this.flagTarjeta = true : this.flagTarjeta = false;
+    this.habilitarBtnFinal();
   }
 
-  onChangeDireccion(value){
+  onChangeDireccion(value) {
     this.direccionElegida = this.domicilios.filter(x => x.calle === value);
+    (this.direccionElegida != undefined) ? this.habilitarBotonFinal = true : this.habilitarBotonFinal = false;
+  }
+
+  onRadioChangeNroTarjeta(value){
+    (value == null || value == '') ? this.habilitarBotonFinal = false : this.habilitarBotonFinal = true;
+    this.habilitarBtnFinal();
+  }
+
+  habilitarBtnFinal() {
+    console.log(this.direccionElegida);
+    //Si es "retiro en local" y se paga con efectivo...
+    if (this.flagRadioDireccion == false && this.flagTarjeta == false) {
+      this.habilitarBotonFinal = true;
+    //Si es "retiro en local" y se paga con tarjeta...
+    }else if(this.flagRadioDireccion == false && this.flagTarjeta == true){
+      if(document.getElementById("nroTarjeta") != null){
+        this.habilitarBotonFinal = true;
+      }else{
+        this.habilitarBotonFinal = false;
+      }
+    }
+    //Si es "Envio Delivery" y se paga con efectivo.
+    if(this.flagRadioDireccion == true && this.flagTarjeta == false && this.direccionElegida != undefined){
+      this.habilitarBotonFinal = true;
+    //Si es "Envio Delivery" y se paga con tarjeta...
+    }else if(this.flagRadioDireccion == true && this.flagTarjeta == true ){
+      if(document.getElementById("nroTarjeta") != null && this.direccionElegida != undefined){
+        this.habilitarBotonFinal = true;
+      }else{
+        this.habilitarBotonFinal = false;
+      }
+    }
   }
 
   getAllDomiciliosXUsuario() {
@@ -152,13 +185,7 @@ export class CarritoComponent implements OnInit {
     })
   }
 
-  habilitarBtnGuardar(){
-    /*
-      To do: with habilitarBotonFinal;
-    */
-  }
-
-  realizarPedido(){
+  realizarPedido() {
     let estado: Estado = {
       id: 7,
       eliminado: false,
@@ -166,13 +193,13 @@ export class CarritoComponent implements OnInit {
     };
     this.pedidos[0].estado = estado;
     this.pedidos[0].envioDelivery = this.flagRadioDireccion;
-    var utc = new Date().toJSON().slice(0,10);
+    var utc = new Date().toJSON().slice(0, 10);
     this.pedidos[0].fecha = new Date(utc);
     let monto = new Float64Array(this.getTotalFinal());
     this.pedidos[0].monto = monto;
-    if(this.flagRadioDireccion == false){
-      let domBuenSabor : Domicilio = {
-        id : this.usuario.id + 99,
+    if (this.flagRadioDireccion == false) {
+      let domBuenSabor: Domicilio = {
+        id: this.usuario.id + 99,
         calle: 'El Buen Sabor',
         numero: 1,
         eliminado: false,
@@ -182,10 +209,10 @@ export class CarritoComponent implements OnInit {
         propietario: null
       }
       this.pedidos[0].domicilio = domBuenSabor;
-    }else{
+    } else {
       this.pedidos[0].domicilio = this.direccionElegida;
     }
-    console.log('Pedido enviado a Cajero: ',this.pedidos[0]);
+    console.log('Pedido enviado a Cajero: ', this.pedidos[0]);
   }
 
 }
