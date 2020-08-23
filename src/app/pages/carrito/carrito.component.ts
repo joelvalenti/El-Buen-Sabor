@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Estado } from 'src/app/models/Estado';
 import { Pedido } from 'src/app/models/Pedido';
 import { PedidoService } from 'src/app/services/allServices/pedido.service';
@@ -36,6 +37,21 @@ export class CarritoComponent implements OnInit {
     insumo: null,
     eliminado: false
   };
+  public estado: Estado = {
+    id: 5,
+    eliminado: false,
+    nombre: 'En Aprobacion'
+  };
+  public domBuenSabor: Domicilio = {
+    id: 99,
+    calle: 'El Buen Sabor',
+    numero: 1,
+    eliminado: false,
+    departamento: 'Cero',
+    piso: 'Cero',
+    localidad: null,
+    propietario: null
+  };
 
   @Input() set id(valor: number) {
     if (valor) {
@@ -45,7 +61,8 @@ export class CarritoComponent implements OnInit {
 
   constructor(private detalleService: DetalleService, private rolesService: RolesService,
     private usuarioService: UsuarioService, private servicioDomicilio: DomicilioService,
-    private pedidoService: PedidoService, private alertsService: SweetAlertsService) { }
+    private pedidoService: PedidoService, private alertsService: SweetAlertsService,
+    private router: Router) { }
 
   ngOnInit() {
     this.isAuth();
@@ -159,28 +176,23 @@ export class CarritoComponent implements OnInit {
   }
 
   habilitarBtnFinal() {
-    console.log(this.direccionElegida);
     //Si es "retiro en local" y se paga con efectivo...
-    if (this.flagRadioDireccion == false && this.flagTarjeta == false) {
+    if (this.flagRadioDireccion == false && (this.flagTarjeta == false || this.flagTarjeta == undefined)) {
       this.habilitarBotonFinal = true;
     //Si es "retiro en local" y se paga con tarjeta...
     }else if(this.flagRadioDireccion == false && this.flagTarjeta == true){
-      if(document.getElementById("nroTarjeta") != null){
-        this.habilitarBotonFinal = true;
-      }else{
-        this.habilitarBotonFinal = false;
-      }
+      (document.getElementById("nroTarjeta") != null)
+        ? this.habilitarBotonFinal = true
+        : this.habilitarBotonFinal = false
     }
     //Si es "Envio Delivery" y se paga con efectivo.
     if(this.flagRadioDireccion == true && this.flagTarjeta == false && this.direccionElegida != undefined){
       this.habilitarBotonFinal = true;
     //Si es "Envio Delivery" y se paga con tarjeta...
     }else if(this.flagRadioDireccion == true && this.flagTarjeta == true ){
-      if(document.getElementById("nroTarjeta") != null && this.direccionElegida != undefined){
-        this.habilitarBotonFinal = true;
-      }else{
-        this.habilitarBotonFinal = false;
-      }
+    (document.getElementById("nroTarjeta") != null && this.direccionElegida != undefined)
+      ? this.habilitarBotonFinal = true 
+      : this.habilitarBotonFinal = false;
     }
   }
 
@@ -191,33 +203,21 @@ export class CarritoComponent implements OnInit {
   }
 
   realizarPedido() {
-    let estado: Estado = {
-      id: 7,
-      eliminado: false,
-      nombre: 'En Aprobacion'
-    };
-    this.pedidos[0].estado = estado;
+    this.pedidos[0].estado = this.estado;
     this.pedidos[0].envioDelivery = this.flagRadioDireccion;
     var utc = new Date().toJSON().slice(0, 10);
     this.pedidos[0].fecha = new Date(utc);
-    let monto = new Float64Array(this.getTotalFinal());
-    this.pedidos[0].monto = monto;
+    /*let monto = new Float64Array(this.getTotalFinal());
+    this.pedidos[0].monto = monto;*/
     if (this.flagRadioDireccion == false) {
-      let domBuenSabor: Domicilio = {
-        id: this.usuario.id + 99,
-        calle: 'El Buen Sabor',
-        numero: 1,
-        eliminado: false,
-        departamento: 'Cero',
-        piso: 'Cero',
-        localidad: null,
-        propietario: null
-      }
-      this.pedidos[0].domicilio = domBuenSabor;
+      this.pedidos[0].domicilio = this.domBuenSabor;
     } else {
       this.pedidos[0].domicilio = this.direccionElegida;
     }
     console.log('Pedido enviado a Cajero: ', this.pedidos[0]);
+    this.pedidoService.put(this.pedidos[0].id, this.pedidos[0]).subscribe(()=>{
+      this.router.navigate(['/cajero']);
+    })
   }
 
 }

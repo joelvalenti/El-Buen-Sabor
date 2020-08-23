@@ -173,10 +173,10 @@ export class CatalogoComponent implements OnInit {
   }
 
 
-  enviarPedido() {
+  async enviarPedido() {
     console.log('pedido final ', this.carritoFinal);
     console.log('bebidas', this.carritoBebidas);
-    this.setearPedido();
+    await this.setearPedido();
     this.router.navigate(['/carrito']);
   }
 
