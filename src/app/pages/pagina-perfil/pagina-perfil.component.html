@@ -1,14 +1,16 @@
 <nav>
-    <div class="nav nav-tabs letra" id="nav-tab" role="tablist">
-        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="nav-usuario-tab" data-toggle="tab" href="#nav-usuario" role="tab"
             aria-controls="nav-home" aria-selected="true">Usuario</a>
-        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
-            aria-controls="nav-profile" aria-selected="false">Dirección</a>
+        <a class="nav-item nav-link" id="nav-domicilio-tab" data-toggle="tab" href="#nav-domicilio" role="tab"
+            aria-controls="nav-profile" aria-selected="false">Domicilios</a>
+        <a class="nav-item nav-link" id="nav-pedidos-tab" data-toggle="tab" href="#nav-pedidos" role="tab"
+            aria-controls="nav-contact" aria-selected="false">Pedidos en Espera</a>
     </div>
 </nav>
 <div class="tab-content letra" id="nav-tabContent">
-    <div class="tab-pane fade show active" style="margin: 1%;" id="nav-home" role="tabpanel"
-        aria-labelledby="nav-home-tab">
+    <div class="tab-pane fade show active" style="margin: 1%;" id="nav-usuario" role="tabpanel"
+        aria-labelledby="nav-usuario-tab">
         <div style="margin-top: 1%;">
             <form>
                 <div class="form-row">
@@ -33,7 +35,7 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="inputPassword4">Fecha de Nacimiento</label>
-                        <input value="{{usuario.fechaNacimiento}}" [(ngModel)]="usuario.fechaNacimiento"
+                        <input value="{{reformatDate}}" [(ngModel)]="reformatDate" (change)="onDateChange($event.target.value)"
                             [ngModelOptions]="{standalone: true}" type="date" class="form-control">
                     </div>
                 </div>
@@ -44,7 +46,7 @@
                             class="form-control" disabled>
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="inputPassword4">Password</label>
+                        <label for="inputPassword4">Contraseña</label>
                         <input value="{{usuario.password}}" [(ngModel)]="usuario.password"
                             [ngModelOptions]="{standalone: true}" placeholder="Ingrese contraseña..." type="password"
                             class="form-control" required>
@@ -63,7 +65,7 @@
             </form>
         </div>
     </div>
-    <div class="tab-pane fade letra" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+    <div class="tab-pane fade" id="nav-domicilio" role="tabpanel" aria-labelledby="nav-domicilio-tab">
         <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#modalDomUsuario"
             style="float: right; margin: 0.5%;" (click)="resetear()">Agregar +</button>
         <div class="table-responsive">
@@ -96,5 +98,9 @@
                 </tbody>
             </table>
         </div>
+        <app-modal-dom-usuario [domicilioSeleccionado]="domicilioSeleccionado" [id]="idP"></app-modal-dom-usuario>
     </div>
-    <app-modal-dom-usuario [domicilioSeleccionado]="domicilioSeleccionado" [id]="idP"></app-modal-dom-usuario>
+    <div class="tab-pane fade" id="nav-pedidos" role="tabpanel" aria-labelledby="nav-pedidos-tab">
+        <h1>Hola</h1>
+    </div>
+</div>

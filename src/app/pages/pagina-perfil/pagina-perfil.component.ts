@@ -7,6 +7,8 @@ import { UsuarioService } from '../../services/allServices/usuario.service';
 import { Usuario } from '../../models/Usuario';
 import { Component, OnInit, Input } from '@angular/core';
 import Swal from 'sweetalert2';
+import { DatePipe } from '@angular/common';
+
 
 @Component({
   selector: 'app-pagina-perfil',
@@ -18,7 +20,9 @@ export class PaginaPerfilComponent implements OnInit {
   public domicilios;
   public localidades;
   indice: number;
-  idP:number;
+  idP: number;
+  public reformatDate;
+  public fechaAux;
   usuario: Usuario = {
     id: 0,
     nombre: '',
@@ -33,7 +37,7 @@ export class PaginaPerfilComponent implements OnInit {
     esCliente: true,
     telefono: 0
   }
-  public domicilioSeleccionado: Domicilio ={
+  public domicilioSeleccionado: Domicilio = {
     id: 0,
     calle: '',
     numero: 0,
@@ -51,17 +55,16 @@ export class PaginaPerfilComponent implements OnInit {
   @Input() set id(valor: number) {
     if (valor) {
       this.getAllDomiciliosXUsuario();
-      this.idP=valor;
+      this.idP = valor;
     }
   }
 
   constructor(private usuarioService: UsuarioService, private rolesService: RolesService,
     private domicilioService: DomicilioService, private localidadService: LocalidadService,
-    private alertsService: SweetAlertsService) { }
+    private alertsService: SweetAlertsService, private datePipe: DatePipe) { }
 
   ngOnInit() {
     this.isAuth();
-    this.getAllDomiciliosXUsuario();
     this.getLocalidades();
   }
 
@@ -70,22 +73,16 @@ export class PaginaPerfilComponent implements OnInit {
       const email = res.email;
       this.rolesService.getEmail(email).subscribe(res => {
         this.usuario = res;
-        this.reformatDateString(this.usuario.fechaNacimiento);
+        this.reformatDate = this.datePipe.transform(this.usuario.fechaNacimiento,"yyyy-MM-dd");
+        this.getAllDomiciliosXUsuario();
       })
     });
   }
 
-  reformatDateString(value) {
-    var b = value.split(/\D/);
-    return b.reverse().join('-');
-  }
-
   getAllDomiciliosXUsuario() {
-    setTimeout(() => {
-      this.domicilioService.buscarporUsuario(this.usuario.id).subscribe(res => {
-        this.domicilios = res;
-      })
-    }, 1500);
+    this.domicilioService.buscarporUsuario(this.usuario.id).subscribe(res => {
+      this.domicilios = res;
+    })
   }
 
   getLocalidades() {
@@ -94,13 +91,16 @@ export class PaginaPerfilComponent implements OnInit {
     })
   }
 
+  onDateChange(value){
+    this.fechaAux = value;
+  }
+
   updateUsuario(usuario: Usuario) {
+    this.usuario.fechaNacimiento = this.fechaAux;
     this.usuarioService.put(usuario.id, usuario).subscribe(
-      res => {
-        this.alertsService.successAlert('El usuario fue actualizado con éxito.');
-      },
+      () => {},
       () => {
-        this.alertsService.errorAlert('Opps... :(','Ocurrió un error al actualizar usuario');
+        this.alertsService.errorAlert('Opps..', 'Ocurrió un error al actualizar usuario');
       }
     );
   }
@@ -128,7 +128,7 @@ export class PaginaPerfilComponent implements OnInit {
           })
       }
     }).catch(() => {
-      this.alertsService.errorAlert('Opps... :(', 'No se pudo eliminar el registro');
+      this.alertsService.errorAlert('Opps..', 'No se pudo eliminar el registro');
     })
   }
 
@@ -136,7 +136,7 @@ export class PaginaPerfilComponent implements OnInit {
     this.domicilioSeleccionado = domicilio;
   }
 
-  resetear(){
+  resetear() {
     this.domicilioSeleccionado = null;
   }
 
