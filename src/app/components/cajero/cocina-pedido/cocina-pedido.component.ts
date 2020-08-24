@@ -13,6 +13,9 @@ import { PlatoService } from 'src/app/services/allServices/plato.service';
 })
 export class CocinaPedidoComponent implements OnInit {
 
+  pageActual: number = 1;
+  indice: number;
+
   facturas = [];
   d:any;
   facturasConfirmar = [];

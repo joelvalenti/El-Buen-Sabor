@@ -19,7 +19,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let factura of facturasConfirmar; let i=index">
+        <tr *ngFor="let factura of facturasConfirmar | paginate: { itemsPerPage: 10, currentPage: pageActual };let i=index">
             <td>{{factura.id}}</td>
             <td>{{factura.total}}</td>
             <td>{{(factura.pedido.envioDelivery === true)? "Si" : "No"}}</td>
@@ -43,6 +43,7 @@
         </tr>
     </tbody>
 </table>
+<pagination-controls (pageChange)="pageActual = $event"></pagination-controls>
 </div>
 <div class="modal fade z" id="modalDetalle" tabindex="-1" role="dialog" data-backdrop="false">
     <div class="modal-dialog" role="document">

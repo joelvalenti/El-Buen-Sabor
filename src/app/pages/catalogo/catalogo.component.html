@@ -79,6 +79,7 @@
                     </div>
                 </div>
                 <div class="col-sm-6" >
+                    <h1 *ngIf="fechahoy == false" style="color: orangered;">El local se encuentra cerrado</h1>
                     <div class="plato" *ngIf="seleccionBebidas == false else esBebida">
                         <div class="card" *ngFor="let plato of platos">
                             <div class="card-body">
@@ -87,7 +88,7 @@
                               <p class="card-text">${{plato.precioVenta}}</p>
                               <div class="botones">
                                 <a id="detalleboton" class="btn btn-primary" data-toggle="modal" data-target="#modalDetalle" (click)="verDetalle(plato)">Detalles</a>
-                                <a class="btn btn-primary" (click)="agregarAlPedido(plato)">Añadir</a>
+                                <a class="btn btn-primary" (click)="agregarAlPedido(plato)" *ngIf="fechahoy == true">Añadir</a>
                               </div>
                             </div>
                           </div>    
@@ -100,7 +101,7 @@
                                   <h4 class="card-title">{{bebida.nombre}}</h4>
                                   <p class="card-text">${{bebida.precioVenta}}</p>
                                   <div class="botones">
-                                    <a class="btn btn-primary" (click)="agregarGaseosa(bebida)">Añadir</a>
+                                    <a class="btn btn-primary" (click)="agregarGaseosa(bebida)" *ngIf="fechahoy == true">Añadir</a>
                                   </div>
                                 </div>
                               </div>    
@@ -117,7 +118,8 @@
                           <h5>Bebidas</h5>
                           <h5 *ngFor="let detalle of carritoBebidas">{{detalle.insumo.nombre}} ${{detalle.insumo.precioVenta}} Cantidad: {{detalle.cantidad}} <a (click)="eliminarItem(detalle)"  style="color: orangered;"><strong>X</strong></a></h5>
                           <h5 class="totalpedido">Total: ${{total}}</h5>
-                          <a (click)="enviarPedido()" class="btn btn-primary">Continuar</a>
+                          <button (click)="enviarPedido()" class="btn btn-primary" *ngIf="fechahoy == true">Continuar</button>
+                          <button class="btn btn-primary" *ngIf="fechahoy == false" disabled>Continuar</button>
                         </div>
                       </div>
                 </div>

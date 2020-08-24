@@ -14,6 +14,9 @@ import { Pedido } from 'src/app/models/Pedido';
 })
 export class ConfirmarPedidoComponent implements OnInit {
 
+  pageActual: number = 1;
+  indice: number;
+
   facturas = [];
   d:any;
   facturasConfirmar = [];
