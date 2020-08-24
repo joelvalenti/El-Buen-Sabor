@@ -3,6 +3,8 @@ import { Component, OnInit, Inject, Optional } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
+import { preserveWhitespacesDefault } from '@angular/compiler';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-modal-usuario',
@@ -15,8 +17,8 @@ export class ModalUsuarioComponent implements OnInit {
   public action: string;
   public form: FormGroup;
   disableSelect = true;
-  rolGuardado:String;
-  opciones:String;
+  rolGuardado: String;
+  opciones: String;
 
   constructor(public dialogRef: MatDialogRef<ModalUsuarioComponent>,
     public formBuilder: FormBuilder,
@@ -33,6 +35,7 @@ export class ModalUsuarioComponent implements OnInit {
   buildForm() {
     this.form = this.formBuilder.group({
       id: [this.localData.id],
+      password: [this.localData.password],
       nombre: [this.localData.nombre, [Validators.required]],
       apellido: [this.localData.apellido, [Validators.required]],
       dni: [this.localData.dni, [Validators.required, , Validators.pattern(/^[0-9]\d*$/)]],
@@ -41,9 +44,9 @@ export class ModalUsuarioComponent implements OnInit {
       email: [this.localData.email, [Validators.required, Validators.email]],
       esCliente: [this.localData.esCliente, [Validators.required]],
       rol: [this.localData.rol],
-      esClienteOpciones:[this.opciones]
+      esClienteOpciones: [this.opciones]
     });
-    
+
   }
 
   setAction() {
@@ -51,8 +54,11 @@ export class ModalUsuarioComponent implements OnInit {
   }
 
   onAction() {
-    this.form.controls['fechaNacimiento'].setValue(this.datePipe.transform(this.form.controls['fechaNacimiento'].value, 'yyyy-MM-dd'));
-    this.dialogRef.close({ event: this.action, data: this.form.value });
+    let op: boolean = this.password();
+    if (op) {
+      this.form.controls['fechaNacimiento'].setValue(this.datePipe.transform(this.form.controls['fechaNacimiento'].value, 'yyyy-MM-dd'));
+      this.dialogRef.close({ event: this.action, data: this.form.value });
+    }
   }
 
   onCancel() {
@@ -63,24 +69,48 @@ export class ModalUsuarioComponent implements OnInit {
     return this.form.controls[control].hasError(error);
   }
 
-  cargarAjustes(){
-    if(this.form.controls['rol'].value!=null){
-      this.rolGuardado=this.form.controls['rol'].value;
+  cargarAjustes() {
+    if (this.form.controls['rol'].value != null) {
+      this.rolGuardado = this.form.controls['rol'].value;
       this.form.controls['esCliente'].setValue(false);
       this.form.controls['esClienteOpciones'].setValue("false");
-    }else{
+    } else {
       this.form.controls['esClienteOpciones'].setValue("true");
       this.form.controls['esCliente'].setValue(true);
+      this.form.controls['rol'].setValue("Cliente");
     }
   }
 
-  dS(o:boolean){
-    this.disableSelect=o;
-    if(o){
+  public password(): boolean {
+    if ((<HTMLInputElement>document.getElementById("P1")).value === this.localData.password && (<HTMLInputElement>document.getElementById("P2")).value === (<HTMLInputElement>document.getElementById("P3")).value && (<HTMLInputElement>document.getElementById("P2")).value != "" && (<HTMLInputElement>document.getElementById("P2")).value != null) {
+      this.form.controls['password'].setValue((<HTMLInputElement>document.getElementById("P2")).value);
+      return true;
+    } else {
+      if ((<HTMLInputElement>document.getElementById("P1")).value === "" || (<HTMLInputElement>document.getElementById("P1")).value === null) {
+        return true;
+      }
+    }
+    Swal.fire({
+      position: 'top-end',
+      icon: 'error',
+      title: 'Password invalida!',
+      showConfirmButton: false,
+      timer: 1500
+    });
+    (<HTMLInputElement>document.getElementById("P1")).value = "";
+    (<HTMLInputElement>document.getElementById("P2")).value = "";
+    (<HTMLInputElement>document.getElementById("P3")).value = "";
+    (<HTMLInputElement>document.getElementById("P1")).focus();
+    return false;
+  }
+
+  dS(o: boolean) {
+    this.disableSelect = o;
+    if (o) {
       this.form.controls['esCliente'].setValue(true);
       this.form.controls['esClienteOpciones'].setValue("true");
-      this.form.controls['rol'].setValue(null);
-    }else{
+      this.form.controls['rol'].setValue("Cliente");
+    } else {
       this.form.controls['rol'].setValue(this.rolGuardado);
       this.form.controls['esClienteOpciones'].setValue("false");
       this.form.controls['esCliente'].setValue(false);
