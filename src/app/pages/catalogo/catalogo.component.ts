@@ -38,6 +38,8 @@ export class CatalogoComponent implements OnInit {
   ultimopedido: Pedido;
   public pedidos: Pedido[] = [];
 
+  fechahoy: boolean = false;
+
   constructor(private servicioCategoria: CategoriaService,
     private servicioPlato: PlatoService,
     private servicioBebida: InsumoService,
@@ -50,6 +52,24 @@ export class CatalogoComponent implements OnInit {
   ngOnInit(): void {
     this.getCategorias();
     this.isAuth();
+    this.establecerFechas();
+  }
+
+  establecerFechas() {
+    let dia = new Date().getDay();
+    let hora = new Date().getHours();
+    //lunes a domingos de 20:00 a 12:00, y de sábados y domingos de 11:00 a 15:00
+    if (hora >= 20 || hora == 0) {
+      this.fechahoy = true;
+    }
+
+    if (dia == 0 || dia == 7) {
+      if (hora >= 11 && hora <= 15) {
+        this.fechahoy = true;
+      }
+    }
+
+    console.log('Bandera hoy ', this.fechahoy);
   }
 
   volverANulo() {
@@ -168,14 +188,16 @@ export class CatalogoComponent implements OnInit {
   }
 
   enviarPedidoFinal() {
-    this.servicioPedido.getPedidoEstado(this.usuario.id, 7).subscribe(res => {
-      this.pedidos = res;
-      if (this.pedidos.length > 0) {
-        this.updatePedido();
-      } else {
-        this.setearPedido();
-      }
-    })
+    if (this.fechahoy == true) {
+      this.servicioPedido.getPedidoEstado(this.usuario.id, 7).subscribe(res => {
+        this.pedidos = res;
+        if (this.pedidos.length > 0) {
+          this.updatePedido();
+        } else {
+          this.setearPedido();
+        }
+      })
+    }
   }
 
   updatePedido() {

@@ -14,6 +14,9 @@ import { Pedido } from 'src/app/models/Pedido';
 })
 export class ConfirmarPedidoComponent implements OnInit {
 
+  pageActual: number = 1;
+  indice: number;
+
   facturas = [];
   d:any;
   facturasConfirmar = [];
@@ -31,7 +34,7 @@ export class ConfirmarPedidoComponent implements OnInit {
   ngOnInit(): void {
     setInterval(() => {
       this.cargarFacturas();
-    }, 5000);
+    }, 60000);
   }
 
   cargarFacturas(): void {

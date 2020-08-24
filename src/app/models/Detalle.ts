@@ -5,7 +5,7 @@ import { Plato } from './Plato';
 export interface Detalle {
     id?: number;
     cantidad?: number;
-    monto?: number;
+    fecha?: Date;
     plato?: Plato;
     insumo?: Insumo;
     pedido?: Pedido;

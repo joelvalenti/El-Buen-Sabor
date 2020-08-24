@@ -154,6 +154,7 @@ export class RealizarPedidoComponent implements OnInit {
     this.form4 = this.formBuilder4.group({
       id: [this.localData.id],
       cantidad: [this.localData.cantidad],
+      fecha:[this.localData.fecha],
       plato: [this.localData.plato],
       insumo: [this.localData.insumo],
       pedido: [this.localData.pedido],
@@ -252,6 +253,7 @@ public focusTarjeta():void{
       this.platoSelec=element;
       if (contador == 0) {
         this.form4.controls['cantidad'].setValue(1);
+        this.form4.controls['fecha'].setValue(this.obtenerFecha());
         this.form4.controls['plato'].setValue(element);
         this.form4.controls['insumo'].setValue(null);
         this.form4.controls['pedido'].setValue(this.pedidoSelec);
@@ -271,6 +273,7 @@ public focusTarjeta():void{
       this.insumoSelec=element;
       if (contador == 0) {
         this.form4.controls['cantidad'].setValue(1);
+        this.form4.controls['fecha'].setValue(this.obtenerFecha());
         this.form4.controls['insumo'].setValue(element);
         this.form4.controls['plato'].setValue(null);
         this.form4.controls['pedido'].setValue(this.pedidoSelec);

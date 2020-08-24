@@ -18,7 +18,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let factura of facturas"
+        <tr *ngFor="let factura of facturas | paginate: { itemsPerPage: 10, currentPage: pageActual };let indice=index"
             class="{{(factura.pedido.estado.nombre == 'Terminado')? 'backAzul' : (factura.pedido.estado.nombre == 'En Preparacion')? 'backVerde' : (factura.pedido.estado.nombre == 'En Viaje')? 'backAmarillo' : 'backRojo'}}">
             <td>{{factura.id}}</td>
             <td>{{factura.total}}</td>
@@ -39,6 +39,7 @@
         </tr>
     </tbody>
 </table>
+<pagination-controls (pageChange)="pageActual = $event"></pagination-controls>
 <div class="modal fade z" id="modalDetalle" tabindex="-1" role="dialog" data-backdrop="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

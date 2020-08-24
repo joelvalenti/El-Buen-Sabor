@@ -13,6 +13,9 @@ import { PlatoService } from 'src/app/services/allServices/plato.service';
 })
 export class CocinaPedidoComponent implements OnInit {
 
+  pageActual: number = 1;
+  indice: number;
+
   facturas = [];
   d:any;
   facturasConfirmar = [];
@@ -29,7 +32,7 @@ export class CocinaPedidoComponent implements OnInit {
   ngOnInit(): void {
     setInterval(() => {
       this.cargarFacturas();
-    }, 5000);
+    }, 60000);
   }
 
   cargarFacturas(): void {

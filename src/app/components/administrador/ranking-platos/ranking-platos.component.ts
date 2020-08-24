@@ -1,13 +1,11 @@
+import { FacturaService } from 'src/app/services/allServices/factura.service';
 import { RankingPlatosService } from './../../../services/allServices/rankingPlatos.service';
-import { ModalPlatoComponent } from './../modales/modal-plato/modal-plato.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
-import { Plato } from '../../../models/Plato';
-import Swal from'sweetalert2';
-import { DetallePlato } from 'src/app/models/DetallePlato';
+import { PlatosPopulares } from '../../../models/PlatosPopulares';
 
 @Component({
   selector: 'app-ranking-platos',
@@ -17,15 +15,13 @@ import { DetallePlato } from 'src/app/models/DetallePlato';
 export class RankingPlatosComponent implements OnInit {
 
 
-  public displayedColumns: string[] = ['id','cantidadVendida','nombre' ];
-  public dataSource: MatTableDataSource<Plato> = new MatTableDataSource();
+  public displayedColumns: string[] = ['id','cantidadVendida', 'nombre' ];
+  public dataSource: MatTableDataSource<any> = new MatTableDataSource();
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  public sidenavOpened: boolean = false;
-  public platoSeleccionado : Plato = null;
 
 
-  constructor(public dialog: MatDialog, public service: RankingPlatosService) { }
+  constructor(public dialog: MatDialog, public service: FacturaService) { }
 
 
   ngOnInit(): void {
@@ -47,9 +43,45 @@ export class RankingPlatosComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  platosPopulares(fechaDesde:String, fechaHasta:String) {
-    this.service.platosPopulares(fechaDesde,fechaHasta).subscribe(response => {
-        this.dataSource.data = response;
+  PlatosPopulares(fechaDesde:String, fechaHasta:String) {
+    console.log(fechaDesde);
+    console.log(fechaHasta);
+    this.service.platosPopulares(fechaDesde,fechaHasta).subscribe(Plato => {
+      console.log(Plato);
+      let detalles=[];
+        detalles=[{
+          "id":Plato.id_Plato1,
+          "cantidadVendida":Plato.cantidad_Plato1,
+          "nombre":Plato.nombre_Plato1,
+        },
+        {
+          "id":Plato.id_Plato2,
+          "cantidadVendida":Plato.cantidad_Plato2,
+          "nombre":Plato.nombre_Plato2,
+        },
+        {
+          "id":Plato.id_Plato3,
+          "cantidadVendida":Plato.cantidad_Plato3,
+          "nombre":Plato.nombre_Plato3,
+        },
+        {
+          "id":Plato.id_Plato4,
+          "cantidadVendida":Plato.cantidad_Plato4,
+          "nombre":Plato.nombre_Plato4,
+        },
+        {
+          "id":Plato.id_Plato5,
+          "cantidadVendida":Plato.cantidad_Plato5,
+          "nombre":Plato.nombre_Plato5,
+        },
+        {
+          "id":Plato.id_Plato6,
+          "cantidadVendida":Plato.cantidad_Plato6,
+          "nombre":Plato.nombre_Plato6,
+        }];
+      
+        
+        this.dataSource.data = detalles;
         console.log(this.dataSource.data);
         this.notifyTable();
     },
@@ -62,12 +94,7 @@ export class RankingPlatosComponent implements OnInit {
     this.dataSource.data = [...this.dataSource.data];
   }
 
-  public verDetalles(elemento : Plato) {
-    this.platoSeleccionado = elemento;
-    this.sidenavOpened = true;
-  }
-
 cargarPlatosPopulares():void{
-  this.platosPopulares((<HTMLInputElement>document.getElementById("fechaDesde")).value.toString(),(<HTMLInputElement>document.getElementById("fechaHasta")).value.toString());
+  this.PlatosPopulares((<HTMLInputElement>document.getElementById("fechaDesde")).value.toString(),(<HTMLInputElement>document.getElementById("fechaHasta")).value.toString());
 }
 }
