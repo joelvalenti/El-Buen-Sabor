@@ -25,6 +25,7 @@ export class CatalogoComponent implements OnInit {
   vcategoria: string = null;
   public categorias: Categoria[];
   public platos: Plato[];
+  public todosLosPlatos: Plato[];
   public platosCarrito: Plato[] = [];
   gaseosas: Insumo[] = [];
   total: number = 0;
@@ -53,6 +54,20 @@ export class CatalogoComponent implements OnInit {
     this.getCategorias();
     this.isAuth();
     this.establecerFechas();
+  }
+
+  onKeyFilter(value) {
+    var filter = value.toLowerCase();
+    var platosFiltrados = [];
+    var platosAux = this.platos;
+    for (let i = 0; i < this.platos.length; i++) {
+      if (filter.length > 0 && this.platos[i].nombre.toLowerCase().includes(filter)) {
+        platosFiltrados.push(this.platos[i]);
+        this.platos = platosFiltrados;
+      }else{
+        this.platos = platosAux;
+      }
+    }
   }
 
   establecerFechas() {
