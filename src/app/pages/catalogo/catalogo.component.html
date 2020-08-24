@@ -117,7 +117,7 @@
                           <h5>Bebidas</h5>
                           <h5 *ngFor="let detalle of carritoBebidas">{{detalle.insumo.nombre}} ${{detalle.insumo.precioVenta}} Cantidad: {{detalle.cantidad}} <a (click)="eliminarItem(detalle)"  style="color: orangered;"><strong>X</strong></a></h5>
                           <h5 class="totalpedido">Total: ${{total}}</h5>
-                          <a (click)="enviarPedido()" class="btn btn-primary">Continuar</a>
+                          <a (click)="enviarPedidoFinal()" class="btn btn-primary">Continuar</a>
                         </div>
                       </div>
                 </div>

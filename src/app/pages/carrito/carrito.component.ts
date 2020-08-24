@@ -207,8 +207,6 @@ export class CarritoComponent implements OnInit {
     this.pedidos[0].envioDelivery = this.flagRadioDireccion;
     var utc = new Date().toJSON().slice(0, 10);
     this.pedidos[0].fecha = new Date(utc);
-    /*let monto = new Float64Array(this.getTotalFinal());
-    this.pedidos[0].monto = monto;*/
     if (this.flagRadioDireccion == false) {
       this.pedidos[0].domicilio = this.domBuenSabor;
     } else {

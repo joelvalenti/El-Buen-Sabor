@@ -36,6 +36,7 @@ export class CatalogoComponent implements OnInit {
   pedidoNuevo: Pedido = {};
   usuario: Usuario = {};
   ultimopedido: Pedido;
+  public pedidos: Pedido[] = [];
 
   constructor(private servicioCategoria: CategoriaService,
     private servicioPlato: PlatoService,
@@ -60,7 +61,7 @@ export class CatalogoComponent implements OnInit {
     this.servicioBebida.getEsInsumo(false).subscribe(res => {
       this.gaseosas = res;
     }, err => {
-      console.log('Error al traer bebidas');
+      console.log('Error al traer bebidas', err);
     });
   }
 
@@ -68,18 +69,17 @@ export class CatalogoComponent implements OnInit {
     this.servicioCategoria.getAll().subscribe(res => {
       this.categorias = res;
     }, err => {
-      alert('Error al traer categorias');
+      console.log('Error al traer categorias', err);
     });
   }
 
   elegirCategoria(categoria: string) {
     this.seleccionBebidas = false;
     this.vcategoria = categoria;
-    console.log('categoria: ', this.vcategoria);
     this.servicioPlato.getByCategory(categoria).subscribe(res => {
       this.platos = res;
     }, err => {
-      alert('Error al traer categorias');
+      console.log('Error al traer categorias: ', err);
     });
   }
 
@@ -90,12 +90,10 @@ export class CatalogoComponent implements OnInit {
       nuevoDetalle.cantidad = 1;
       this.carritoFinal.push(nuevoDetalle);
       this.total += plato.precioVenta;
-      console.log('carrito final 1', this.carritoFinal);
     } else {
       let otro: Detalle = {};
       otro.plato = plato;
       const indice = this.carritoFinal.findIndex(ref => ref.plato.nombre == otro.plato.nombre);
-      console.log(indice);
       if (indice < 0) {
         let nuevoPlato: Detalle = {};
         nuevoPlato.plato = plato;
@@ -117,13 +115,10 @@ export class CatalogoComponent implements OnInit {
       nuevoDetalle.cantidad = 1;
       this.carritoBebidas.push(nuevoDetalle);
       this.total += bebida.precioVenta;
-      console.log('carrito final 1', this.carritoBebidas);
     } else {
       let otro: Detalle = {};
       otro.insumo = bebida;
-      console.log(otro.insumo.nombre);
       const indice = this.carritoBebidas.findIndex(ref => ref.insumo.nombre == otro.insumo.nombre);
-      console.log(indice);
       if (indice < 0) {
         let nuevoPlato: Detalle = {};
         nuevoPlato.insumo = bebida;
@@ -172,15 +167,34 @@ export class CatalogoComponent implements OnInit {
     });
   }
 
+  enviarPedidoFinal() {
+    this.servicioPedido.getPedidoEstado(this.usuario.id, 7).subscribe(res => {
+      this.pedidos = res;
+      if (this.pedidos.length > 0) {
+        this.updatePedido();
+      } else {
+        this.setearPedido();
+      }
+    })
+  }
 
-  async enviarPedido() {
-    console.log('pedido final ', this.carritoFinal);
-    console.log('bebidas', this.carritoBebidas);
-    await this.setearPedido();
+  updatePedido() {
+    console.log('Entre a updatePedido');
+    const arreglofinal = this.carritoFinal.concat(this.carritoBebidas);
+    arreglofinal.forEach(element => {
+      element.pedido = this.pedidos[0];
+      this.detalleService.post(element).subscribe(
+        () => { },
+        err => {
+          console.log('Error seteando detalles: ', err);
+        }
+      );
+    });
     this.router.navigate(['/carrito']);
   }
 
   setearPedido() {
+    console.log('Entre a setear pedidos.');
     let estado: Estado = {
       id: 7,
       eliminado: false,
@@ -193,25 +207,25 @@ export class CatalogoComponent implements OnInit {
       this.ultimopedido = res;
       this.setearDetalles();
     }, err => console.log(err));
-
-
   }
 
   setearDetalles() {
+    console.log('Entre a setearDetalles');
     const arreglofinal = this.carritoFinal.concat(this.carritoBebidas);
     arreglofinal.forEach(element => {
       element.pedido = this.ultimopedido;
       this.detalleService.post(element).subscribe(
-        res => {
-          console.log('correcto, se seteo el detalle', res.id)
-        }, err => {
-          console.log('err');
+        () => { },
+        err => {
+          console.log('Error seteando detalles: ', err);
         }
       );
     });
+    this.router.navigate(['/carrito']);
   }
 
   verDetalle(plato: Plato) {
     this.platoDetalle = plato;
   }
+
 }
