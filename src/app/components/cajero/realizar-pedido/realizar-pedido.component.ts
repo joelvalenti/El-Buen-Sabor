@@ -238,12 +238,36 @@ public focusTarjeta():void{
 }
   public pagar(op:boolean):void {
     if(op){ 
+      if((<HTMLInputElement>document.getElementById("tarjeta")).value.length==16){
       this.form5.controls['nroTarjeta'].setValue((<HTMLInputElement>document.getElementById("tarjeta")).value);
       this.form5.controls['tipoPago'].setValue("Tarjeta");
+      this.paso=4;
+    }else{
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: 'Número de tarjeta incorrecto!',
+        showConfirmButton: false,
+        timer: 1500
+      });
+      (<HTMLInputElement>document.getElementById("tarjeta")).value="";
+    }
     }else{
       this.form5.controls['tipoPago'].setValue("Efectivo");
+      this.paso=4;
     }
-    this.paso=4;
+    
+  }
+
+  public inputValidator(event: any) {
+    //console.log(event.target.value);
+    const pattern = /^[0-9]*$/;   
+    //let inputChar = String.fromCharCode(event.charCode)
+    if (!pattern.test(event.target.value)) {
+      event.target.value = event.target.value.replace(/[^0-9]/g, "");
+      // invalid character, prevent input
+
+    }
   }
   public crearDetallePlato(element: Plato): void {
     this.service7.buscarPorPlato(this.pedidoSelec.id, element.id).subscribe((data) => {

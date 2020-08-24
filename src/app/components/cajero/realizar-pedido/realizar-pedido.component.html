@@ -18,7 +18,7 @@
 </div>
 <div *ngIf="this.paso==3" class="botonesUsuario">
     <button class="myButton" (click)="pagar(true)">Pagar con Tarjeta</button>
-    <input type="text" id="tarjeta" value="---- ---- ---- ----" (focus)="focusTarjeta()"/>
+    <input type="text" id="tarjeta" value="" (input)="inputValidator($event)"  (focus)="focusTarjeta()"/>
     &nbsp;&nbsp;
     <button class="myButton" (click)="pagar(false)">Pagar en Efectivo</button>
 </div>
