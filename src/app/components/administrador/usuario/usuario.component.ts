@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { Usuario } from '../../../models/Usuario';
+import { DatePipe, getLocaleDateFormat } from '@angular/common';
 import { UsuarioService } from '../../../services/allServices/usuario.service'
 import Swal from'sweetalert2';
 
@@ -21,9 +22,10 @@ export class UsuarioComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   public sidenavOpened: boolean = false;
   public usuarioSeleccionado : Usuario = null;
+  public reformatDate;
 
 
-  constructor(public dialog: MatDialog, public service: UsuarioService) { }
+  constructor(public dialog: MatDialog, public service: UsuarioService, private datePipe: DatePipe) { }
 
 
   ngOnInit(): void {

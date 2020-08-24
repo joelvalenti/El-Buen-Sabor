@@ -32,10 +32,10 @@
         <button class="myButton" (click)="reiniciarPedido()">Realizar un nuevo pedido</button>
     </div>
 </div>
-<table class="tg" *ngIf="this.paso==4">
+<table class="tg" *ngIf="this.paso==4" class="mat-elevation-z8">
     <thead>
         <tr>
-            <th class="tg-u8eq anchocolum1">
+            <th class="tg-u8eq col-xs-12 col-sm-3">
                 <div style="text-align: center; ">
                     <h1>Categorias</h1>
                 </div>
@@ -66,7 +66,7 @@
 
 
 
-            <th class="tg-qeeq anchocolum2">
+            <th class="tg-qeeq col-xs-12 col-sm-5">
                 <div *ngFor="let plato of this.localDataPlatos" class="pedido">
                     <div style="float:left;">
                         <img class="card-img-top" style="width: 70px; height: 70px;"
@@ -108,7 +108,7 @@
 
 
 
-            <th class="tg-qeeq anchocolum3">
+            <th class="tg-qeeq col-xs-12 col-sm-4">
                 <div class="izquierdo">
                     <div *ngFor="let detalle1 of this.localDataDetalles" class="contenedor">
                         <button class="myButtonMM" (click)="cantidad(true,detalle1)">+</button>&nbsp;&nbsp;
@@ -125,7 +125,7 @@
                         <input type="text" disabled id="total" class="sinborde total" value="0" style="width:20%;">
                     </div>
                 </div>
-                <button class="myButton" style=" width:100%;" (click)="terminarPedido()">Terminar Pedido</button>
+                <button *ngIf="this.contar>0"class="myButton" style=" width:100%;" (click)="terminarPedido()">Terminar Pedido</button>
                 <form [formGroup]="form4">
                     <input hidden formControlName="id">
                     <input hidden formControlName="cantidad">

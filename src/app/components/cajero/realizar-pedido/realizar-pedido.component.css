@@ -113,7 +113,7 @@ div {
 .izquierdo{
     border-style: solid;
     padding:10px;
-    width: 100%;
+    width: 300px;
     border-width: 2px; 
     border-color: black;
     border-radius: 5px 5px 5px 5px;
@@ -131,9 +131,7 @@ div {
     font-size: 15px !important;
     font-weight: bold !important; 
 }
-  .dtotal{
 
-  }
   .contenedor{
     border-style: solid;
     padding:10px;
@@ -153,3 +151,6 @@ div {
     margin-top: 10px;
     text-align:center;
 }
+table {
+    width: 100%;
+  }

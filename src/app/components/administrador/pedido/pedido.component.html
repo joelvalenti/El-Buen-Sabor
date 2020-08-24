@@ -7,132 +7,84 @@
                     <input matInput (keyup)="applyFilter($event)" placeholder="Buscar...">
                 </mat-form-field>
             </div>
-        
-        <div class="tabla" class="mat-elevation-z8">
-            <mat-table [dataSource]="dataSource" matSort>
+
+            <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
                 <!-- Numero Column -->
                 <ng-container matColumnDef="numero" >
-                    <mat-header-cell mat-sort-header *matHeaderCellDef> Nº </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="pointer">
-                        {{element.id}} </mat-cell>
+                    <th mat-header-cell mat-sort-header *matHeaderCellDef> Nº </th>
+                    <td mat-cell *matCellDef="let element" class="pointer">
+                        {{element.id}} </td>
                 </ng-container>
 
                 <!-- Fecha Column -->
                 <ng-container matColumnDef="fecha">
-                    <mat-header-cell mat-sort-header *matHeaderCellDef> Fecha </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="pointer">
-                        {{element.fecha}} </mat-cell>
+                    <th mat-header-cell mat-sort-header *matHeaderCellDef> Fecha </th>
+                    <td mat-cell *matCellDef="let element" class="pointer">
+                        {{element.fecha}} </td>
                 </ng-container>
 
                 <!-- Hora Estimada Column -->
                 <ng-container matColumnDef="horaEstimada">
-                    <mat-header-cell mat-sort-header *matHeaderCellDef> Hora </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="pointer">
-                        {{element.horaEstimada}} </mat-cell>
+                    <th mat-header-cell mat-sort-header *matHeaderCellDef> Hora </th>
+                    <td mat-cell *matCellDef="let element" class="pointer">
+                        {{element.horaEstimada}} </td>
                 </ng-container>
 
                 <!-- Envio Delivery Column -->
                 <ng-container matColumnDef="envioDelivery">
-                    <mat-header-cell mat-sort-header *matHeaderCellDef> Envio Delivery </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="pointer">
+                    <th mat-header-cell mat-sort-header *matHeaderCellDef> Envio Delivery </th>
+                    <td mat-cell *matCellDef="let element" class="pointer">
                         <span *ngIf="element.envioDelivery == true">Si</span>
                         <span *ngIf="element.envioDelivery == false">No</span>
-                         </mat-cell>
+                         </td>
                 </ng-container>
 
                 <!-- PedidoDetalle Column-->
                 <ng-container matColumnDef="detallePedido">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Detalles </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="pointer" (click)="verPedidoDetalle(element)">
-                        Ver Detalles </mat-cell>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Detalles </th>
+                    <td mat-cell *matCellDef="let element" class="pointer" (click)="verPedidoDetalle(element)">
+                        Ver Detalles </td>
                 </ng-container>
 
                 <!-- Domicilio Column-->
                 <ng-container matColumnDef="domicilio">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'TCClass'"> Domicilio </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="pointer" [ngClass]="'TCClass'">
-                       <span *ngIf="element.domicilioElegido != null"> {{element.domicilio.calle}} {{element.domicilioElegido.numero}}, {{element.domicilioElegido.localidad.nombre}}, {{element.domicilioElegido.departamento}}</span> </mat-cell>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'TCClass'"> Domicilio </th>
+                    <td mat-cell *matCellDef="let element" class="pointer" [ngClass]="'TCClass'">
+                       <span *ngIf="element.domicilio != null"> {{element.domicilio.calle}} {{element.domicilio.numero}}, {{element.domicilio.localidad.nombre}}, {{element.domicilio.departamento}}</span> 
+                       <span *ngIf="element.domicilio == null"> Retiro por el Local</span>
+                    </td>
                 </ng-container>
 
                 <!-- Monto Column-->
                 <ng-container matColumnDef="monto">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Monto </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="pointer">
-                        $ {{element.monto}} </mat-cell>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Monto </th>
+                    <td mat-cell *matCellDef="let element" class="pointer">
+                        $ {{element.monto}} </td>
                 </ng-container>
 
                 <!-- Estado Column-->
                 <ng-container matColumnDef="estado">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="pointer">
-                        <span >{{element.estado.nombre}}</span> </mat-cell>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+                    <td mat-cell *matCellDef="let element" class="pointer">
+                        <span >{{element.estado.nombre}}</span> </td>
                 </ng-container>
+        
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"
+                [ngClass]="{'rojo': 'Cancelado' == row.estado.nombre,
+                            'azul': 'En Preparacion' == row.estado.nombre,
+                            'dorado': 'En Aprobacion' == row.estado.nombre,
+                            'gris': 'En Pedido' == row.estado.nombre,
+                            'verdeOscuro': 'Terminado' == row.estado.nombre,
+                            'magenta': 'En Viaje' == row.estado.nombre,
+                            'verde': 'Entregado' == row.estado.nombre
+                        }"
+                ></tr>
 
-                <!-- Email Column
-                <ng-container matColumnDef="email">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'TCClass'"> Email </mat-header-cell>
-                    <mat-cell *matCellDef="let element" [ngClass]="'TCClass'" class="pointer"
-                        (click)="verDetalles(element)">
-                        {{element.email}} </mat-cell>
-                </ng-container>
-
-                Es Cliente Column
-                <ng-container matColumnDef="esCliente">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Es Cliente </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="pointer" (click)="verDetalles(element)">
-                        <span *ngIf="element.esCliente == true">Si</span>
-                        <span *ngIf="element.esCliente == false">No</span>
-                    </mat-cell>
-                </ng-container>
-
-                 Telefono Column
-                <ng-container matColumnDef="telefono">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Teléfono </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="pointer" (click)="verDetalles(element)">
-                        {{element.telefono}} </mat-cell>
-                </ng-container>
-
-                 Fecha de nacimiento Column
-                <ng-container matColumnDef="fechaNacimiento">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Nacimiento </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="pointer" (click)="verDetalles(element)">
-                        {{element.fechaNacimiento}} </mat-cell>
-                </ng-container>
-
-                 Rol Column
-                <ng-container matColumnDef="rol">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Rol </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="pointer" (click)="verDetalles(element)">
-                        {{element.rol}} </mat-cell>
-                </ng-container>
-
-
-                 Acciones Column -->
-                <!--<ng-container matColumnDef="actions">
-                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                    <mat-cell *matCellDef="let element" style="display: flex; justify-content: center;">
-                        <button mat-mini-fab class="my-editar" matTooltip="Editar" (click)="onSubmit(element)">
-                            <mat-icon [inline]="true">create</mat-icon>
-                        </button>
-                        <button mat-mini-fab class="my-eliminar" (click)="eliminar(element)">
-                            <mat-icon [inline]="true">delete_forever</mat-icon>
-                        </button>
-                    </mat-cell>
-                </ng-container>
---> 
-                
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns"
-                [ngClass]="{'rojo': 'Cocina' == row.estado.nombre,
-                            'azul': 'Esperar' == row.estado.nombre,
-                            'verde': 'Entregar' == row.estado.nombre}"
-                ></mat-row>
-
-            </mat-table>
+            </table>
             <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons aria-label="etiqueta">
             </mat-paginator>
-        </div>
-        <!-- </div> -->
+
     </mat-sidenav-content>
 </mat-sidenav-container>

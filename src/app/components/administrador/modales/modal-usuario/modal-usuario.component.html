@@ -72,6 +72,7 @@
 
     </div>
 
+
     <div class="form-row">
 
       <mat-form-field class="form-group col-md-6">
@@ -90,8 +91,30 @@
         <mat-label>Rol</mat-label>
         <mat-select [disabled]="disableSelect" placeholder="Usuario Rol" formControlName="rol">
           <mat-option value="Administrador">Administrador</mat-option>
+          <mat-option value="Cajero">Cajero</mat-option>
           <mat-option value="Cocinero">Cocinero</mat-option>
+          <mat-option value="Cliente">Cliente</mat-option>
         </mat-select>
+      </mat-form-field>
+
+    </div>
+
+    <div class="form-row">
+      <input hidden formControlName="password">
+
+      <mat-form-field class="form-group col-md-4">
+        <mat-label>Última Password</mat-label>
+        <input type="password" id="P1" matInput placeholder="Usuario Password">
+      </mat-form-field>
+
+      <mat-form-field class="form-group col-md-4">
+        <mat-label>Nueva Password</mat-label>
+        <input type="password" id="P2" matInput placeholder="Usuario Password" >
+      </mat-form-field>
+
+      <mat-form-field class="form-group col-md-4">
+        <mat-label>Repetir Password</mat-label>
+        <input type="password" id="P3" matInput placeholder="Usuario Password" >
       </mat-form-field>
 
     </div>

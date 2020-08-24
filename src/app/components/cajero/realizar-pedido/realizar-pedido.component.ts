@@ -55,6 +55,7 @@ export class RealizarPedidoComponent implements OnInit {
   public domId: number;
   public llave: boolean = true;
   public retirarLocal:boolean=false;
+  public contar: number=0;
 
   constructor(public dialog: MatDialog, public formBuilder3: FormBuilder, public formBuilder4: FormBuilder,
     public formBuilder5: FormBuilder,
@@ -90,7 +91,7 @@ export class RealizarPedidoComponent implements OnInit {
     var d = new Date();
     this.form3.controls['horaEstimada'].setValue(d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds());
     this.form3.controls['fecha'].setValue(this.obtenerFecha());
-    this.form3.controls['envioDelivery'].setValue(true);
+    this.form3.controls['envioDelivery'].setValue(!this.retirarLocal);
     this.form3.controls['eliminado'].setValue(false);
     this.agregarEstado();
   }
@@ -247,6 +248,7 @@ public focusTarjeta():void{
   public crearDetallePlato(element: Plato): void {
     this.service7.buscarPorPlato(this.pedidoSelec.id, element.id).subscribe((data) => {
       let contador: number = 0;
+      this.contar++;
       data.forEach(element => {
         contador += 1;
       });
@@ -267,6 +269,7 @@ public focusTarjeta():void{
   public crearDetalleInsumo(element: Insumo): void {
     this.service7.buscarPorInsumo(this.pedidoSelec.id, element.id).subscribe((data) => {
       let contador: number = 0;
+      this.contar++;
       data.forEach(element => {
         contador += 1;
       });
@@ -330,8 +333,10 @@ public focusTarjeta():void{
       if (incrementar) {
         cantidad = Number.parseInt((<HTMLInputElement>document.getElementById("cantidad_" + detalle.id.toString())).value) + 1;
         this.actualizarDetalle(cantidad, detalle, false);
+        this.contar++;
       } else {
         cantidad = Number.parseInt((<HTMLInputElement>document.getElementById("cantidad_" + detalle.id.toString())).value) - 1;
+        this.contar--;
         if(cantidad==0){
           this.actualizarDetalle(1, detalle, true);
         }else{

@@ -52,8 +52,6 @@ export class PedidoComponent implements OnInit {
   getAll() {
     this.pedidoService.getAll().subscribe(response => {
         this.dataSource.data = response;
-        console.log("MONTO: " + this.dataSource.data);
-        
     },
       error => {
         alert("Error en getAll" + error);

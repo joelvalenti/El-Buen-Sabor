@@ -12,39 +12,37 @@
                 </div>
             </div>
         
-        <div class="tabla" class="mat-elevation-z8">
-            <mat-table  [dataSource]="dataSource" matSort>
+            <table mat-table  [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
                 <!-- Id Column -->
                 <ng-container matColumnDef="id">
-                    <mat-header-cell mat-sort-header *matHeaderCellDef> Id </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="pointer" >
-                        {{element.id}} </mat-cell>
+                    <th mat-header-cell mat-sort-header *matHeaderCellDef> Id </th>
+                    <td mat-cell *matCellDef="let element" class="pointer" >
+                        {{element.id}} </td>
                 </ng-container>
 
                 <!-- Cantidad Vendida Column -->
                 <ng-container matColumnDef="cantidadVendida">
-                    <mat-header-cell mat-sort-header *matHeaderCellDef> Cantidad Vendida </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="pointer" >
-                        {{element.cantidadVendida}} </mat-cell>
+                    <th mat-header-cell mat-sort-header *matHeaderCellDef> Cantidad Vendida </th>
+                    <td mat-cell *matCellDef="let element" class="pointer" >
+                        {{element.cantidadVendida}} </td>
                 </ng-container>
 
                 <!-- Nombre Column -->
                 <ng-container matColumnDef="nombre">
-                    <mat-header-cell mat-sort-header *matHeaderCellDef> Nombre </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="pointer" >
-                        {{element.nombre | titlecase}} </mat-cell>
+                    <th mat-header-cell mat-sort-header *matHeaderCellDef> Nombre </th>
+                    <td mat-cell *matCellDef="let element" class="pointer" >
+                        {{element.nombre | titlecase}} </td>
                 </ng-container>
 
                 
 
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
-            </mat-table>
-            <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons aria-label="etiqueta">
+            </table>
+            <mat-paginator [pageSizeOptions]="[6,10,20]" showFirstLastButtons aria-label="etiqueta">
             </mat-paginator>
-        </div>
-        <!-- </div> -->
+            
     </mat-sidenav-content>
 </mat-sidenav-container>
