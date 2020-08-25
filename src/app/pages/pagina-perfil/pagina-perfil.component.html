@@ -5,7 +5,7 @@
         <a class="nav-item nav-link" id="nav-domicilio-tab" data-toggle="tab" href="#nav-domicilio" role="tab"
             aria-controls="nav-profile" aria-selected="false">Domicilios</a>
         <a class="nav-item nav-link" id="nav-pedidos-tab" data-toggle="tab" href="#nav-pedidos" role="tab"
-            aria-controls="nav-contact" aria-selected="false">Pedidos en Espera</a>
+            aria-controls="nav-contact" aria-selected="false">Mis Pedidos</a>
     </div>
 </nav>
 <div class="tab-content letra" id="nav-tabContent">
@@ -84,7 +84,7 @@
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
+                        <th scope="col">Nro. Domicilio</th>
                         <th scope="col">Calle</th>
                         <th scope="col">Número</th>
                         <th scope="col">Piso</th>
@@ -113,6 +113,59 @@
         <app-modal-dom-usuario [domicilioSeleccionado]="domicilioSeleccionado" [id]="idP"></app-modal-dom-usuario>
     </div>
     <div class="tab-pane fade" id="nav-pedidos" role="tabpanel" aria-labelledby="nav-pedidos-tab">
-        <h1>Hola</h1>
+        <div class="letra" style="margin: 1%;">
+            <h2>Pedido Actual</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nro. Pedido</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Factura</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row"></th>
+                            <td></td>
+                            <td></td>
+                            <td>Descargar Factura</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-8">
+                    <h2>Historial de Pedidos</h2>
+                </div>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" placeholder="Buscar por fecha..."
+                    (keyup)="onKeyFilter($event.target.value)">
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nro. Pedido</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Factura</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of pedidosXId | paginate: { itemsPerPage: 10, currentPage: pageActual }">
+                            <th scope="row">{{item.id}}</th>
+                            <td>{{item.estado.nombre}}</td>
+                            <td>{{item.fecha}}</td>
+                            <td>Descargar Factura</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <pagination-controls (pageChange)="pageActual = $event"></pagination-controls>
+            </div>
+        </div>
     </div>
 </div>

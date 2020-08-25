@@ -9,6 +9,7 @@ import { Injectable } from '@angular/core';
 export class PedidoService extends BaseService<Pedido> {
   protected miUrl = 'http://localhost:9000/api/v1/pedido/';
   protected miUrl2 = 'http://localhost:9000/api/v1/pedido/estado/';
+  protected miUrl3 = 'http://localhost:9000/api/v1/pedido/byUser/';
 
   updateEstado(status: number, pedido: any): Observable<any> {
     return this.http.put<any>(
@@ -32,5 +33,8 @@ export class PedidoService extends BaseService<Pedido> {
     return this.http.get<any[]>(this.miUrl2+id+'/'+id2);
   }
 
+  getAllPedidosXId(id:number): Observable<any[]>{
+    return this.http.get<any[]>(this.miUrl3+id);
+  }
 
 }

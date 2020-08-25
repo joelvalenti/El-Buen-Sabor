@@ -1,3 +1,5 @@
+import { Pedido } from './../../models/Pedido';
+import { PedidoService } from 'src/app/services/allServices/pedido.service';
 import { SweetAlertsService } from './../../services/allServices/sweet-alerts.service';
 import { Domicilio } from '../../models/Domicilio';
 import { RolesService } from '../../services/allServices/roles.service';
@@ -26,6 +28,9 @@ export class PaginaPerfilComponent implements OnInit {
   public rolSeleccionado;
   public esAdministrador;
   public esAdministradorActualmente;
+  pageActual: number = 1;
+  public pedidosXId: Pedido[] = [];
+  public pedidosXIdAux;
 
   usuario: Usuario = {
     id: 0,
@@ -65,7 +70,8 @@ export class PaginaPerfilComponent implements OnInit {
 
   constructor(private usuarioService: UsuarioService, private rolesService: RolesService,
     private domicilioService: DomicilioService, private localidadService: LocalidadService,
-    private alertsService: SweetAlertsService, private datePipe: DatePipe) { }
+    private alertsService: SweetAlertsService, private datePipe: DatePipe,
+    private pedidoService: PedidoService) { }
 
   ngOnInit() {
     this.isAuth();
@@ -83,6 +89,7 @@ export class PaginaPerfilComponent implements OnInit {
         }
         this.reformatDate = this.datePipe.transform(this.usuario.fechaNacimiento, "yyyy-MM-dd");
         this.getAllDomiciliosXUsuario();
+        this.getPedidosXId();
       })
     });
   }
@@ -99,6 +106,30 @@ export class PaginaPerfilComponent implements OnInit {
     })
   }
 
+  getPedidosXId() {
+    this.pedidoService.getPedidoEstado(this.usuario.id, 1).subscribe(res => {
+      this.pedidosXId = res;
+      this.pedidosXIdAux = res;
+    },
+      () => {
+        this.alertsService.errorAlert('Opss..', 'No se pudo recolectar la información del carrito');
+      });
+  }
+
+  onKeyFilter(value) {
+    var filter = value.toLowerCase();
+    var platosFiltrados = [];
+    for (let i = 0; i < this.pedidosXIdAux.length; i++) {
+      if (this.pedidosXIdAux[i].fecha.toLowerCase().includes(filter)) {
+        platosFiltrados.push(this.pedidosXIdAux[i]);
+        this.pedidosXId = platosFiltrados;
+      }
+    }
+    if(filter == ''){
+      this.pedidosXId = this.pedidosXIdAux;
+    }
+  }
+
   onDateChange(value) {
     this.fechaAux = value;
   }
@@ -108,6 +139,7 @@ export class PaginaPerfilComponent implements OnInit {
     this.usuarioService.put(usuario.id, usuario).subscribe(
       () => {
         this.usuario.rol = this.rolSeleccionado;
+        this.alertsService.successAlert('Datos Actualizados');
         if(this.usuario.rol != 'administrador'){
           this.esAdministrador = false;
         }
