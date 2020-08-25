@@ -17,25 +17,25 @@
         </li>
         <!--CLIENTE-->
         <li class="nav-item active">
-          <a class="nav-link" href="/catalogo" *ngIf="isLogged && rol == 'cliente'">Menú<span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="/catalogo" *ngIf="isLogged && (rol == 'cliente' || rol == 'administrador')">Menú<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/usuario"  *ngIf="isLogged && rol == 'cliente'">Mi Perfil</a>
+          <a class="nav-link" href="/usuario"  *ngIf="isLogged && (rol == 'cliente' || rol == 'administrador')">Mi Perfil</a>
         </li>
         <!--DELIVERY-->
         <li class="nav-item">
-          <a class="nav-link" href="/delivery" *ngIf="isLogged && rol == 'delivery'">Delivery</a>
+          <a class="nav-link" href="/delivery" *ngIf="isLogged && (rol == 'delivery' || rol == 'administrador')">Delivery</a>
         </li>
         <!--CAJERO-->
         <li class="nav-item">
-          <a class="nav-link" href="/cajero" *ngIf="isLogged && (rol=='cajero')">Cajero</a>
+          <a class="nav-link" href="/cajero" *ngIf="isLogged && (rol=='cajero' || rol == 'administrador')">Cajero</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/carrito" *ngIf="isLogged && (rol == 'cliente' || rol=='cajero')">Carrito</a>
+          <a class="nav-link" href="/carrito" *ngIf="isLogged && (rol == 'cliente' || rol=='cajero' || rol == 'administrador')">Carrito</a>
         </li>
         <!--COCINERO-->
         <li class="nav-item">
-          <a class="nav-link" href="/cocina" *ngIf="isLogged && rol == 'cocinero'">Cocina</a>
+          <a class="nav-link" href="/cocina" *ngIf="isLogged && (rol == 'cocinero' || rol == 'administrador')">Cocina</a>
         </li>
         <!--ADMINISTRADOR-->
         <li class="nav-item">
