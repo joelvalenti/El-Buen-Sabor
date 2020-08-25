@@ -52,6 +52,7 @@ export class ModalloginComponent implements OnInit {
         this.usuarioLogeado = res;
         console.log('Se emite el rol', this.usuarioLogeado.rol);
        this.rol.emit(this.usuarioLogeado.rol); //esta linea emite el Rol de usuario 
+       window.location.reload();
       }, err => {
         alert('Ocurrió un gran error');
       });
@@ -70,6 +71,7 @@ export class ModalloginComponent implements OnInit {
         this.servicio.getEmail(correo).subscribe( res=>{
           console.log('Usted ya esta registrado cumpa', res);
           this.rol.emit(res.rol);
+          window.location.reload();
         }, err=>{
           this.nuevoUsuario.email = correo;
             const displayName = res.displayName;
@@ -86,6 +88,7 @@ export class ModalloginComponent implements OnInit {
             this.servicio.post(this.nuevoUsuario).subscribe(res =>{
             console.log('Succesfully posted', res); 
             this.rol.emit(this.usuarioLogeado.rol);
+            window.location.reload();
             }, 
             err=>{
               this.errormsg =  err.message;

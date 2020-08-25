@@ -65,14 +65,7 @@ export class ModalregistroComponent implements OnInit {
    this.authService.registerUser(formRegistro.value.email , formRegistro.value.password).then(
       (res)=> {
         this.authService.isAuth().subscribe( user =>{
-          if(user){
-            user.updateProfile({
-              displayName: '',
-              photoURL: this.inputImageUser.nativeElement.value
-            }).then( () => {
-              
-            }).catch( (error) => console.log('error',error));
-          }
+          
         });
         //codigo para agregar nuevo usuario
         this.nuevoUsuario.nombre = formRegistro.value.nombre;
@@ -85,7 +78,7 @@ export class ModalregistroComponent implements OnInit {
         this.nuevoUsuario.telefono = formRegistro.value.telefono;
         
         this.serviciorol.post(this.nuevoUsuario).subscribe(
-          res => { console.log('Todo bien', res)},
+          res => { console.log('Todo bien', res); window.location.reload();},
           err => {console.log('Todo mal', err)}
         );
         //end
@@ -108,6 +101,7 @@ export class ModalregistroComponent implements OnInit {
         const correo = res.email;
         this.serviciorol.getEmail(correo).subscribe( res=>{
           console.log('Usted ya esta registrado cumpa', res);
+          window.location.reload();
         }, err=>{
           this.nuevoUsuario.email = correo;
             const displayName = res.displayName;
@@ -123,7 +117,8 @@ export class ModalregistroComponent implements OnInit {
            //post user
             console.log('nuevo usuario que vamos a postear: ', this.nuevoUsuario);
             this.serviciorol.post(this.nuevoUsuario).subscribe(res =>{
-            console.log('Succesfully posted', res); 
+              console.log('Succesfully posted', res); 
+              window.location.reload();
             }, 
             err=>{
               console.log('Something went wrong.'); 
