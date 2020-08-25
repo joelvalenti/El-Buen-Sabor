@@ -25,7 +25,7 @@ export class CatalogoComponent implements OnInit {
   vcategoria: string = null;
   public categorias: Categoria[];
   public platos: Plato[];
-  public todosLosPlatos: Plato[];
+  public platosAux: Plato[];
   public platosCarrito: Plato[] = [];
   gaseosas: Insumo[] = [];
   total: number = 0;
@@ -59,14 +59,14 @@ export class CatalogoComponent implements OnInit {
   onKeyFilter(value) {
     var filter = value.toLowerCase();
     var platosFiltrados = [];
-    var platosAux = this.platos;
-    for (let i = 0; i < this.platos.length; i++) {
-      if (filter.length > 0 && this.platos[i].nombre.toLowerCase().includes(filter)) {
-        platosFiltrados.push(this.platos[i]);
+    for (let i = 0; i < this.platosAux.length; i++) {
+      if (this.platosAux[i].nombre.toLowerCase().includes(filter)) {
+        platosFiltrados.push(this.platosAux[i]);
         this.platos = platosFiltrados;
-      }else{
-        this.platos = platosAux;
       }
+    }
+    if(filter == ''){
+      this.platos = this.platosAux;
     }
   }
 
@@ -113,6 +113,7 @@ export class CatalogoComponent implements OnInit {
     this.vcategoria = categoria;
     this.servicioPlato.getByCategory(categoria).subscribe(res => {
       this.platos = res;
+      this.platosAux = res;
     }, err => {
       console.log('Error al traer categorias: ', err);
     });

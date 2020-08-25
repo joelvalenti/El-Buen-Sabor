@@ -23,6 +23,10 @@ export class PaginaPerfilComponent implements OnInit {
   idP: number;
   public reformatDate;
   public fechaAux;
+  public rolSeleccionado;
+  public esAdministrador;
+  public esAdministradorActualmente;
+
   usuario: Usuario = {
     id: 0,
     nombre: '',
@@ -73,7 +77,11 @@ export class PaginaPerfilComponent implements OnInit {
       const email = res.email;
       this.rolesService.getEmail(email).subscribe(res => {
         this.usuario = res;
-        this.reformatDate = this.datePipe.transform(this.usuario.fechaNacimiento,"yyyy-MM-dd");
+        if(this.usuario.rol == 'administrador') {
+          this.esAdministrador = true;
+          this.esAdministradorActualmente = true;
+        }
+        this.reformatDate = this.datePipe.transform(this.usuario.fechaNacimiento, "yyyy-MM-dd");
         this.getAllDomiciliosXUsuario();
       })
     });
@@ -91,14 +99,24 @@ export class PaginaPerfilComponent implements OnInit {
     })
   }
 
-  onDateChange(value){
+  onDateChange(value) {
     this.fechaAux = value;
   }
 
   updateUsuario(usuario: Usuario) {
     this.usuario.fechaNacimiento = this.fechaAux;
     this.usuarioService.put(usuario.id, usuario).subscribe(
-      () => {},
+      () => {
+        this.usuario.rol = this.rolSeleccionado;
+        if(this.usuario.rol != 'administrador'){
+          this.esAdministrador = false;
+        }
+        if(this.esAdministradorActualmente == true){
+          console.log('entré al if.');
+          window.location.reload();
+          this.esAdministradorActualmente = false;
+        }
+       },
       () => {
         this.alertsService.errorAlert('Opps..', 'Ocurrió un error al actualizar usuario');
       }
@@ -136,8 +154,21 @@ export class PaginaPerfilComponent implements OnInit {
     this.domicilioSeleccionado = domicilio;
   }
 
+  onChangeRol(event) {
+    this.rolSeleccionado = event;
+  }
+
   resetear() {
-    this.domicilioSeleccionado = null;
+    this.domicilioSeleccionado = {
+      id: 0,
+      calle: '',
+      numero: 0,
+      eliminado: false,
+      localidad: null,
+      propietario: null,
+      departamento: '',
+      piso: ''
+    };
   }
 
 }
