@@ -46,12 +46,12 @@
     <div class="col-xs-12 col-sm-3">
       <h2 class="titulos">1) Seleccione su método de entrega</h2>
       <label class="container titulos">Retiro en local(-10%)
-        <input type="radio" name="radio0" value="local" (change)="onRadioChange($event.target.value)" />
+        <input type="radio" name="radio0" value="local" checked="checked"
+          (change)="onRadioChange($event.target.value)" />
         <span class="checkmark"></span>
       </label>
       <label class="container titulos">Envío por delivery
-        <input type="radio" name="radio0" value="delivery" checked="checked"
-          (change)="onRadioChange($event.target.value)" />
+        <input type="radio" name="radio0" value="delivery" (change)="onRadioChange($event.target.value)" />
         <span class="checkmark"></span>
         <br>
       </label>
@@ -61,18 +61,23 @@
     <div class="col-xs-12 col-sm-3">
       <h2 class="titulos">2) Método de Pago </h2>
       <label class="container titulos">Con Efectivo
-        <input type="radio" name="radio" value="efectivo" checked="checked"
+        <input type="radio" name="radio" id="efecSeleccionado" value="efectivo" checked="checked"
           (change)="onRadioChangePago($event.target.value)" />
         <span class="checkmark"></span>
       </label>
-      <label class="container titulos">Con Tarjeta
-        <input type="radio" name="radio" value="tarjeta" (change)="onRadioChangePago($event.target.value)" />
-        <span class="checkmark"></span>
-      </label>
-      <div *ngIf="flagTarjeta"> 
-        <label for="formGroupExampleInput" style="color: red">*Requerido</label>
-        <input type="number" class="form-control" (change)="onRadioChangeNroTarjeta($event.target.value)" 
-          id="nroTarjeta" value="nroTarjeta" placeholder="Número de tarjeta...">
+      <div *ngIf="habilitarTarjeta === true">
+        <label class="container titulos">Con Tarjeta
+          <input type="radio" name="radio" id="tarjSeleccionado" value="tarjeta" (change)="onRadioChangePago($event.target.value)" />
+          <span class="checkmark"></span>
+        </label>
+        <div *ngIf="flagTarjeta">
+          <label for="formGroupExampleInput" style="color: red">*Número Tarjeta</label>
+          <input type="number" class="form-control" (change)="onRadioChangeNroTarjeta($event.target.value)"
+            placeholder="Número de tarjeta...">
+          <label for="formGroupExampleInput" style="color: red; margin-top: 1%;">*DNI Titular</label>
+          <input type="number" class="form-control" (change)="onRadioChangeDNITarjeta($event.target.value)"
+            placeholder="D.N.I Del titular...">
+        </div>
       </div>
     </div>
 
@@ -112,8 +117,8 @@
     <div class="col-xs-6 col-sm-2">
       <h2 class="titulos">¡Confirmar pedido!</h2>
       <div *ngIf="habilitarBotonFinal == true;else mensajeHabilitar">
-        <button type="button" class="btn btn-success btn-block titulos"
-          (click)="realizarPedido()">Realizar Pedido</button>
+        <button type="button" class="btn btn-success btn-block titulos" (click)="realizarPedido()">Realizar
+          Pedido</button>
       </div>
       <ng-template class="col-xs-6 col-sm-2" #mensajeHabilitar>
         <h2 class="titulos" style="color: red;">Faltan Datos</h2>

@@ -1,3 +1,5 @@
+import { Factura } from './../../models/Factura';
+import { FacturaService } from './../../services/allServices/factura.service';
 import { Router } from '@angular/router';
 import { Estado } from 'src/app/models/Estado';
 import { Pedido } from 'src/app/models/Pedido';
@@ -25,6 +27,9 @@ export class CarritoComponent implements OnInit {
   public domicilios: Domicilio[];
   public idPersona: number;
   public flagRadioDireccion = true;
+  public habilitarTarjeta = true;
+  public numeroTarjeta;
+  public dniTitularTarjeta;
   public flagTarjeta;
   public habilitarBotonFinal = false;
   public usuario: Usuario;
@@ -62,7 +67,7 @@ export class CarritoComponent implements OnInit {
   constructor(private detalleService: DetalleService, private rolesService: RolesService,
     private usuarioService: UsuarioService, private servicioDomicilio: DomicilioService,
     private pedidoService: PedidoService, private alertsService: SweetAlertsService,
-    private router: Router) { }
+    private router: Router, private facturaService: FacturaService) { }
 
   ngOnInit() {
     this.isAuth();
@@ -154,8 +159,11 @@ export class CarritoComponent implements OnInit {
     if (value == "local") {
       this.flagRadioDireccion = false;
       this.direccionElegida = undefined;
+      this.habilitarTarjeta = true;
     } else {
       this.flagRadioDireccion = true;
+      (<HTMLInputElement>document.getElementById("efecSeleccionado")).checked = true;
+      this.habilitarTarjeta = false;
     }
     this.habilitarBtnFinal();
   }
@@ -171,7 +179,14 @@ export class CarritoComponent implements OnInit {
   }
 
   onRadioChangeNroTarjeta(value) {
-    (value == null || value == '') ? this.habilitarBotonFinal = false : this.habilitarBotonFinal = true;
+    let aux = value;
+    this.numeroTarjeta = aux.toString();
+    this.habilitarBtnFinal();
+  }
+
+  onRadioChangeDNITarjeta(value){
+    this.dniTitularTarjeta = value;
+    console.log(this.dniTitularTarjeta);
     this.habilitarBtnFinal();
   }
 
@@ -181,18 +196,15 @@ export class CarritoComponent implements OnInit {
       this.habilitarBotonFinal = true;
       //Si es "retiro en local" y se paga con tarjeta...
     } else if (this.flagRadioDireccion == false && this.flagTarjeta == true) {
-      (document.getElementById("nroTarjeta") != null)
-        ? this.habilitarBotonFinal = true
-        : this.habilitarBotonFinal = false
+      if((this.numeroTarjeta != null && this.numeroTarjeta > 15) && this.dniTitularTarjeta > 99999){
+        this.habilitarBotonFinal = true
+      }else{
+        this.habilitarBotonFinal = false
+      }
     }
     //Si es "Envio Delivery" y se paga con efectivo.
     if (this.flagRadioDireccion == true && this.flagTarjeta == false && this.direccionElegida != undefined) {
       this.habilitarBotonFinal = true;
-      //Si es "Envio Delivery" y se paga con tarjeta...
-    } else if (this.flagRadioDireccion == true && this.flagTarjeta == true) {
-      (document.getElementById("nroTarjeta") != null && this.direccionElegida != undefined)
-        ? this.habilitarBotonFinal = true
-        : this.habilitarBotonFinal = false;
     }
   }
 
@@ -214,8 +226,30 @@ export class CarritoComponent implements OnInit {
       this.pedidos[0].domicilio = this.direccionElegida[0];
     }
     console.log('Pedido enviado a Cajero: ', this.pedidos[0]);
+    this.generarFactura();
     this.pedidoService.put(this.pedidos[0].id, this.pedidos[0]).subscribe(() => {
       this.router.navigate(['/cajero']);
+    })
+  }
+
+  generarFactura(){
+    var tipoDePago;
+    (this.flagTarjeta == true) ? tipoDePago = 'Tarjeta' : tipoDePago = 'Efectivo';
+    const factura: Factura = {
+      usuario: this.usuario,
+      pedido: this.pedidos[0],
+      tipoFactura: 'C',
+      subtotal: this.getTotalNeto(),
+      fecha: this.pedidos[0].fecha,
+      tipoPago: tipoDePago,
+      montoDescuento: this.getTotalFinal()-this.getTotalNeto(),
+      total: this.getTotalFinal(),
+      nroTarjeta: this.numeroTarjeta,
+      detalle: this.detalles,
+      eliminado: false
+    }
+    this.facturaService.post(factura).subscribe(res =>{
+      console.log('Factura generada: ',res);
     })
   }
 
