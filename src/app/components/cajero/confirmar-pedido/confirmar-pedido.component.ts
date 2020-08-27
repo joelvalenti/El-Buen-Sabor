@@ -45,7 +45,7 @@ export class ConfirmarPedidoComponent implements OnInit {
         } else {
           let bol = false;
           let idx: number;
-          let bool: boolean;
+          let bool: boolean=false;
           for (let indx = 0; indx < this.facturas.length; indx++) {
             if (this.facturas[indx].id === fact.id) {
               bol = true;
@@ -109,14 +109,14 @@ export class ConfirmarPedidoComponent implements OnInit {
     this.detalleService.buscarPorPedido(id).subscribe((detalles) => {
       this.d=detalles;
       detalles.forEach((det) => {
-        if(det.insumo!=null){
+        if(det.insumo!=null && det.plato==null){
         this.insumoService.getOne(det.insumo.id).subscribe((ins) => {
           if (ins.nombre !== null) {
             this.detalles.push(ins);
           }
         });
       }
-      if(det.plato!=null){
+      if(det.plato!=null && det.plato==null){
         this.platoService.getOne(det.plato.id).subscribe((pla) => {
           if (pla.nombre !== null) {
             this.detalles.push(pla);

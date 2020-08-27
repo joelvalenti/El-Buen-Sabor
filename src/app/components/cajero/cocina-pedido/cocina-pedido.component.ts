@@ -43,7 +43,7 @@ export class CocinaPedidoComponent implements OnInit {
         } else {
           let bol = false;
           let idx: number;
-          let bool: boolean;
+          let bool: boolean=true;
           for (let indx = 0; indx < this.facturas.length; indx++) {
             if (this.facturas[indx].id === fact.id) {
               bol = true;

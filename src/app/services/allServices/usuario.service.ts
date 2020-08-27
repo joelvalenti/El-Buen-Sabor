@@ -17,13 +17,16 @@ export class UsuarioService extends BaseService<Usuario> {
   public userData : Observable<firebase.User>;
   public rolEmail : string;
   protected miUrl = 'http://localhost:9000/api/v1/usuario/';
+  protected miUrl2 = 'http://localhost:9000/api/v1/usuario/traerCocineros';
 
-  constructor(private afsAuth: AngularFireAuth, private afs: AngularFirestore, public http: HttpClient, private servroles: RolesService) {
+  constructor(private afsAuth: AngularFireAuth, private afs: AngularFirestore, public http: HttpClient) {
     super(http);
     this.userData = afsAuth.authState;
-
    }
 
+  getCocineros() : Observable<Usuario> {
+    return this.http.get<Usuario>(this.miUrl2);
+  }
 
   registerUser(email: string, pass: string){
     return new Promise((resolve, reject) =>{

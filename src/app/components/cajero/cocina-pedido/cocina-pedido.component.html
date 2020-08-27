@@ -38,8 +38,9 @@
             </td>
         </tr>
     </tbody>
+    <pagination-controls style="width:100%;" (pageChange)="pageActual = $event"></pagination-controls>
 </table>
-<pagination-controls (pageChange)="pageActual = $event"></pagination-controls>
+<div style="text-align: center;"><button class="myButton" (click)="this.cargarFacturas()">Actualizar</button></div>
 <div class="modal fade z" id="modalDetalle" tabindex="-1" role="dialog" data-backdrop="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
