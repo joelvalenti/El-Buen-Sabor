@@ -319,6 +319,7 @@ export class CarritoComponent implements OnInit {
       montoDescuento: this.getTotalFinal() - this.getTotalNeto(),
       total: this.getTotalFinal(),
       nroTarjeta: this.numeroTarjeta,
+      dniTarjeta: this.dniTitularTarjeta,
       detalle: this.detalles,
       eliminado: false
     }
@@ -328,7 +329,7 @@ export class CarritoComponent implements OnInit {
   }
 
   redireccion() {
-    if (this.usuario.rol === 'cliente' || this.usuario.rol === 'delivery') {
+    if (this.usuario.rol === 'cliente' || this.usuario.rol === 'delivery' || this.usuario.rol === 'cocinero') {
       this.router.navigate(['/usuario']);
     } else {
       this.router.navigate(['/cajero']);
