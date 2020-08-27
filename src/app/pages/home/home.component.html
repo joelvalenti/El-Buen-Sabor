@@ -22,8 +22,22 @@
 </div>
 <div class="medium">
     <div class="container">
-        <div class="row">
+        <div class="row" id="rowtitle">
             <h1 class="platos">ALGUNOS DE NUESTROS MEJORES PLATOS</h1>
+        </div>
+        <div class="row">
+            
+                <div class="form-group">
+                    <h5><em>Selecciona tu foto de perfil</em></h5>
+                    <input type="file" accept=".png, .jpg" (change)="onUpload($event)">
+                </div>
+                <div>
+                    <input #imagenPlato type="text" [value]="urlImage | async" id="urlImagen" >
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary" (click)="verImagen()"> Ver Url </button>
+                </div>
+           
         </div>
         <div class="row">
             <div class="col-sm" *ngFor="let plato of platos">
