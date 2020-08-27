@@ -8,10 +8,6 @@ import { Plato } from '../../../models/Plato';
 import { PlatoService } from '../../../services/allServices/plato.service'
 import Swal from'sweetalert2';
 import { DetallePlato } from 'src/app/models/DetallePlato';
-//imagenes
-import { AngularFireStorage } from '@angular/fire/storage';
-import {finalize} from 'rxjs/operators';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-receta',
@@ -26,12 +22,9 @@ export class RecetaComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   public sidenavOpened: boolean = false;
   public platoSeleccionado : Plato = null;
-  //variables para subida de imagenes
-  uploadPercent : Observable<number>;
-  urlImage : Observable<string>;
-  idImagenPlato : string;
 
-  constructor(public dialog: MatDialog, public service: PlatoService, private storage : AngularFireStorage) { }
+
+  constructor(public dialog: MatDialog, public service: PlatoService) { }
 
 
   ngOnInit(): void {
@@ -44,7 +37,7 @@ export class RecetaComponent implements OnInit {
   traducirPaginator(){
     this.paginator._intl.itemsPerPageLabel ="Registros por Página";
     this.paginator._intl.nextPageLabel = "Siguiente"
-    this.paginator._intl.previousPageLabel = "Anterior";
+    this.paginator._intl.previousPageLabel = "Anterior"; 
     this.paginator._intl.firstPageLabel = "Primera Página";
     this.paginator._intl.lastPageLabel = "Última Página";
   }
@@ -91,11 +84,6 @@ export class RecetaComponent implements OnInit {
   }
 
   public agregar(element: Plato) {
-    this.urlImage.subscribe( ref =>{
-      alert(ref);
-      this.idImagenPlato = ref;
-    });
-    element.imagen = this.idImagenPlato;
     this.service.post(element).subscribe((result) => {
       this.dataSource.data.push(result);
       this.notifyTable();
@@ -155,18 +143,4 @@ export class RecetaComponent implements OnInit {
     this.sidenavOpened = true;
   }
 
-  onUpload(e){
-    const id = Math.random().toString(36).substring(2);
-    const file = e.target.files[0];
-    const filePath = `upload/foto_${id}`;
-    const ref = this.storage.ref(filePath);
-    const task = this.storage.upload(filePath, file);
-    //Imagen subida, ahora recuperamos la imagen
-    this.uploadPercent = task.percentageChanges();
-    task.snapshotChanges().pipe(
-      finalize( ()=> {
-        this.urlImage = ref.getDownloadURL();
-      })
-    ).subscribe();
-  }
 }
