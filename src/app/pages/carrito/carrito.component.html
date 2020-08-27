@@ -67,14 +67,15 @@
       </label>
       <div *ngIf="habilitarTarjeta === true">
         <label class="container titulos">Con Tarjeta
-          <input type="radio" name="radio" id="tarjSeleccionado" value="tarjeta" (change)="onRadioChangePago($event.target.value)" />
+          <input type="radio" name="radio" id="tarjSeleccionado" value="tarjeta"
+            (change)="onRadioChangePago($event.target.value)" />
           <span class="checkmark"></span>
         </label>
         <div *ngIf="flagTarjeta">
-          <label for="formGroupExampleInput" style="color: red">*Número Tarjeta</label>
+          <label for="formGroupExampleInput" style="color: red">*Número Tarjeta (min. 9 dígitos)</label>
           <input type="number" class="form-control" (change)="onRadioChangeNroTarjeta($event.target.value)"
             placeholder="Número de tarjeta...">
-          <label for="formGroupExampleInput" style="color: red; margin-top: 1%;">*DNI Titular</label>
+          <label for="formGroupExampleInput" style="color: red; margin-top: 1%;">*DNI Titular (min. 7 dígitos)</label>
           <input type="number" class="form-control" (change)="onRadioChangeDNITarjeta($event.target.value)"
             placeholder="D.N.I Del titular...">
         </div>

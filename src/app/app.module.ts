@@ -62,6 +62,10 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
 
+import { PdfMakeWrapper } from 'pdfmake-wrapper';
+import pdfFonts from "pdfmake/build/vfs_fonts";
+PdfMakeWrapper.setFonts(pdfFonts);
+
 @NgModule({
   entryComponents: [],
   declarations: [

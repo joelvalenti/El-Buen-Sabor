@@ -107,7 +107,7 @@ export class PaginaPerfilComponent implements OnInit {
   }
 
   getPedidosXId() {
-    this.pedidoService.getPedidoEstado(this.usuario.id, 1).subscribe(res => {
+    this.pedidoService.getPedidoEstado(this.usuario.id, 6).subscribe(res => {
       this.pedidosXId = res;
       this.pedidosXIdAux = res;
     },

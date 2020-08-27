@@ -14,6 +14,7 @@ import { Domicilio } from './../../models/Domicilio';
 import { Detalle } from './../../models/Detalle';
 import { Component, OnInit, Input } from '@angular/core';
 import Swal from 'sweetalert2';
+import { PdfMakeWrapper } from 'pdfmake-wrapper';
 
 @Component({
   selector: 'app-carrito',
@@ -25,16 +26,21 @@ export class CarritoComponent implements OnInit {
 
   public detalles: Detalle[] = [];
   public domicilios: Domicilio[];
+  public cocineros;
+  public pedidosEnPreparacion;
+  public detallesEnPreparacion;
   public idPersona: number;
-  public flagRadioDireccion = true;
+  public flagRadioDireccion = false;
   public habilitarTarjeta = true;
   public numeroTarjeta;
   public dniTitularTarjeta;
   public flagTarjeta;
-  public habilitarBotonFinal = false;
+  public habilitarBotonFinal = true;
   public usuario: Usuario;
   public pedidos: Pedido[] = [];
   public direccionElegida;
+  public primeraVuelta = false;
+  public tiempoPedido = 0;
   public detalleSeleccionado: Detalle = {
     id: 0,
     cantidad: 0,
@@ -71,6 +77,7 @@ export class CarritoComponent implements OnInit {
 
   ngOnInit() {
     this.isAuth();
+    this.getCocineros();
   }
 
   isAuth() {
@@ -80,8 +87,50 @@ export class CarritoComponent implements OnInit {
         this.usuario = res;
         this.getAllDomiciliosXUsuario();
         this.getPedidosXUsuario();
+        this.getPedidosEnPreparacion();
       })
     });
+  }
+
+  getAllDomiciliosXUsuario() {
+    this.servicioDomicilio.buscarporUsuario(this.usuario.id).subscribe(res => {
+      this.domicilios = res;
+    })
+  }
+
+  getCocineros() {
+    this.usuarioService.getCocineros().subscribe(res => {
+      this.cocineros = res;
+    });
+  }
+
+  getPedidosEnPreparacion() {
+    this.pedidoService.getPedidoEstado(this.usuario.id, 2).subscribe(res => {
+      this.pedidosEnPreparacion = res;
+      console.log('Pedidos en preparacion...', this.pedidosEnPreparacion);
+      res.forEach(element => {
+        this.getDetallesXPedidoEnPreparacion(element.id);
+      });
+    },
+      () => {
+        this.alertsService.errorAlert('Opss..', 'No se pudo recolectar la información del carrito');
+      });
+  }
+
+  getDetallesXPedidoEnPreparacion(id: number) {
+    this.detalleService.buscarPorPedido(id).subscribe(res => {
+      if (this.primeraVuelta === false) {
+        this.detallesEnPreparacion = res;
+        console.log('Detalles en Preparacion PV: ', this.detallesEnPreparacion);
+        this.primeraVuelta = true;
+      } else {
+        this.detallesEnPreparacion = this.detallesEnPreparacion.concat(res);
+        console.log('Detalles en Preparacion SV: ', this.detallesEnPreparacion);
+      }
+    },
+      () => {
+        this.alertsService.errorAlert('Opss..', 'No se pudo recolectar la información del carrito');
+      });
   }
 
   getPedidosXUsuario() {
@@ -101,7 +150,7 @@ export class CarritoComponent implements OnInit {
       this.detalles = res;
     },
       () => {
-        this.alertsService.errorAlert('Opss... :(', 'No se pudo recolectar la información del carrito');
+        this.alertsService.errorAlert('Opss..', 'No se pudo recolectar la información del carrito');
       });
   }
 
@@ -156,7 +205,7 @@ export class CarritoComponent implements OnInit {
   }
 
   onRadioChange(value) {
-    if (value == "local") {
+    if (value === "local") {
       this.flagRadioDireccion = false;
       this.direccionElegida = undefined;
       this.habilitarTarjeta = true;
@@ -169,72 +218,98 @@ export class CarritoComponent implements OnInit {
   }
 
   onRadioChangePago(value) {
-    (value == "tarjeta") ? this.flagTarjeta = true : this.flagTarjeta = false;
+    (value === "tarjeta") ? this.flagTarjeta = true : this.flagTarjeta = false;
     this.habilitarBtnFinal();
   }
 
   onChangeDireccion(value) {
     this.direccionElegida = this.domicilios.filter(x => x.calle === value);
-    (this.direccionElegida != undefined) ? this.habilitarBotonFinal = true : this.habilitarBotonFinal = false;
-  }
-
-  onRadioChangeNroTarjeta(value) {
-    let aux = value;
-    this.numeroTarjeta = aux.toString();
     this.habilitarBtnFinal();
   }
 
-  onRadioChangeDNITarjeta(value){
+  onRadioChangeNroTarjeta(value) {
+    this.numeroTarjeta = value;
+    this.habilitarBtnFinal();
+  }
+
+  onRadioChangeDNITarjeta(value) {
     this.dniTitularTarjeta = value;
-    console.log(this.dniTitularTarjeta);
     this.habilitarBtnFinal();
   }
 
   habilitarBtnFinal() {
     //Si es "retiro en local" y se paga con efectivo...
-    if (this.flagRadioDireccion == false && (this.flagTarjeta == false || this.flagTarjeta == undefined)) {
+    if (this.flagRadioDireccion === false && (this.flagTarjeta === false || this.flagTarjeta === undefined)) {
       this.habilitarBotonFinal = true;
       //Si es "retiro en local" y se paga con tarjeta...
-    } else if (this.flagRadioDireccion == false && this.flagTarjeta == true) {
-      if((this.numeroTarjeta != null && this.numeroTarjeta > 15) && this.dniTitularTarjeta > 99999){
+    } else if (this.flagRadioDireccion === false && this.flagTarjeta === true) {
+      if ((this.numeroTarjeta != null && this.numeroTarjeta > 99999999) && this.dniTitularTarjeta > 999999) {
         this.habilitarBotonFinal = true
-      }else{
+      } else {
         this.habilitarBotonFinal = false
       }
     }
     //Si es "Envio Delivery" y se paga con efectivo.
-    if (this.flagRadioDireccion == true && this.flagTarjeta == false && this.direccionElegida != undefined) {
+    if (this.flagRadioDireccion === true && this.direccionElegida === undefined) {
+      this.habilitarBotonFinal = false;
+    } else if (this.flagRadioDireccion === true && this.direccionElegida !== undefined) {
       this.habilitarBotonFinal = true;
     }
   }
 
-  getAllDomiciliosXUsuario() {
-    this.servicioDomicilio.buscarporUsuario(this.usuario.id).subscribe(res => {
-      this.domicilios = res;
-    })
+  calcularTiempo() {
+    var tiempoSinCocineros = 0;
+    this.detallesEnPreparacion = this.detallesEnPreparacion.concat(this.detalles);
+    for (let index = 0; index < this.detallesEnPreparacion.length; index++) {
+      tiempoSinCocineros += this.detallesEnPreparacion[0].plato.tiempoPreparacion;
+    }
+    if (this.cocineros.length > 0) {
+      this.tiempoPedido = tiempoSinCocineros / this.cocineros.length;
+    } else {
+      this.tiempoPedido = tiempoSinCocineros;
+    }
+    if (this.flagRadioDireccion === true) {
+      this.tiempoPedido += 10;
+    }
+    console.log('Tiempo de preparacion final: ', this.tiempoPedido);
+    return this.tiempoPedido;
   }
 
   realizarPedido() {
+    console.log('detalles: ', this.detalles);
     this.pedidos[0].estado = this.estado;
     this.pedidos[0].envioDelivery = this.flagRadioDireccion;
     var utc = new Date().toJSON().slice(0, 10);
     this.pedidos[0].fecha = new Date(utc);
-    if (this.flagRadioDireccion == false) {
+    this.pedidos[0].tiempoPreparacion = this.calcularTiempo();
+    if (this.flagRadioDireccion === false) {
       this.pedidos[0].domicilio = this.domBuenSabor;
     } else {
-      console.log(this.direccionElegida);
       this.pedidos[0].domicilio = this.direccionElegida[0];
     }
     console.log('Pedido enviado a Cajero: ', this.pedidos[0]);
     this.generarFactura();
     this.pedidoService.put(this.pedidos[0].id, this.pedidos[0]).subscribe(() => {
-      this.router.navigate(['/cajero']);
+      if (this.flagRadioDireccion === true) {
+        Swal.fire(
+          'Su pedido fue enviado!',
+          "De acuerdo al tiempo de espera, en " + this.tiempoPedido + " minutos llegará a su domicilio. <br/> Recuerde que puede consultar su factura y el estado de su pedido en 'Mi Perfil'.",
+          'success'
+        )
+      } else {
+        Swal.fire(
+          'Su pedido fue enviado!',
+          "De acuerdo al tiempo de espera, en " + this.tiempoPedido + " minutos estará listo para retirar. <br/> Recuerde que puede consultar su factura y el estado de su pedido en 'Mi Perfil'.",
+          'success'
+        )
+      }
     })
+    this.redireccion();
   }
 
-  generarFactura(){
+  generarFactura() {
     var tipoDePago;
-    (this.flagTarjeta == true) ? tipoDePago = 'Tarjeta' : tipoDePago = 'Efectivo';
+    (this.flagTarjeta === true) ? tipoDePago = 'Tarjeta' : tipoDePago = 'Efectivo';
     const factura: Factura = {
       usuario: this.usuario,
       pedido: this.pedidos[0],
@@ -242,15 +317,22 @@ export class CarritoComponent implements OnInit {
       subtotal: this.getTotalNeto(),
       fecha: this.pedidos[0].fecha,
       tipoPago: tipoDePago,
-      montoDescuento: this.getTotalFinal()-this.getTotalNeto(),
+      montoDescuento: this.getTotalFinal() - this.getTotalNeto(),
       total: this.getTotalFinal(),
       nroTarjeta: this.numeroTarjeta,
       detalle: this.detalles,
       eliminado: false
     }
-    this.facturaService.post(factura).subscribe(res =>{
-      console.log('Factura generada: ',res);
+    this.facturaService.post(factura).subscribe(res => {
+      console.log('Factura generada: ', res);
     })
   }
 
+  redireccion() {
+    if (this.usuario.rol === 'cliente' || this.usuario.rol === 'delivery') {
+      this.router.navigate(['/usuario']);
+    } else {
+      this.router.navigate(['/cajero']);
+    }
+  }
 }

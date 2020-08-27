@@ -12,5 +12,6 @@ export interface Pedido {
     estado?: Estado;
     usuario?: Usuario;
     domicilio?: Domicilio;
+    tiempoPreparacion?: number;
     eliminado?: boolean;
 }
