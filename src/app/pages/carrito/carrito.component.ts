@@ -14,7 +14,6 @@ import { Domicilio } from './../../models/Domicilio';
 import { Detalle } from './../../models/Detalle';
 import { Component, OnInit, Input } from '@angular/core';
 import Swal from 'sweetalert2';
-import { PdfMakeWrapper } from 'pdfmake-wrapper';
 
 @Component({
   selector: 'app-carrito',

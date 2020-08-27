@@ -31,7 +31,7 @@ export class CocinaPedidoComponent implements OnInit {
 
   ngOnInit(): void {
     setInterval(() => {
-      this.cargarFacturas();
+      this.cargarFacturas(); 
     }, 60000);
   }
 
