@@ -196,6 +196,7 @@ export class ModalPlatoComponent implements OnInit {
       this.form.controls['imagen'].setValue(this.imagenPlato.nativeElement.value);
       this.form.controls['detalle'].setValue(this.localData.detalle);
       this.dialogRef.close({ event: this.action, data: this.form.value });
+      
     }
     
   }

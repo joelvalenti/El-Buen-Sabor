@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit {
       res => {
         this.platos.push(res);
       }, err =>{
-        console.log('error');
+        console.log('error!');
       }
     );
     this.servicio.getOne(3).subscribe(res => {
