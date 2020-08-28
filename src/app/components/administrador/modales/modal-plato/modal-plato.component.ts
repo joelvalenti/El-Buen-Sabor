@@ -4,7 +4,7 @@ import { Detalle } from './../../../../models/Detalle';
 import { PlatoService } from './../../../../services/allServices/plato.service';
 import { Plato } from './../../../../models/Plato';
 import { CategoriaService } from './../../../../services/allServices/categoria.service';
-import { Component, OnInit, ViewChild, Inject, Optional  } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, Optional, ElementRef   } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
@@ -14,6 +14,11 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
 import Swal from'sweetalert2';
 import { DetallePlatoService } from 'src/app/services/allServices/detalleplato.service';
+//imagenes
+import { AngularFireStorage } from '@angular/fire/storage';
+import {finalize} from 'rxjs/operators';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-modal-plato',
@@ -29,6 +34,13 @@ export class ModalPlatoComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
+  //variables para subida de imagenes
+  uploadPercent : Observable<number>;
+  urlImage : Observable<string>;
+  urlString : string;
+  bandera : boolean = false;
+  @ViewChild('imagenPlato')  imagenPlato : ElementRef;
+
   public localData: any;
   public localDataDetallePlato:any;
   public localDataCategoria: any;
@@ -42,7 +54,7 @@ export class ModalPlatoComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<ModalPlatoComponent>,public dialog: MatDialog,
     public formBuilder: FormBuilder,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any, private datePipe: DatePipe,
-    private service: CategoriaService, private service2:DetallePlatoService, private service3:PlatoService) {
+    private service: CategoriaService, private service2:DetallePlatoService, private service3:PlatoService, private storage : AngularFireStorage) {
     if(data.detalle!=undefined){
       this.dataSource.data = [ ...data.detalle];
     }
@@ -180,8 +192,12 @@ export class ModalPlatoComponent implements OnInit {
   }
 
   onAction() {
-    this.form.controls['detalle'].setValue(this.localData.detalle);
-    this.dialogRef.close({ event: this.action, data: this.form.value });
+    if(this.bandera){
+      this.form.controls['imagen'].setValue(this.imagenPlato.nativeElement.value);
+      this.form.controls['detalle'].setValue(this.localData.detalle);
+      this.dialogRef.close({ event: this.action, data: this.form.value });
+    }
+    
   }
 
   onCancel() {
@@ -197,4 +213,21 @@ export class ModalPlatoComponent implements OnInit {
     this.form.controls['categoria'].setValue(this.localDataCategoria[id-1]);
   }
 
+  onUpload(e){
+    const id = Math.random().toString(36).substring(2);
+    const file = e.target.files[0];
+    const filePath = `upload/foto_${id}`;
+    const ref = this.storage.ref(filePath);
+    const task = this.storage.upload(filePath, file);
+    //Imagen subida, ahora recuperamos la imagen
+    this.uploadPercent = task.percentageChanges();
+    task.snapshotChanges().pipe(
+      finalize( ()=>{
+        this.urlImage = ref.getDownloadURL();
+        this.bandera = true;
+        console.log('Bandera cambiada', this.bandera);
+      }  )
+    ).subscribe( 
+    );
+  }
 }
