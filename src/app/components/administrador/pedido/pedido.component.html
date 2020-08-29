@@ -6,9 +6,12 @@
                 <mat-form-field class="busqueda">
                     <input matInput (keyup)="applyFilter($event)" placeholder="Buscar...">
                 </mat-form-field>
+                <button mat-raised-button class="exportar"  (click)="exporter.exportTable('xlxs',{fileName:'pedidos'})">
+                    Exportar a Excel
+                </button>
             </div>
 
-            <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+            <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
                 <!-- Numero Column -->
                 <ng-container matColumnDef="numero" >
@@ -54,13 +57,6 @@
                        <span *ngIf="element.domicilio != null"> {{element.domicilio.calle}} {{element.domicilio.numero}}, {{element.domicilio.localidad.nombre}}, {{element.domicilio.departamento}}</span> 
                        <span *ngIf="element.domicilio == null"> Retiro por el Local</span>
                     </td>
-                </ng-container>
-
-                <!-- Monto Column-->
-                <ng-container matColumnDef="monto">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Monto </th>
-                    <td mat-cell *matCellDef="let element" class="pointer">
-                        $ {{element.monto}} </td>
                 </ng-container>
 
                 <!-- Estado Column-->

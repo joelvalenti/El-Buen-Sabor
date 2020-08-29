@@ -25,3 +25,9 @@
 table {
     width: 100%;
   }
+  .purple{
+    background: purple !important;
+}
+.exportar{
+    float: right;
+}
