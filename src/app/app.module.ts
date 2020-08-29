@@ -65,6 +65,9 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
 
+//Excel
+import { MatTableExporterModule } from 'mat-table-exporter';
+
 @NgModule({
   entryComponents: [],
   declarations: [
@@ -110,9 +113,11 @@ import { AngularFirestore } from '@angular/fire/firestore';
     HomeComponent,
     PaginaPerfilComponent,
     ModalDomUsuarioComponent,
-    FacturapdfComponent
+    FacturapdfComponent,
+    EstadisticasComponent
   ],
   imports: [
+    MatTableExporterModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
