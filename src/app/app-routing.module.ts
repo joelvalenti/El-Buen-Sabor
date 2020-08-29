@@ -1,4 +1,3 @@
-import { FacturapdfComponent } from './components/facturapdf/facturapdf.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CocinaComponent } from './pages/cocina/cocina.component';
@@ -9,6 +8,7 @@ import { DeliveryComponent } from './pages/delivery/delivery.component';
 import { CatalogoComponent } from './pages/catalogo/catalogo.component';
 import { HomeComponent } from './pages/home/home.component';
 import { PaginaPerfilComponent } from './pages/pagina-perfil/pagina-perfil.component';
+import { FacturapdfComponent } from './components/facturapdf/facturapdf.component';
 
 //import Guards
 import { AuthGuard } from './guards/auth.guard';
