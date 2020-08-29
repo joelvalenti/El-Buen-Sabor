@@ -10,9 +10,15 @@
                      <input type="date" id="fechaHasta" >&nbsp;&nbsp;
                     <button mat-raised-button class="my-agregar" (click)="cargarPlatosPopulares()">Ver</button>
                 </div>
+                <div class="excel" *ngIf="this.genExcel==true">
+                    <button mat-button (click)="exporter.exportTable('csv')">
+                        Exportar a Excel
+                    </button>
+                </div>
+                
             </div>
         
-            <table mat-table  [dataSource]="dataSource" matSort class="mat-elevation-z8">
+            <table mat-table matTableExporter [dataSource]="dataSource" #exporter="matTableExporter" matSort class="mat-elevation-z8">
 
                 <!-- Id Column -->
                 <ng-container matColumnDef="id">
@@ -43,6 +49,6 @@
             </table>
             <mat-paginator [pageSizeOptions]="[6,10,20]" showFirstLastButtons aria-label="etiqueta">
             </mat-paginator>
-            
+
     </mat-sidenav-content>
 </mat-sidenav-container>

@@ -15,6 +15,7 @@ import { PlatosPopulares } from '../../../models/PlatosPopulares';
 export class RankingPlatosComponent implements OnInit {
 
 
+  public genExcel:boolean=false;
   public displayedColumns: string[] = ['id','cantidadVendida', 'nombre' ];
   public dataSource: MatTableDataSource<any> = new MatTableDataSource();
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -48,6 +49,7 @@ export class RankingPlatosComponent implements OnInit {
     console.log(fechaHasta);
     this.service.platosPopulares(fechaDesde,fechaHasta).subscribe(Plato => {
       console.log(Plato);
+      this.genExcel=true;
       let detalles=[];
         detalles=[{
           "id":Plato.id_Plato1,

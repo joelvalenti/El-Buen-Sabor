@@ -18,7 +18,7 @@ export class IndexAdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAuth();
-    setTimeout(() => this.ver(), 1500);
+    setTimeout(() => this.ver(), 500);
     
   }
 
@@ -33,10 +33,10 @@ export class IndexAdminComponent implements OnInit {
   }
 public ver(){
   if(this.usuario==null){
-    setTimeout(() => this.r(), 1500);
+    setTimeout(() => this.r(), 500);
   }else{
-    if (this.usuario.rol!='Administrador') {
-      setTimeout(() => this.r(), 1500);
+    if (this.usuario.rol!='administrador') {
+      setTimeout(() => this.r(), 500);
     }
   }
 }

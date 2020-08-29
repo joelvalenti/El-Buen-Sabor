@@ -77,7 +77,7 @@ export class ModalUsuarioComponent implements OnInit {
     } else {
       this.form.controls['esClienteOpciones'].setValue("true");
       this.form.controls['esCliente'].setValue(true);
-      this.form.controls['rol'].setValue("Cliente");
+      this.form.controls['rol'].setValue("cliente");
     }
   }
 
