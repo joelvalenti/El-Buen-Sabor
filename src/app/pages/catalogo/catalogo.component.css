@@ -9,7 +9,8 @@
     font-family: Verdana;
 }
 .imagencategoria{
-    width: 100%;
+    width: 325px;
+    height: 200px;
     transition: all 0.1s;
 }
 .imagencategoria:hover{
