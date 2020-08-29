@@ -56,7 +56,15 @@
 </div>
 <div *ngIf="this.paso==5" class="botonesUsuario">
     <div class="nuevopedido">
+        <br>
+        <br>
+        <div style="font-weight: bold;">
+            Tiempo de preparación último pedido: {{this.tiempoPedido}}min
+        </div>
+        <br>
+        <br>
         <button class="myButton" (click)="reiniciarPedido()">Realizar un nuevo pedido</button>
+        
     </div>
 </div>
 <table class="tg" *ngIf="this.paso==4" class="mat-elevation-z8">

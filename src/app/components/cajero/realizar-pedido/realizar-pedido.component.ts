@@ -47,7 +47,9 @@ export class RealizarPedidoComponent implements OnInit {
   public localData: any = { ...this.pedido };
   public localDataFactura: any = { ...this.factura };
   public detalle: Detalle;
+  public d: Detalle;
   public detalleInsumo: Detalle;
+  public localDataD: any = { ...this.d };
   public localDataDetalle: any = { ...this.detalle };
   public localDataDetalles: any = this.detalle;
   public form3: FormGroup;
@@ -59,6 +61,11 @@ export class RealizarPedidoComponent implements OnInit {
   public llave: boolean = true;
   public retirarLocal: boolean = false;
   public contar: number = 0;
+  public pedidosEnPreparacion;
+  public primeraVuelta = false;
+  public tiempoPedido = 0;
+  public detallesEnPreparacion: Detalle[] = [];
+  public cocineros;
 
   constructor(public dialog: MatDialog, public formBuilder3: FormBuilder, public formBuilder4: FormBuilder,
     public formBuilder5: FormBuilder,
@@ -68,11 +75,94 @@ export class RealizarPedidoComponent implements OnInit {
     public service8: InsumoService, public service9: CategoriaInsumoService, public service10: FacturaService) { }
 
   ngOnInit(): void {
+    this.getCocineros();
     this.buildForm3();
     this.buildForm4();
     this.buildForm5();
     this.getAllCategorias();
+
   }
+
+  getCocineros() {
+    this.service5.getCocineros().subscribe(res => {
+      this.cocineros = res;
+      console.log("Cocineros: ", res)
+    });
+  }
+
+  getPedidosEnPreparacion() {
+    this.service3.getPedidoEstado(this.usuario.id, 2).subscribe(res => {
+      this.pedidosEnPreparacion = res;
+      console.log('Pedidos en preparacion...', this.pedidosEnPreparacion);
+      res.forEach(element => {
+        this.getDetallesXPedidoEnPreparacion(element.id);
+      });
+    },
+      () => {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: 'No se pudo recolectar la información del pedido!',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      });
+  }
+
+  getDetallesXPedidoEnPreparacion(id: number) {
+    this.service7.buscarPorPedido(id).subscribe(res => {
+      if (this.primeraVuelta === false) {
+        this.detallesEnPreparacion = res;
+        console.log('Detalles en Preparacion PV: ', this.detallesEnPreparacion);
+        this.primeraVuelta = true;
+      } else {
+        this.detallesEnPreparacion = this.detallesEnPreparacion.concat(res);
+        console.log('Detalles en Preparacion SV: ', this.detallesEnPreparacion);
+      }
+    },
+      () => {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: 'No se pudo recolectar la información del pedido!',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      });
+  }
+
+
+  calcularTiempo(detalle: Detalle) {
+    var tiempoSinCocineros = 0;
+    let key: boolean = false;
+    //this detalles en preparacion es lo que se encuentra en cocina, y le concateno el detalle que acabas de armar
+    this.detallesEnPreparacion.forEach(element => {
+      if (element.id == detalle.id) {
+        element.cantidad = detalle.cantidad;
+        key = true;
+      }
+    });
+    if (!key) {
+      this.detallesEnPreparacion = this.detallesEnPreparacion.concat(detalle);
+    }
+    for (let index = 0; index < this.detallesEnPreparacion.length; index++) {
+      tiempoSinCocineros += this.detallesEnPreparacion[index].plato.tiempoPreparacion * this.detallesEnPreparacion[index].cantidad;
+    }
+    if (this.cocineros.length > 0) {
+      this.tiempoPedido = tiempoSinCocineros / this.cocineros.length;
+    } else {
+      this.tiempoPedido = tiempoSinCocineros;
+    }
+    //Si el envio es delivery, le sumas 10 minutos.
+    if (this.retirarLocal === true) {
+      this.tiempoPedido += 10;
+    }
+    console.log('Tiempo de preparacion final: ', this.tiempoPedido);
+
+    this.form3.controls['tiempoPreparacion'].setValue(this.tiempoPedido);
+    
+  }
+
   obtenerFecha(): String {
     var d = new Date();
     let mes: String;
@@ -111,6 +201,7 @@ export class RealizarPedidoComponent implements OnInit {
       this.usuario = data;
       this.form3.controls['usuario'].setValue(this.usuario);
       this.agregarDomicilio();
+      this.getPedidosEnPreparacion();
     });
   }
 
@@ -134,6 +225,7 @@ export class RealizarPedidoComponent implements OnInit {
       this.service3.post(element).subscribe((result) => {
         this.localData = { ...result };
         this.pedidoSelec = result;
+        this.form3.controls['id'].setValue(result.id);
         console.log(result.id);
       });
     }
@@ -148,6 +240,7 @@ export class RealizarPedidoComponent implements OnInit {
       estado: [this.localData.estado],
       usuario: [this.localData.usuario],
       domicilio: [this.localData.domicilio],
+      tiempoPreparacion:[this.localData.tiempoPreparacion],
       eliminado: [this.localData.eliminado]
     });
 
@@ -156,13 +249,13 @@ export class RealizarPedidoComponent implements OnInit {
 
   buildForm4() {
     this.form4 = this.formBuilder4.group({
-      id: [this.localData.id],
-      cantidad: [this.localData.cantidad],
-      fecha: [this.localData.fecha],
-      plato: [this.localData.plato],
-      insumo: [this.localData.insumo],
-      pedido: [this.localData.pedido],
-      eliminado: [this.localData.eliminado]
+      id: [this.localDataD.id],
+      cantidad: [this.localDataD.cantidad],
+      fecha: [this.localDataD.fecha],
+      plato: [this.localDataD.plato],
+      insumo: [this.localDataD.insumo],
+      pedido: [this.localDataD.pedido],
+      eliminado: [this.localDataD.eliminado]
     });
 
   }
@@ -334,6 +427,10 @@ export class RealizarPedidoComponent implements OnInit {
   public postDetalle(): void {
     this.service7.post(this.form4.value).subscribe((data) => {
       this.getAllDetalles();
+      let key: boolean = false;
+      this.service7.getOne(data.id).subscribe((data2)=>{
+        this.calcularTiempo(data2);
+      })
     });
   }
 
@@ -348,7 +445,7 @@ export class RealizarPedidoComponent implements OnInit {
     this.service3.getOne(this.pedidoSelec.id).subscribe((data) => {
       this.pedidoSelec = data;
       if (this.retirarLocal) {
-        (<HTMLInputElement>document.getElementById("total")).value = ((this.pedidoSelec.monto-(this.pedidoSelec.monto*0.1)).toFixed(2)).toString();
+        (<HTMLInputElement>document.getElementById("total")).value = ((this.pedidoSelec.monto - (this.pedidoSelec.monto * 0.1)).toFixed(2)).toString();
       } else {
         (<HTMLInputElement>document.getElementById("total")).value = this.pedidoSelec.monto.toFixed(2).toString();
       }
@@ -391,6 +488,7 @@ export class RealizarPedidoComponent implements OnInit {
           this.actualizarDetalle(cantidad, detalle, false);
         }
       }
+
     }
     this.llave = false;
   }
@@ -406,22 +504,26 @@ export class RealizarPedidoComponent implements OnInit {
     this.form4.controls['eliminado'].setValue(eliminado);
     console.log(this.form4.value)
     this.service7.put(detalle.id, this.form4.value).subscribe((data) => {
+      this.service7.getOne(detalle.id).subscribe((data2)=>{
+        this.calcularTiempo(data2);
+        console.log("CALCULO TIEMPO");
+      });
       this.getAllDetalles();
       this.llave = true;
-    })
+    });
   }
 
   public terminarPedido(): void {
 
     this.form5.controls['id'].setValue(null);
-    
+
     this.form5.controls['fecha'].setValue(this.obtenerFecha());
     this.form5.controls['pedido'].setValue(this.pedidoSelec);
     this.form5.controls['usuario'].setValue(this.usuario);
 
     if (this.retirarLocal) {
       this.form5.controls['subtotal'].setValue((this.pedidoSelec.monto).toFixed(2));
-      this.form5.controls['total'].setValue((this.pedidoSelec.monto-(this.pedidoSelec.monto*0.1)).toFixed(2));
+      this.form5.controls['total'].setValue((this.pedidoSelec.monto - (this.pedidoSelec.monto * 0.1)).toFixed(2));
       this.form5.controls['montoDescuento'].setValue((this.pedidoSelec.monto * 0.1).toFixed(2));
     } else {
       this.form5.controls['subtotal'].setValue(this.pedidoSelec.monto.toFixed(2));
@@ -434,6 +536,14 @@ export class RealizarPedidoComponent implements OnInit {
 
     this.service10.post(this.form5.value).subscribe(data => {
       this.paso = 5;
+      this.service3.put(this.pedidoSelec.id,this.form3.value).subscribe(data2=>{
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: '¡El tiempo de su pedido es de ' + this.tiempoPedido + 'min!',
+          showConfirmButton: false
+        });
+      });
     });
 
 
@@ -454,6 +564,8 @@ export class RealizarPedidoComponent implements OnInit {
     this.localDataDetalle = null;
     this.localDataDetalles = null;
     this.localDataPlatos = null;
+    this.detallesEnPreparacion=null;
+    this.tiempoPedido=0;
   }
 
 }
