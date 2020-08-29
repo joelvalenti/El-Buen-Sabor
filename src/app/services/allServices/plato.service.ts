@@ -23,4 +23,7 @@ export class PlatoService extends BaseService<Plato> {
     return this.http.get<Plato[]>(this.miUrl+'searchByCategory/' + categoria);
   }
 
+  consultarStock( plato : number, cantidad : number):Observable<boolean>{
+    return this.http.get<boolean>(this.miUrl + 'verificarStock/' + plato + '/' + cantidad);
+  }
 }

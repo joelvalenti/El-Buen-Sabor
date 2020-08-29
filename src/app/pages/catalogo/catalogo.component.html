@@ -4,7 +4,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-4" *ngFor="let categoria of categorias">
-                    <a (click)="elegirCategoria(categoria.nombre)"><img class="imagencategoria" src="../burrito.png"
+                    <a (click)="elegirCategoria(categoria.nombre)"><img class="imagencategoria" src="{{categoria.imagen}}"
                             alt="categoria"></a>
                     <h2 id="categorii">{{categoria.nombre}}</h2>
                 </div>
@@ -105,11 +105,11 @@
                     </div>
                     <div class="plato" *ngIf="seleccionBebidas == false else esBebida">
                         <div class="card" *ngFor="let plato of platos">
-                            <div class="card-header">
+                            <div class="card-header" >
                                 {{plato.cantidadVendida}} vendidos.
                             </div>
                             <div class="card-body" style="text-align: center;">
-                                <img class="card-img-top imagenplato" src="../burrito.png" alt="plato" />
+                                <img class="card-img-top imagenplato" src="{{plato.imagen}}" alt="plato" />
                                 <h2 class="card-title" style="text-align: center;">{{plato.nombre}}</h2>
                                 <h3 class="card-text">Precio: $ {{plato.precioVenta}}</h3>
                                 <div class="botones">
@@ -128,7 +128,7 @@
                                     Stock Actual: {{bebida.stockActual}}
                                 </div>
                                 <div class="card-body" style="text-align: center;">
-                                    <img class="card-img-top imagenplato" src="../burrito.png" alt="plato" />
+                                    <img class="card-img-top imagenplato" src="{{bebida.imagen}}" alt="plato" />
                                     <h2 class="card-title">{{bebida.nombre}}</h2>
                                     <h3 class="card-text">${{bebida.precioVenta}}</h3>
                                     <div class="botones">
@@ -159,6 +159,7 @@
                             <button (click)="enviarPedidoFinal()" class="btn btn-primary"
                                 *ngIf="fechahoy == true">Continuar</button>
                             <button class="btn btn-primary" *ngIf="fechahoy == false" disabled>Continuar</button>
+                            <button class="btn btn-primary" (click)="consultarStock(6,10)" >Consultar Stock</button>
                         </div>
                     </div>
                 </div>

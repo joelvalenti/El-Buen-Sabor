@@ -11,6 +11,7 @@ export interface Insumo {
     esInsumo: boolean;
     nombre: string;
     descripcion: string;
+    imagen : string;
     categoria: {
         id:number
     };

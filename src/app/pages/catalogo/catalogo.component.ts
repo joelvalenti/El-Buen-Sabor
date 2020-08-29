@@ -31,6 +31,7 @@ export class CatalogoComponent implements OnInit {
   total: number = 0;
   platoDetalle: Plato = {};
   seleccionBebidas: boolean = false;
+  stock : string = '';
   //variables pedido
   carritoFinal: Detalle[] = [];
   carritoBebidas: Detalle[] = [];
@@ -95,6 +96,7 @@ export class CatalogoComponent implements OnInit {
     this.seleccionBebidas = true;
     this.servicioBebida.getEsInsumo(false).subscribe(res => {
       this.gaseosas = res;
+      console.log(res);
     }, err => {
       console.log('Error al traer bebidas', err);
     });
@@ -103,6 +105,7 @@ export class CatalogoComponent implements OnInit {
   getCategorias() {
     this.servicioCategoria.getAll().subscribe(res => {
       this.categorias = res;
+      console.log(res);
     }, err => {
       console.log('Error al traer categorias', err);
     });
@@ -266,4 +269,25 @@ export class CatalogoComponent implements OnInit {
     this.platoDetalle = plato;
   }
 
+   consultarStock(plato : number, cantidad : number){
+      let resultado;
+      this.servicioPlato.consultarStock(plato,cantidad).subscribe(
+        res => {
+          resultado = res;
+          console.log('RES DE LA LLAMADA',res);
+          if(resultado){
+            console.log('resultado if',resultado);
+            return true;
+          }else{
+            console.log('resultado else',resultado);
+            return false;
+          }
+        },
+        err => {
+          console.log(err)
+          return false;
+        }
+      );
+      
+   }
 }
