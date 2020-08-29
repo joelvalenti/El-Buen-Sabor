@@ -106,10 +106,11 @@ export class CarritoComponent implements OnInit {
   getPedidosEnPreparacion() {
     this.pedidoService.getPedidoEstado(this.usuario.id, 2).subscribe(res => {
       this.pedidosEnPreparacion = res;
-      console.log('Pedidos en preparacion...', this.pedidosEnPreparacion);
-      res.forEach(element => {
-        this.getDetallesXPedidoEnPreparacion(element.id);
-      });
+      if (this.pedidosEnPreparacion.length > 0) {
+        res.forEach(element => {
+          this.getDetallesXPedidoEnPreparacion(element.id);
+        });
+      }
     },
       () => {
         this.alertsService.errorAlert('Opss..', 'No se pudo recolectar la información del carrito');
@@ -123,12 +124,16 @@ export class CarritoComponent implements OnInit {
         console.log('Detalles en Preparacion PV: ', this.detallesEnPreparacion);
         this.primeraVuelta = true;
       } else {
-        this.detallesEnPreparacion = this.detallesEnPreparacion.concat(res);
-        console.log('Detalles en Preparacion SV: ', this.detallesEnPreparacion);
+        if (this.detallesEnPreparacion.length > 0 || this.detallesEnPreparacion !== undefined) {
+          this.detallesEnPreparacion = this.detallesEnPreparacion.concat(res);
+          console.log('Detalles en Preparacion SV if: ', this.detallesEnPreparacion);
+        } else {
+          console.log('Detalles en Preparacion SV else: ', this.detallesEnPreparacion);
+        }
       }
     },
       () => {
-        this.alertsService.errorAlert('Opss..', 'No se pudo recolectar la información del carrito');
+        this.alertsService.errorAlert('Opss..', 'Carrito: Error en getDetallesXPedidoEnPreparación.');
       });
   }
 
@@ -140,7 +145,7 @@ export class CarritoComponent implements OnInit {
       });
     },
       () => {
-        this.alertsService.errorAlert('Opss..', 'No se pudo recolectar la información del carrito');
+        this.alertsService.errorAlert('Opss..', 'Carrito: Error en getPediosXUsuario');
       });
   }
 
@@ -149,7 +154,7 @@ export class CarritoComponent implements OnInit {
       this.detalles = res;
     },
       () => {
-        this.alertsService.errorAlert('Opss..', 'No se pudo recolectar la información del carrito');
+        this.alertsService.errorAlert('Opss..', 'Carrito: Error en getDetallesXPedido');
       });
   }
 
@@ -258,9 +263,14 @@ export class CarritoComponent implements OnInit {
 
   calcularTiempo() {
     var tiempoSinCocineros = 0;
-    this.detallesEnPreparacion = this.detallesEnPreparacion.concat(this.detalles);
+    if (this.detallesEnPreparacion !== undefined) {
+      this.detallesEnPreparacion = this.detallesEnPreparacion.concat(this.detalles);
+    }else{
+      this.detallesEnPreparacion = this.detalles;
+    }
     for (let index = 0; index < this.detallesEnPreparacion.length; index++) {
-      tiempoSinCocineros += this.detallesEnPreparacion[0].plato.tiempoPreparacion;
+      let cantidad = this.detallesEnPreparacion[index].cantidad;
+      tiempoSinCocineros += this.detallesEnPreparacion[index].plato.tiempoPreparacion * cantidad;
     }
     if (this.cocineros.length > 0) {
       this.tiempoPedido = tiempoSinCocineros / this.cocineros.length;
@@ -275,7 +285,6 @@ export class CarritoComponent implements OnInit {
   }
 
   realizarPedido() {
-    console.log('detalles: ', this.detalles);
     this.pedidos[0].estado = this.estado;
     this.pedidos[0].envioDelivery = this.flagRadioDireccion;
     var utc = new Date().toJSON().slice(0, 10);
@@ -339,4 +348,5 @@ export class CarritoComponent implements OnInit {
       this.router.navigate(['/cajero']);
     }
   }
+  
 }
