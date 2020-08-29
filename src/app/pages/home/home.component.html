@@ -18,7 +18,7 @@
             <li><img class="imagenPaso" src="../../assets/imagenes/burguer.png" alt="iconoComida"> Elegí tu comida</li>
             <li><img class="imagenPaso" src="../../assets/imagenes/creditcard.png" alt="iconoPago"> Selecciona medio de pago y espera tu comida</li>
         </ul>
-    </div>
+    </div>  
 </div>
 <div class="medium">
     <div class="container">
@@ -26,22 +26,8 @@
             <h1 class="platos">ALGUNOS DE NUESTROS MEJORES PLATOS</h1>
         </div>
         <div class="row">
-            
-                <div class="form-group">
-                    <h5><em>Selecciona tu foto de perfil</em></h5>
-                    <input type="file" accept=".png, .jpg" (change)="onUpload($event)">
-                </div>
-                <div>
-                    <input #imagenPlato type="text" [value]="urlImage | async" id="urlImagen" >
-                </div>
-                <div>
-                    <button type="button" class="btn btn-primary" (click)="verImagen()"> Ver Url </button>
-                </div>
-           
-        </div>
-        <div class="row">
             <div class="col-sm" *ngFor="let plato of platos">
-                <img src="../burrito.png" alt="plato" class="plate">
+                <img src="{{plato.imagen}}" alt="plato" class="plate">
                 <h2>{{plato.nombre}}</h2>
             </div>
         </div>
@@ -54,7 +40,7 @@
                 <p>EL BUEN SABOR - LABORATORIO 4 - UNIVERSIDAD TECNOLOGICA NACIONAL</p>
             </div>
             <div class="row">
-                <p>Sitio web creado por Astorga, Gutierrez Caligaris, Rocha y Valenti. 2018-2020 </p>
+                <p>Sitio web creado por Astorga, Gutierrez Caligaris, Rocha y Valenti. 2018-2020</p>
             </div>
         </div>
     </footer>

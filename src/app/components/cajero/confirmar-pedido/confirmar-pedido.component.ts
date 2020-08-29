@@ -58,7 +58,7 @@ export class ConfirmarPedidoComponent implements OnInit {
             if (this.facturasConfirmar[indx].id === fact.id) {
               bol = true;
               idx = indx;
-              bool = false;
+              bool = false; 
               break;
             }
           }
