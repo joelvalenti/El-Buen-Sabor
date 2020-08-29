@@ -23,6 +23,7 @@ import { Estado } from 'src/app/models/Estado';
 import { Plato } from 'src/app/models/Plato';
 import { InsumoService } from 'src/app/services/allServices/insumo.service';
 import { FaltanteStockComponent } from '../../administrador/faltante-stock/faltante-stock.component';
+import { Factura } from 'src/app/models/Factura';
 
 @Component({
   selector: 'app-realizar-pedido',
@@ -39,10 +40,12 @@ export class RealizarPedidoComponent implements OnInit {
   public domicilio: Domicilio;
   public estado: Estado;
   public pedido: Pedido;
+  public factura: Factura;
   public pedidoSelec: Pedido;
   public platoSelec: Plato;
   public insumoSelec: Insumo;
   public localData: any = { ...this.pedido };
+  public localDataFactura: any = { ...this.factura };
   public detalle: Detalle;
   public detalleInsumo: Detalle;
   public localDataDetalle: any = { ...this.detalle };
@@ -166,15 +169,18 @@ export class RealizarPedidoComponent implements OnInit {
 
   buildForm5() {
     this.form5 = this.formBuilder5.group({
-      id: [this.localData.id],
-      total: [this.localData.cantidad],
-      usuario: [this.localData.plato],
-      pedido: [this.localData.insumo],
-      fecha: [this.localData.pedido],
-      tipoPago: [this.localData.tipoPago],
-      nroTarjeta: [this.localData.nroTarjeta],
-      dniTitular: [this.localData.dniTitular],
-      eliminado: [this.localData.eliminado]
+      id: [this.localDataFactura.id],
+      total: [this.localDataFactura.cantidad],
+      usuario: [this.localDataFactura.plato],
+      pedido: [this.localDataFactura.insumo],
+      fecha: [this.localDataFactura.pedido],
+      tipoPago: [this.localDataFactura.tipoPago],
+      tipoFactura: [this.localDataFactura.tipoFactura],
+      subtotal: [this.localDataFactura.subtotal],
+      montoDescuento: [this.localDataFactura.montoDescuento],
+      nroTarjeta: [this.localDataFactura.nroTarjeta],
+      dniTitular: [this.localDataFactura.dniTitular],
+      eliminado: [this.localDataFactura.eliminado]
     });
 
   }
@@ -290,14 +296,14 @@ export class RealizarPedidoComponent implements OnInit {
             this.form4.controls['eliminado'].setValue(false);
             this.postDetalle();
           }
-        }else{
-            Swal.fire({
-              position: 'top-end',
-              icon: 'error',
-              title: 'No hay stock suficiente para ' + element.nombre + '',
-              showConfirmButton: false,
-              timer: 1500
-            })
+        } else {
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: 'No hay stock suficiente para ' + element.nombre + '',
+            showConfirmButton: false,
+            timer: 1500
+          })
         }
       })
     });
@@ -341,7 +347,11 @@ export class RealizarPedidoComponent implements OnInit {
   public getOnePedido(): void {
     this.service3.getOne(this.pedidoSelec.id).subscribe((data) => {
       this.pedidoSelec = data;
-      (<HTMLInputElement>document.getElementById("total")).value = this.pedidoSelec.monto.toString();
+      if (this.retirarLocal) {
+        (<HTMLInputElement>document.getElementById("total")).value = ((this.pedidoSelec.monto-(this.pedidoSelec.monto*0.1)).toFixed(2)).toString();
+      } else {
+        (<HTMLInputElement>document.getElementById("total")).value = this.pedidoSelec.monto.toFixed(2).toString();
+      }
     });
   }
 
@@ -404,10 +414,21 @@ export class RealizarPedidoComponent implements OnInit {
   public terminarPedido(): void {
 
     this.form5.controls['id'].setValue(null);
-    this.form5.controls['total'].setValue(this.pedidoSelec.monto);
+    
     this.form5.controls['fecha'].setValue(this.obtenerFecha());
     this.form5.controls['pedido'].setValue(this.pedidoSelec);
     this.form5.controls['usuario'].setValue(this.usuario);
+
+    if (this.retirarLocal) {
+      this.form5.controls['subtotal'].setValue((this.pedidoSelec.monto).toFixed(2));
+      this.form5.controls['total'].setValue((this.pedidoSelec.monto-(this.pedidoSelec.monto*0.1)).toFixed(2));
+      this.form5.controls['montoDescuento'].setValue((this.pedidoSelec.monto * 0.1).toFixed(2));
+    } else {
+      this.form5.controls['subtotal'].setValue(this.pedidoSelec.monto.toFixed(2));
+      this.form5.controls['total'].setValue(this.pedidoSelec.monto.toFixed(2));
+      this.form5.controls['montoDescuento'].setValue(0);
+    }
+    this.form5.controls['tipoFactura'].setValue("C");
     this.form5.controls['eliminado'].setValue(false);
 
 

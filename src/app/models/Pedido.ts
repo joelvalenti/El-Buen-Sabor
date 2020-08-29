@@ -7,7 +7,7 @@ export interface Pedido {
     id?: number;
     horaEstimada?: string;
     envioDelivery?: boolean;
-    monto?: Float64Array;
+    monto?: number;
     fecha?: Date;
     estado?: Estado;
     usuario?: Usuario;
