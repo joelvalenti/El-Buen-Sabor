@@ -1,6 +1,6 @@
 import { EstadisticasComponent } from './components/administrador/estadisticas/estadisticas.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, Injectable } from '@angular/core';
+import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -63,11 +63,6 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
 
-import { PdfMakeWrapper } from 'pdfmake-wrapper';
-import pdfFonts from "pdfmake/build/vfs_fonts";
-import { MatTableExporterModule } from 'mat-table-exporter';
-PdfMakeWrapper.setFonts(pdfFonts);
-
 @NgModule({
   entryComponents: [],
   declarations: [
@@ -80,7 +75,7 @@ PdfMakeWrapper.setFonts(pdfFonts);
     FilterBuscarRecetaPipe,
     FilterBuscarLocalidadPipe,
     UsuarioComponent,
-	IndexAdminComponent,
+	  IndexAdminComponent,
     ModalUsuarioComponent,
     CategoriaComponent,
     ModalCategoriaComponent,
@@ -113,7 +108,6 @@ PdfMakeWrapper.setFonts(pdfFonts);
     HomeComponent,
     PaginaPerfilComponent,
     ModalDomUsuarioComponent,
-    EstadisticasComponent
   ],
   imports: [
     BrowserModule,
@@ -122,7 +116,6 @@ PdfMakeWrapper.setFonts(pdfFonts);
     NgxPaginationModule,
     BrowserAnimationsModule,
     MaterialModule,
-    MatTableExporterModule,
     FormsModule,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),

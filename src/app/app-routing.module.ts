@@ -1,3 +1,4 @@
+import { FacturapdfComponent } from './components/facturapdf/facturapdf.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CocinaComponent } from './pages/cocina/cocina.component';
@@ -21,7 +22,9 @@ const routes: Routes = [
   { path: 'usuario', component: PaginaPerfilComponent, canActivate:[AuthGuard]},
   { path: 'cocina', component: CocinaComponent, canActivate:[AuthGuard] },
   { path: 'administrador', component: IndexAdminComponent, canActivate:[AuthGuard]},
-  { path: 'cajero', component: IndexCajeroComponent, canActivate:[AuthGuard]}
+  { path: 'cajero', component: IndexCajeroComponent, canActivate:[AuthGuard]},
+  { path: 'factura', component: FacturapdfComponent, canActivate:[AuthGuard]}
+
 ];
 
 @NgModule({

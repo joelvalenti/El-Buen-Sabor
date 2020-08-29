@@ -11,17 +11,16 @@ import { Usuario } from 'src/app/models/Usuario';
 })
 export class IndexAdminComponent implements OnInit {
 
-  constructor( private rolesService: RolesService,
-    private usuarioService: UsuarioService, private router:Router) { }
+  constructor(private rolesService: RolesService,
+    private usuarioService: UsuarioService, private router: Router) { }
 
-    public usuario:Usuario;
+  public usuario: Usuario;
 
   ngOnInit(): void {
     this.isAuth();
     setTimeout(() => this.ver(), 500);
-    
-  }
 
+  }
 
   isAuth() {
     this.usuarioService.isAuth().subscribe(res => {
@@ -31,18 +30,19 @@ export class IndexAdminComponent implements OnInit {
       })
     });
   }
-public ver(){
-  if(this.usuario==null){
-    setTimeout(() => this.r(), 500);
-  }else{
-    if (this.usuario.rol!='administrador') {
+  
+  public ver() {
+    if (this.usuario == null) {
       setTimeout(() => this.r(), 500);
+    } else {
+      if (this.usuario.rol != 'administrador') {
+        setTimeout(() => this.r(), 500);
+      }
     }
   }
-}
-public r(){
-  this.router.navigate(['']);
-  console.log("Se envio");
-}
+  public r() {
+    this.router.navigate(['']);
+    console.log("Se envio");
+  }
 
 }

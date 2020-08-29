@@ -140,7 +140,7 @@ export class CarritoComponent implements OnInit {
       });
     },
       () => {
-        this.alertsService.errorAlert('Opss... :(', 'No se pudo recolectar la información del carrito');
+        this.alertsService.errorAlert('Opss..', 'No se pudo recolectar la información del carrito');
       });
   }
 
@@ -164,7 +164,7 @@ export class CarritoComponent implements OnInit {
 
   getTotalFinal(): number {
     let totalNeto = this.getTotalNeto();
-    let totalFinal = totalNeto - totalNeto * 0.1; //Con 10% de descuento.
+    let totalFinal = totalNeto - totalNeto * 0.1;
     if (this.flagRadioDireccion) {
       return totalNeto;
     } else {
@@ -195,7 +195,7 @@ export class CarritoComponent implements OnInit {
           })
       }
     }).catch(() => {
-      this.alertsService.errorAlert('Opps... :(', 'No se pudo eliminar el registro');
+      this.alertsService.errorAlert('Opps..', 'No se pudo eliminar el registro');
     })
   }
 
@@ -289,19 +289,7 @@ export class CarritoComponent implements OnInit {
     console.log('Pedido enviado a Cajero: ', this.pedidos[0]);
     this.generarFactura();
     this.pedidoService.put(this.pedidos[0].id, this.pedidos[0]).subscribe(() => {
-      if (this.flagRadioDireccion === true) {
-        Swal.fire(
-          'Su pedido fue enviado!',
-          "De acuerdo al tiempo de espera, en " + this.tiempoPedido + " minutos llegará a su domicilio. <br/> Recuerde que puede consultar su factura y el estado de su pedido en 'Mi Perfil'.",
-          'success'
-        )
-      } else {
-        Swal.fire(
-          'Su pedido fue enviado!',
-          "De acuerdo al tiempo de espera, en " + this.tiempoPedido + " minutos estará listo para retirar. <br/> Recuerde que puede consultar su factura y el estado de su pedido en 'Mi Perfil'.",
-          'success'
-        )
-      }
+      this.sweetAlertEnviado();
     })
     this.redireccion();
   }
@@ -326,6 +314,22 @@ export class CarritoComponent implements OnInit {
     this.facturaService.post(factura).subscribe(res => {
       console.log('Factura generada: ', res);
     })
+  }
+
+  sweetAlertEnviado() {
+    if (this.flagRadioDireccion === true) {
+      Swal.fire(
+        'Su pedido fue enviado!',
+        "De acuerdo al tiempo de espera, en " + this.tiempoPedido + " minutos llegará a su domicilio. <br/> Recuerde que puede consultar su factura y el estado de su pedido en 'Mi Perfil'.",
+        'success'
+      )
+    } else {
+      Swal.fire(
+        'Su pedido fue enviado!',
+        "De acuerdo al tiempo de espera, en " + this.tiempoPedido + " minutos estará listo para retirar. <br/> Recuerde que puede consultar su factura y el estado de su pedido en 'Mi Perfil'.",
+        'success'
+      )
+    }
   }
 
   redireccion() {
