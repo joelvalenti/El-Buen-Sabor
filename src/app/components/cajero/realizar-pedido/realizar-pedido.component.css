@@ -41,7 +41,7 @@
     font-size: large;
     font-weight: bold;
 }
-div {
+divOp {
     justify-content: center;
     align-content: center;
     flex-direction: column;
