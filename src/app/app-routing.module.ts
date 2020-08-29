@@ -22,8 +22,7 @@ const routes: Routes = [
   { path: 'usuario', component: PaginaPerfilComponent, canActivate:[AuthGuard]},
   { path: 'cocina', component: CocinaComponent, canActivate:[AuthGuard] },
   { path: 'administrador', component: IndexAdminComponent, canActivate:[AuthGuard]},
-  { path: 'cajero', component: IndexCajeroComponent, canActivate:[AuthGuard]},
-  { path: 'factura', component: FacturapdfComponent, canActivate:[AuthGuard]}
+  { path: 'cajero', component: IndexCajeroComponent, canActivate:[AuthGuard]}
 
 ];
 

@@ -1,7 +1,7 @@
 <div *ngIf="this.paso==1" class="botonesUsuario">
     <button class="myButton" (click)="onSubmitUsuario()">Seleccionar Usuario</button>
 </div>
-<div *ngIf="this.paso==2 || this.paso==3 || this.paso==4"  class="botonesUsuario">
+<div *ngIf="this.paso==2 || this.paso==3 || this.paso==4" class="botonesUsuario">
     <div class="alert alert-success" role="alert">
         Paso 1 -> Usuario Seleccionado Correctamente ✅
     </div>
@@ -17,8 +17,35 @@
     </div>
 </div>
 <div *ngIf="this.paso==3" class="botonesUsuario">
-    <span *ngIf="this.retirarLocal==true"><button class="myButton" (click)="pagar(true)">Pagar con Tarjeta</button>
-    <input type="text" id="tarjeta" value="" (input)="inputValidator($event)"  (focus)="focusTarjeta()"/></span>
+    
+    <span style="font-weight: bold;">Podes:</span>
+    <br>
+    <br>
+    <div *ngIf="this.retirarLocal==true">
+        <button class="myButton" (click)="pagar(true)">Pagar con Tarjeta</button>
+        <br>
+        <br>
+        <div style="text-align: center; display:inline-block">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <div class="input-group-text" id="inputGroup-sizing-1">Nro. tarjeta:</div>
+                </div>
+                <input type="text" id="tarjeta" class="form-control" aria-label="Nro. Tarjeta"
+                    aria-describedby="inputGroup-sizing-1" (input)="inputValidator($event)"
+                    (focus)="focusTarjeta()">
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <div class="input-group-text" id="inputGroup-sizing-2">DNI:</div>
+                </div>
+                <input type="text" id="dni" (input)="inputValidator($event)" class="form-control" aria-label="DNI"
+                    aria-describedby="inputGroup-sizing-2">
+            </div>
+        </div>
+    </div>
+    <span style="font-weight: bold;">O sino:</span>
+    <br>
+    <br>
     &nbsp;&nbsp;
     <button class="myButton" (click)="pagar(false)">Pagar en Efectivo</button>
 </div>
@@ -115,17 +142,18 @@
                         <input type="text" disabled id="cantidad_{{detalle1.id}}" class="sinborde cont"
                             value="{{detalle1.cantidad}}" style="width:10%;">
                         <button class="myButtonMM" (click)="cantidad(false,detalle1)">-</button>&nbsp;&nbsp;
-                        <input type="text" *ngIf="detalle1.insumo==null"disabled class="sinborde cont" value="{{detalle1.plato.nombre}}"
-                            style="width:50%;">
-                            <input type="text" *ngIf="detalle1.plato==null"disabled class="sinborde cont" value="{{detalle1.insumo.nombre}}"
-                            style="width:50%;">
+                        <input type="text" *ngIf="detalle1.insumo==null" disabled class="sinborde cont"
+                            value="{{detalle1.plato.nombre}}" style="width:50%;">
+                        <input type="text" *ngIf="detalle1.plato==null" disabled class="sinborde cont"
+                            value="{{detalle1.insumo.nombre}}" style="width:50%;">
                     </div>
                     <div class="dtotal">
                         <span class="total">Total: $ </span>
                         <input type="text" disabled id="total" class="sinborde total" value="0" style="width:20%;">
                     </div>
                 </div>
-                <button *ngIf="this.contar>0"class="myButton" style=" width:100%;" (click)="terminarPedido()">Terminar Pedido</button>
+                <button *ngIf="this.contar>0" class="myButton" style=" width:100%;" (click)="terminarPedido()">Terminar
+                    Pedido</button>
                 <form [formGroup]="form4">
                     <input hidden formControlName="id">
                     <input hidden formControlName="cantidad">

@@ -48,13 +48,13 @@
 
     </div>
     <div class="form-row">
-      <div class="form-group">
-        <h5><em>Selecciona tu foto de perfil</em></h5>
-        <input type="file" accept=".png, .jpg" (change)="onUpload($event)">
+        <div class="form-group">
+          <h5><em>Selecciona foto ilustrativa del plato</em></h5>
+          <input type="file" accept=".png, .jpg" (change)="onUpload($event)">
+        </div>
+        <div>
+          <input #imagenPlato type="text" [value]="urlImage | async" id="urlImagen" hidden >
       </div>
-      <div>
-        <input #imagenPlato type="text" [value]="urlImage | async" id="urlImagen" hidden >
-    </div>
     </div>
 <span *ngIf="dataDetalle!=undefined">
     <mat-sidenav-container>

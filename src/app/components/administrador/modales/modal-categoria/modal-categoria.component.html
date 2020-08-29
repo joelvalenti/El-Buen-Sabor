@@ -29,6 +29,15 @@
         </mat-error>
       </mat-form-field>
     </div>
+    <div class="form-row">
+      <div class="form-group">
+        <h5><em>Selecciona foto para la categoria</em></h5>
+        <input type="file" accept=".png, .jpg" (change)="onUpload($event)">
+      </div>
+      <div>
+        <input #imagenPlato type="text" [value]="urlImage | async" id="urlImagen" hidden >
+    </div>
+  </div>
 
     <div class="container-button">
       <button mat-raised-button color="primary" (click)="onAction()">{{action}}</button>

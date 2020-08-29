@@ -12,6 +12,7 @@ export class DetalleService extends BaseService<Detalle> {
   protected miUrl2 = 'http://localhost:9000/api/v1/detalle/query/';
   protected miUrl3 = 'http://localhost:9000/api/v1/detalle/buscarPorPlato/';
   protected miUrl4 = 'http://localhost:9000/api/v1/detalle/buscarPorInsumo/';
+  protected miUrl5 = 'http://localhost:9000/api/v1/detalle/verificarStock/';
 
   constructor(protected http: HttpClient) {
     super(http);
@@ -25,6 +26,11 @@ export class DetalleService extends BaseService<Detalle> {
   }
   buscarPorInsumo(id:number, id2:number): Observable<Detalle[]> {
     return this.http.get<Detalle[]>(this.miUrl3 + id + '/' + id2);
+  }
+  
+  consultarStock(id:number, body : Detalle):Observable<Boolean>{
+    //http://localhost:9000/api/v1/detalle/verificarStock/
+    return this.http.put<Boolean>(this.miUrl5 + id, body);
   }
 
 }

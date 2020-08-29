@@ -32,7 +32,7 @@ import { FaltanteStockComponent } from '../../administrador/faltante-stock/falta
 export class RealizarPedidoComponent implements OnInit {
 
   public localDataCategorias: any;
-  public localDataCategoriasInsumos:any;
+  public localDataCategoriasInsumos: any;
   public localDataPlatos: any;
   public localDataInsumos: any;
   public usuario: Usuario;
@@ -40,8 +40,8 @@ export class RealizarPedidoComponent implements OnInit {
   public estado: Estado;
   public pedido: Pedido;
   public pedidoSelec: Pedido;
-  public platoSelec:Plato;
-  public insumoSelec:Insumo;
+  public platoSelec: Plato;
+  public insumoSelec: Insumo;
   public localData: any = { ...this.pedido };
   public detalle: Detalle;
   public detalleInsumo: Detalle;
@@ -51,18 +51,18 @@ export class RealizarPedidoComponent implements OnInit {
   public form4: FormGroup;
   public form5: FormGroup;
   public userId: number;
-  public paso:number=1;
+  public paso: number = 1;
   public domId: number;
   public llave: boolean = true;
-  public retirarLocal:boolean=false;
-  public contar: number=0;
+  public retirarLocal: boolean = false;
+  public contar: number = 0;
 
   constructor(public dialog: MatDialog, public formBuilder3: FormBuilder, public formBuilder4: FormBuilder,
     public formBuilder5: FormBuilder,
     public service: CategoriaService,
     public service2: PlatoService, public service3: PedidoService, public service4: EstadoService,
     public service5: UsuarioService, public service6: DomicilioService, public service7: DetalleService,
-    public service8: InsumoService, public service9:CategoriaInsumoService, public service10:FacturaService) { }
+    public service8: InsumoService, public service9: CategoriaInsumoService, public service10: FacturaService) { }
 
   ngOnInit(): void {
     this.buildForm3();
@@ -112,17 +112,17 @@ export class RealizarPedidoComponent implements OnInit {
   }
 
   agregarDomicilio(): void {
-    if(this.retirarLocal){
+    if (this.retirarLocal) {
       this.form3.controls['domicilio'].setValue(null);
       this.crearPedido(this.form3.value);
-    }else{
+    } else {
       this.service6.getOne(this.domId).subscribe(data => {
         this.domicilio = data;
         this.form3.controls['domicilio'].setValue(this.domicilio);
         this.crearPedido(this.form3.value);
       });
     }
-    
+
   }
 
   public crearPedido(element: Pedido) {
@@ -155,7 +155,7 @@ export class RealizarPedidoComponent implements OnInit {
     this.form4 = this.formBuilder4.group({
       id: [this.localData.id],
       cantidad: [this.localData.cantidad],
-      fecha:[this.localData.fecha],
+      fecha: [this.localData.fecha],
       plato: [this.localData.plato],
       insumo: [this.localData.insumo],
       pedido: [this.localData.pedido],
@@ -172,7 +172,8 @@ export class RealizarPedidoComponent implements OnInit {
       pedido: [this.localData.insumo],
       fecha: [this.localData.pedido],
       tipoPago: [this.localData.tipoPago],
-      nroTarjeta:[this.localData.nroTarjeta],
+      nroTarjeta: [this.localData.nroTarjeta],
+      dniTitular: [this.localData.dniTitular],
       eliminado: [this.localData.eliminado]
     });
 
@@ -182,14 +183,14 @@ export class RealizarPedidoComponent implements OnInit {
     this.service.getAll().subscribe((data) => {
       this.localDataCategorias = data;
     });
-    this.service9.buscarporCategoria().subscribe((data)=>{
-      this.localDataCategoriasInsumos=data;
+    this.service9.buscarporCategoria().subscribe((data) => {
+      this.localDataCategoriasInsumos = data;
     })
-    
+
   }
 
   onSubmitUsuario(): void {
-    this.dialog.open(ModalRealizarPedidoUsuarioComponent, {width:"1000px"})
+    this.dialog.open(ModalRealizarPedidoUsuarioComponent, { width: "1000px" })
       .afterClosed().subscribe(result => {
         this.cargarUsuario(result.data);
         Swal.fire({
@@ -202,25 +203,25 @@ export class RealizarPedidoComponent implements OnInit {
       });
   }
 
-  onSubmitDomicilio(op:boolean): void {
-    if(op){
-      this.dialog.open(ModalRealizarPedidoDomicilioComponent, {width:"800px", data: this.userId })
-      .afterClosed().subscribe(result => {
-        this.cargarDomicilio(result.data);
-        Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          title: 'Domicilio seleccionado correctamente!',
-          showConfirmButton: false,
-          timer: 1500
-        })
-      });
-    }else{
-      this.retirarLocal=true;
+  onSubmitDomicilio(op: boolean): void {
+    if (op) {
+      this.dialog.open(ModalRealizarPedidoDomicilioComponent, { width: "800px", data: this.userId })
+        .afterClosed().subscribe(result => {
+          this.cargarDomicilio(result.data);
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Domicilio seleccionado correctamente!',
+            showConfirmButton: false,
+            timer: 1500
+          })
+        });
+    } else {
+      this.retirarLocal = true;
       this.paso = 3;
       this.cargarPedido();
     }
-    
+
   }
 
   public cargarUsuario(element: number) {
@@ -233,35 +234,36 @@ export class RealizarPedidoComponent implements OnInit {
     this.paso = 3;
     this.cargarPedido();
   }
-public focusTarjeta():void{
-  (<HTMLInputElement>document.getElementById("tarjeta")).value="";
-}
-  public pagar(op:boolean):void {
-    if(op){ 
-      if((<HTMLInputElement>document.getElementById("tarjeta")).value.length==16){
-      this.form5.controls['nroTarjeta'].setValue((<HTMLInputElement>document.getElementById("tarjeta")).value);
-      this.form5.controls['tipoPago'].setValue("Tarjeta");
-      this.paso=4;
-    }else{
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'Número de tarjeta incorrecto!',
-        showConfirmButton: false,
-        timer: 1500
-      });
-      (<HTMLInputElement>document.getElementById("tarjeta")).value="";
-    }
-    }else{
+  public focusTarjeta(): void {
+    (<HTMLInputElement>document.getElementById("tarjeta")).value = "";
+  }
+  public pagar(op: boolean): void {
+    if (op) {
+      if ((<HTMLInputElement>document.getElementById("tarjeta")).value.length == 16) {
+        this.form5.controls['nroTarjeta'].setValue((<HTMLInputElement>document.getElementById("tarjeta")).value);
+        this.form5.controls['dniTitular'].setValue(Number.parseInt((<HTMLInputElement>document.getElementById("dni")).value));
+        this.form5.controls['tipoPago'].setValue("Tarjeta");
+        this.paso = 4;
+      } else {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: 'Número de tarjeta incorrecto!',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        (<HTMLInputElement>document.getElementById("tarjeta")).value = "";
+      }
+    } else {
       this.form5.controls['tipoPago'].setValue("Efectivo");
-      this.paso=4;
+      this.paso = 4;
     }
-    
+
   }
 
   public inputValidator(event: any) {
     //console.log(event.target.value);
-    const pattern = /^[0-9]*$/;   
+    const pattern = /^[0-9]*$/;
     //let inputChar = String.fromCharCode(event.charCode)
     if (!pattern.test(event.target.value)) {
       event.target.value = event.target.value.replace(/[^0-9]/g, "");
@@ -271,21 +273,33 @@ public focusTarjeta():void{
   }
   public crearDetallePlato(element: Plato): void {
     this.service7.buscarPorPlato(this.pedidoSelec.id, element.id).subscribe((data) => {
-      let contador: number = 0;
-      this.contar++;
-      data.forEach(element => {
-        contador += 1;
-      });
-      this.platoSelec=element;
-      if (contador == 0) {
-        this.form4.controls['cantidad'].setValue(1);
-        this.form4.controls['fecha'].setValue(this.obtenerFecha());
-        this.form4.controls['plato'].setValue(element);
-        this.form4.controls['insumo'].setValue(null);
-        this.form4.controls['pedido'].setValue(this.pedidoSelec);
-        this.form4.controls['eliminado'].setValue(false);
-        this.postDetalle();
-      }
+      this.service2.consultarStock(element.id, 1).subscribe((stock) => {
+        if (stock) {
+          let contador: number = 0;
+          this.contar++;
+          data.forEach(element => {
+            contador += 1;
+          });
+          this.platoSelec = element;
+          if (contador == 0) {
+            this.form4.controls['cantidad'].setValue(1);
+            this.form4.controls['fecha'].setValue(this.obtenerFecha());
+            this.form4.controls['plato'].setValue(element);
+            this.form4.controls['insumo'].setValue(null);
+            this.form4.controls['pedido'].setValue(this.pedidoSelec);
+            this.form4.controls['eliminado'].setValue(false);
+            this.postDetalle();
+          }
+        }else{
+            Swal.fire({
+              position: 'top-end',
+              icon: 'error',
+              title: 'No hay stock suficiente para ' + element.nombre + '',
+              showConfirmButton: false,
+              timer: 1500
+            })
+        }
+      })
     });
 
   }
@@ -297,7 +311,7 @@ public focusTarjeta():void{
       data.forEach(element => {
         contador += 1;
       });
-      this.insumoSelec=element;
+      this.insumoSelec = element;
       if (contador == 0) {
         this.form4.controls['cantidad'].setValue(1);
         this.form4.controls['fecha'].setValue(this.obtenerFecha());
@@ -319,7 +333,7 @@ public focusTarjeta():void{
 
   public getAllDetalles(): void {
     this.service7.buscarPorPedido(this.pedidoSelec.id).subscribe((data) => {
-        this.localDataDetalles = data;
+      this.localDataDetalles = data;
       this.getOnePedido();
     })
   }
@@ -336,7 +350,7 @@ public focusTarjeta():void{
     this.service2.buscarPlatoPorCategoria(id).subscribe(data => {
       console.log("Plato: " + data)
       this.localDataPlatos = data;
-      this.localDataInsumos=null;
+      this.localDataInsumos = null;
     });
 
   }
@@ -346,13 +360,13 @@ public focusTarjeta():void{
     this.service8.buscarPorCategoriaNoInsumo(id).subscribe(data => {
       console.log("Insumo: " + data)
       this.localDataInsumos = data;
-      this.localDataPlatos=null;
+      this.localDataPlatos = null;
     });
 
   }
 
   public cantidad(incrementar: boolean, detalle: Detalle): void {
-    let cantidad: number=0;
+    let cantidad: number = 0;
     if (this.llave) {
       if (incrementar) {
         cantidad = Number.parseInt((<HTMLInputElement>document.getElementById("cantidad_" + detalle.id.toString())).value) + 1;
@@ -361,33 +375,33 @@ public focusTarjeta():void{
       } else {
         cantidad = Number.parseInt((<HTMLInputElement>document.getElementById("cantidad_" + detalle.id.toString())).value) - 1;
         this.contar--;
-        if(cantidad==0){
+        if (cantidad == 0) {
           this.actualizarDetalle(1, detalle, true);
-        }else{
+        } else {
           this.actualizarDetalle(cantidad, detalle, false);
         }
       }
     }
-    this.llave=false;
+    this.llave = false;
   }
 
- 
 
-  public actualizarDetalle(cantidad:number,detalle:Detalle, eliminado:boolean):void{
-      this.form4.controls['id'].setValue(detalle.id);
-      this.form4.controls['cantidad'].setValue(cantidad);
-      this.form4.controls['plato'].setValue(detalle.plato);
-      this.form4.controls['pedido'].setValue(detalle.pedido);
-      this.form4.controls['insumo'].setValue(detalle.insumo);
-      this.form4.controls['eliminado'].setValue(eliminado);
-      console.log(this.form4.value)
-      this.service7.put(detalle.id,this.form4.value).subscribe((data)=>{
-        this.getAllDetalles();
-        this.llave=true;
-      })
+
+  public actualizarDetalle(cantidad: number, detalle: Detalle, eliminado: boolean): void {
+    this.form4.controls['id'].setValue(detalle.id);
+    this.form4.controls['cantidad'].setValue(cantidad);
+    this.form4.controls['plato'].setValue(detalle.plato);
+    this.form4.controls['pedido'].setValue(detalle.pedido);
+    this.form4.controls['insumo'].setValue(detalle.insumo);
+    this.form4.controls['eliminado'].setValue(eliminado);
+    console.log(this.form4.value)
+    this.service7.put(detalle.id, this.form4.value).subscribe((data) => {
+      this.getAllDetalles();
+      this.llave = true;
+    })
   }
 
-  public terminarPedido():void{
+  public terminarPedido(): void {
 
     this.form5.controls['id'].setValue(null);
     this.form5.controls['total'].setValue(this.pedidoSelec.monto);
@@ -397,28 +411,28 @@ public focusTarjeta():void{
     this.form5.controls['eliminado'].setValue(false);
 
 
-    this.service10.post(this.form5.value).subscribe(data=>{
+    this.service10.post(this.form5.value).subscribe(data => {
       this.paso = 5;
     });
-    
+
 
   }
 
-  public reiniciarPedido():void{
-    this.userId=null;
-    this.domId=null;
-    this.pedidoSelec=null;
-    this.platoSelec=null;
-    this.usuario=null;
-    this.detalle=null;
-    this.domicilio=null;
-    this.estado=null;
-    this.paso=1;
-    this.retirarLocal=false;
-    this.localData=null;
-    this.localDataDetalle=null;
-    this.localDataDetalles=null;
-    this.localDataPlatos=null;
+  public reiniciarPedido(): void {
+    this.userId = null;
+    this.domId = null;
+    this.pedidoSelec = null;
+    this.platoSelec = null;
+    this.usuario = null;
+    this.detalle = null;
+    this.domicilio = null;
+    this.estado = null;
+    this.paso = 1;
+    this.retirarLocal = false;
+    this.localData = null;
+    this.localDataDetalle = null;
+    this.localDataDetalles = null;
+    this.localDataPlatos = null;
   }
 
 }

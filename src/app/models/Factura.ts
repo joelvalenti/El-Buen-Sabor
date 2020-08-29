@@ -9,7 +9,7 @@ export interface Factura {
     total?: number;
     fecha?: Date;
     tipoFactura?: string;
-    dniTarjeta?: number;
+    dniTitular?: number;
     tipoPago?: string;
     usuario?: Usuario;
     pedido?: Pedido;

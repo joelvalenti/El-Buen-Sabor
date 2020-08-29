@@ -14,6 +14,7 @@ import { RolesService } from 'src/app/services/allServices/roles.service';
 import { Usuario } from 'src/app/models/Usuario';
 import { DetalleService } from 'src/app/services/allServices/detalle.service';
 import { Estado } from 'src/app/models/Estado';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-catalogo',
@@ -31,6 +32,7 @@ export class CatalogoComponent implements OnInit {
   total: number = 0;
   platoDetalle: Plato = {};
   seleccionBebidas: boolean = false;
+  stock: boolean;
   //variables pedido
   carritoFinal: Detalle[] = [];
   carritoBebidas: Detalle[] = [];
@@ -65,7 +67,7 @@ export class CatalogoComponent implements OnInit {
         this.platos = platosFiltrados;
       }
     }
-    if(filter == ''){
+    if (filter == '') {
       this.platos = this.platosAux;
     }
   }
@@ -95,6 +97,7 @@ export class CatalogoComponent implements OnInit {
     this.seleccionBebidas = true;
     this.servicioBebida.getEsInsumo(false).subscribe(res => {
       this.gaseosas = res;
+      console.log(res);
     }, err => {
       console.log('Error al traer bebidas', err);
     });
@@ -103,6 +106,7 @@ export class CatalogoComponent implements OnInit {
   getCategorias() {
     this.servicioCategoria.getAll().subscribe(res => {
       this.categorias = res;
+      console.log(res);
     }, err => {
       console.log('Error al traer categorias', err);
     });
@@ -119,30 +123,15 @@ export class CatalogoComponent implements OnInit {
     });
   }
 
-  agregarAlPedido(plato: Plato) {
-    let nuevoDetalle: Detalle = {};
-    if (this.carritoFinal.length < 1) {
-      nuevoDetalle.plato = plato;
-      nuevoDetalle.cantidad = 1;
-      this.carritoFinal.push(nuevoDetalle);
-      this.total += plato.precioVenta;
-    } else {
-      let otro: Detalle = {};
-      otro.plato = plato;
-      const indice = this.carritoFinal.findIndex(ref => ref.plato.nombre == otro.plato.nombre);
-      if (indice < 0) {
-        let nuevoPlato: Detalle = {};
-        nuevoPlato.plato = plato;
-        nuevoPlato.cantidad = 1;
-        this.carritoFinal.push(nuevoPlato);
-        this.total += plato.precioVenta;
-        const nuevoIndice = this.carritoFinal.findIndex(ref => ref.plato.nombre == otro.plato.nombre);
-      } else {
-        this.carritoFinal[indice].cantidad++;
-        this.total += plato.precioVenta;
-      }
-    }
-  }
+  // async agregarAlPedido(plato: Plato){
+  //   this.stock = await this.consultarStock(plato,1);
+  //   console.log('stock en linea 127', this.stock);
+  //    this.agregarPlato(plato);
+  //    console.log('stock en linea 130', this.stock);
+  // }
+ 
+
+
 
   agregarGaseosa(bebida) {
     let nuevoDetalle: Detalle = {};
@@ -265,5 +254,61 @@ export class CatalogoComponent implements OnInit {
   verDetalle(plato: Plato) {
     this.platoDetalle = plato;
   }
+
+  agregarAlPedido(plato: Plato) {
+    this.servicioPlato.consultarStock(plato.id, 1).subscribe(
+      res => {
+        console.log('respuesta consultarStock ', res);
+        this.stock = res;
+        if (res === true) {
+          let nuevoDetalle: Detalle = {};
+          if (this.carritoFinal.length < 1) {
+            nuevoDetalle.plato = plato;
+            nuevoDetalle.cantidad = 1;
+            this.carritoFinal.push(nuevoDetalle);
+            this.total += plato.precioVenta;
+          } else {
+            let otro: Detalle = {};
+            otro.plato = plato;
+            const indice = this.carritoFinal.findIndex(ref => ref.plato.nombre == otro.plato.nombre);
+            if (indice < 0) {
+              let nuevoPlato: Detalle = {};
+              nuevoPlato.plato = plato;
+              nuevoPlato.cantidad = 1;
+              this.carritoFinal.push(nuevoPlato);
+              this.total += plato.precioVenta;
+              const nuevoIndice = this.carritoFinal.findIndex(ref => ref.plato.nombre == otro.plato.nombre);
+            } else {
+              this.carritoFinal[indice].cantidad++;
+              this.total += plato.precioVenta;
+            }
+          }
+        }else{
+          Swal.fire({
+            icon: 'error',
+            title: 'No hay suficiente stock para ' + plato.nombre,
+            showConfirmButton: false,
+            timer: 1500
+          })
+          
+        }
+      },
+      err => {
+        console.log('error ', err);
+      }
+    );
+  }
+  //  consultarStock(plato : Plato, cantidad : number): any{
+  //   this.servicioPlato.consultarStock(plato.id,cantidad).subscribe(
+  //     res=>{
+  //       console.log('respuesta consultarStock ', res);
+  //       return this.stock = res;
+  //     },
+  //     err=>{
+  //       console.log('error ', err);
+  //       return false;
+  //     }
+  //   );
+  // }
 
 }

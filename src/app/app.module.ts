@@ -1,3 +1,4 @@
+import { EstadisticasComponent } from './components/administrador/estadisticas/estadisticas.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -48,7 +49,6 @@ import { PaginaPerfilComponent } from './pages/pagina-perfil/pagina-perfil.compo
 import { ModalDomUsuarioComponent } from './components/modal-domicilio/modal-dom-usuario/modal-dom-usuario.component';
 import { ModalDetalleComponent } from './components/modal-detalle/modal-detalle.component';
 import { UsuarioComponent } from './components/administrador/usuario/usuario.component';
-import { FacturapdfComponent } from './components/facturapdf/facturapdf.component';
 
 // Pipes
 import { FilterBuscarRecetaPipe } from './pipes/filter-buscar-receta.pipe';
@@ -108,7 +108,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
     HomeComponent,
     PaginaPerfilComponent,
     ModalDomUsuarioComponent,
-    FacturapdfComponent
   ],
   imports: [
     BrowserModule,

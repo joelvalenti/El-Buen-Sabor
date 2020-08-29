@@ -17,6 +17,10 @@
     float:left;
     padding-left:20px;
 }
+.excel{
+    float:right;
+    padding-right: 20px;
+}
 .botonagregar{
     float:right;
     padding-right:20px;
@@ -24,3 +28,4 @@
 table {
     width: 100%;
   }
+  
