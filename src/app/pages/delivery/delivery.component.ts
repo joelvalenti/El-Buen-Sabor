@@ -28,14 +28,12 @@ export class DeliveryComponent implements OnInit {
     }, 5000);
   }
 
-  cerrarSesion(): void {
-    alert('Cerrar Sesion');
-  }
   aceptarPedido(index: number): void {
     const pedido = this.pedidos[index];
-    this.pedidoService.updateEstado(4, pedido).subscribe();
-    this.pedidosAceptados.push(pedido);
-    this.pedidos.splice(index, 1);
+    this.pedidoService.updateEstado(4, pedido).subscribe(() => {
+      this.pedidosAceptados.push(pedido);
+      this.pedidos.splice(index, 1);
+    });
   }
   cargarLocalidades(): void {
     this.localidadService.getAll().subscribe((localidades) => {
@@ -49,7 +47,7 @@ export class DeliveryComponent implements OnInit {
           this.pedidoService.getOne(pedidoU.id).subscribe((pedi) => {
             if (pedi.estado.nombre === 'Terminado') {
               if (pedidos.length === 0) {
-                this.pedidosUnit(pedi);
+                this.pedidosUnit(pedi, true);
               } else {
                 let bool = true;
                 for (const pedidoUnitario of this.pedidos) {
@@ -58,6 +56,21 @@ export class DeliveryComponent implements OnInit {
                     break;
                   }
                 }
+                if (bool) {
+                  this.pedidosUnit(pedi, true);
+                }
+              }
+            } else if (pedi.estado.nombre === 'Facturado') {
+              this.pedidosAceptados.forEach((pedidUnit, index) => {
+                if (pedidUnit.id === pedi.id) {
+                  this.pedidosAceptados.splice(index, 1);
+                }
+              });
+            } else if (pedi.estado.nombre === 'En Delivery') {
+              if (pedidos.length === 0) {
+                this.pedidosUnit(pedi, false);
+              } else {
+                let bool = true;
                 for (const pedidoUnitario of this.pedidosAceptados) {
                   if (pedidoUnitario.id === pedi.id) {
                     bool = false;
@@ -65,14 +78,8 @@ export class DeliveryComponent implements OnInit {
                   }
                 }
                 if (bool) {
-                  this.pedidosUnit(pedi);
+                  this.pedidosUnit(pedi, false);
                 }
-              }
-            }
-            if (pedi.estado.nombre === 'Entregado') {
-              const indes = this.pedidosAceptados.indexOf(pedi);
-              if (indes) {
-                this.pedidosAceptados.splice(indes, 1);
               }
             }
           });
@@ -80,13 +87,17 @@ export class DeliveryComponent implements OnInit {
       });
     });
   }
-  pedidosUnit(pedidoU: any): void {
+  pedidosUnit(pedidoU: any, bool: boolean): void {
     this.facturaService.getAll().subscribe((facturas) => {
       facturas.forEach((factura) => {
         if (factura.pedido.id === pedidoU.id) {
           this.total.push(factura.total);
           this.tipoPago.push(factura.tipoPago);
-          this.pedidos.push(pedidoU);
+          if (bool) {
+            this.pedidos.push(pedidoU);
+          } else {
+            this.pedidosAceptados.push(pedidoU);
+          }
         }
       });
     });
