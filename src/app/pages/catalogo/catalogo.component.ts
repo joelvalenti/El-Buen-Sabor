@@ -75,8 +75,9 @@ export class CatalogoComponent implements OnInit {
   establecerFechas() {
     let dia = new Date().getDay();
     let hora = new Date().getHours();
+    let minutos = new Date().getMinutes();
     //lunes a domingos de 20:00 a 12:00, y de sábados y domingos de 11:00 a 15:00
-    if (hora >= 20 || hora == 0) {
+    if (hora >= 20 || (hora == 0 && minutos >= 0)) {
       this.fechahoy = true;
     }
 

@@ -54,8 +54,8 @@ h1{
     margin-bottom: 2%;
 }
 .imagenplato{
-    width: 70%;
-    height: 70%;
+    width: 500px;
+    height: 320px;
 }
 .card-text{
     color: orangered;
@@ -92,8 +92,12 @@ h1{
         margin: 1%;
         margin-top: 3%;
     }
+    .imagenplato{
+        width: 325px;
+        height: 200px;
+    }
 }
-@media screen and (min-width: 600px){
+@media screen and (min-width: 600px){ /* pantalla normal */
     .categoriesmobile{
         display:none;
     }

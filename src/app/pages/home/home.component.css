@@ -105,7 +105,8 @@ label{
     text-align: center;
 }
 .plate{
-    width: 100%;
+    width: 350px;
+    height: 220px;
 }
 /* FOOTER */
 .footer{
@@ -115,4 +116,10 @@ label{
     color: #888;
     text-align: center;
     margin-top: 2%;
+}
+@media screen and (max-width: 600px){
+    .plate{
+        width: 325px;
+        height: 200px;
+    }    
 }
