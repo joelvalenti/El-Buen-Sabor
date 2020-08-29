@@ -1,5 +1,6 @@
+import { EstadisticasComponent } from './components/administrador/estadisticas/estadisticas.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, Injectable } from '@angular/core';
+import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -62,10 +63,6 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
 
-import { PdfMakeWrapper } from 'pdfmake-wrapper';
-import pdfFonts from "pdfmake/build/vfs_fonts";
-PdfMakeWrapper.setFonts(pdfFonts);
-
 @NgModule({
   entryComponents: [],
   declarations: [
@@ -78,7 +75,7 @@ PdfMakeWrapper.setFonts(pdfFonts);
     FilterBuscarRecetaPipe,
     FilterBuscarLocalidadPipe,
     UsuarioComponent,
-	IndexAdminComponent,
+	  IndexAdminComponent,
     ModalUsuarioComponent,
     CategoriaComponent,
     ModalCategoriaComponent,
@@ -110,7 +107,7 @@ PdfMakeWrapper.setFonts(pdfFonts);
     DeliveryComponent,
     HomeComponent,
     PaginaPerfilComponent,
-    ModalDomUsuarioComponent
+    ModalDomUsuarioComponent,
   ],
   imports: [
     BrowserModule,
