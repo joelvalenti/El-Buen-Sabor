@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, Injectable } from '@angular/core';
+import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -48,6 +48,7 @@ import { PaginaPerfilComponent } from './pages/pagina-perfil/pagina-perfil.compo
 import { ModalDomUsuarioComponent } from './components/modal-domicilio/modal-dom-usuario/modal-dom-usuario.component';
 import { ModalDetalleComponent } from './components/modal-detalle/modal-detalle.component';
 import { UsuarioComponent } from './components/administrador/usuario/usuario.component';
+import { FacturapdfComponent } from './components/facturapdf/facturapdf.component';
 
 // Pipes
 import { FilterBuscarRecetaPipe } from './pipes/filter-buscar-receta.pipe';
@@ -62,10 +63,6 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
 
-import { PdfMakeWrapper } from 'pdfmake-wrapper';
-import pdfFonts from "pdfmake/build/vfs_fonts";
-PdfMakeWrapper.setFonts(pdfFonts);
-
 @NgModule({
   entryComponents: [],
   declarations: [
@@ -78,7 +75,7 @@ PdfMakeWrapper.setFonts(pdfFonts);
     FilterBuscarRecetaPipe,
     FilterBuscarLocalidadPipe,
     UsuarioComponent,
-	IndexAdminComponent,
+	  IndexAdminComponent,
     ModalUsuarioComponent,
     CategoriaComponent,
     ModalCategoriaComponent,
@@ -110,7 +107,8 @@ PdfMakeWrapper.setFonts(pdfFonts);
     DeliveryComponent,
     HomeComponent,
     PaginaPerfilComponent,
-    ModalDomUsuarioComponent
+    ModalDomUsuarioComponent,
+    FacturapdfComponent
   ],
   imports: [
     BrowserModule,
