@@ -13,7 +13,6 @@ export class ComandaComponent implements OnInit {
   @Input() tipoPago;
   @Input() total;
   productos = [];
-  tiempoRestante = 0;
   cantidad = [];
   idDetalle = 0;
 
@@ -24,34 +23,13 @@ export class ComandaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.delivery) {
-      this.cargarTabla(false);
-    } else {
-      this.cargarTabla(true);
-      this.disminuirTiempo();
-    }
+    this.cargarTabla();
   }
 
-  calcularTiempoRestante(tiempo: number): void {
-    if (this.tiempoRestante < tiempo) {
-      this.tiempoRestante = tiempo;
-    }
-  }
-  disminuirTiempo(): void {
-    const interval = setInterval(() => {
-      this.tiempoRestante -= 1;
-      this.pedidoService.updateTiempoRestante(this.comanda.id, this.tiempoRestante).subscribe();
-      if (this.tiempoRestante === 0) {
-        this.pedidoService.updateEstado(1, this.comanda).subscribe();
-        this.pedidoService.updateTiempoRestante(this.comanda.id, 0).subscribe();
-        this.cancelarInterval(interval);
-      }
-    }, 60000);
-  }
   cancelarInterval(interval: any): void {
     clearInterval(interval);
   }
-  cargarTabla(tiempo: boolean): void {
+  cargarTabla(): void {
     this.detalleService
       .buscarPorPedido(this.comanda.id)
       .subscribe((detalles) => {
@@ -63,9 +41,6 @@ export class ComandaComponent implements OnInit {
                 if (plato.nombre !== 'Plato Vacio') {
                   this.productos.push(plato);
                   this.cantidad.push(detalleData.cantidad);
-                  if (tiempo) {
-                    this.calcularTiempoRestante(this.comanda.tiempoPreparacion);
-                  }
                 }
               });
           });
@@ -74,5 +49,8 @@ export class ComandaComponent implements OnInit {
   }
   pedidoEntregado(): void {
     this.pedidoService.updateEstado(6, this.comanda).subscribe();
+  }
+  terminarPedido(): void {
+    this.pedidoService.updateEstado(1, this.comanda).subscribe();
   }
 }
