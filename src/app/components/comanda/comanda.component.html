@@ -38,7 +38,7 @@
     </div>
   </ng-container>
   <ng-template #elseTemplate>
-    <div class="card-body">
+    <div class="card-body" *ngIf="productos.length > 0">
       <h3 class="card-title">Pedido {{ comanda.id }}</h3>
       <table class="table">
         <thead class="thead-dark">

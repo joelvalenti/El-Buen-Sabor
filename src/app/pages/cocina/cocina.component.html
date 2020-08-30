@@ -8,7 +8,8 @@
                     <h2>Cargando Pedidos</h2>
                 </div>
                 <div class="row" *ngIf="!spinner">
-                    <app-comanda *ngFor="let comanda of comandas" [comanda]="comanda" [delivery]="false"></app-comanda>
+                    <app-comanda *ngFor="let comanda of comandas" [comanda]="comanda" [delivery]="false"
+                        (eliminarComanda)="eliminarComanda($event)"></app-comanda>
                 </div>
             </div>
         </mat-tab>
@@ -29,7 +30,7 @@
                     <table class="table">
                         <thead class="thead-dark">
                             <tr>
-                                <th scope="col">Nro. Pedido</th>
+                                <th scope="col">Nro. Plato</th>
                                 <th scope="col">Nombre Plato</th>
                                 <th scope="col">Accion</th>
                             </tr>
