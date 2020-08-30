@@ -22,7 +22,6 @@ import Swal from 'sweetalert2';
 })
 
 export class CarritoComponent implements OnInit {
-
   public detalles: Detalle[] = [];
   public domicilios: Domicilio[];
   public cocineros;
@@ -265,7 +264,7 @@ export class CarritoComponent implements OnInit {
     var tiempoSinCocineros = 0;
     if (this.detallesEnPreparacion !== undefined) {
       this.detallesEnPreparacion = this.detallesEnPreparacion.concat(this.detalles);
-    }else{
+    } else {
       this.detallesEnPreparacion = this.detalles;
     }
     for (let index = 0; index < this.detallesEnPreparacion.length; index++) {
@@ -329,14 +328,14 @@ export class CarritoComponent implements OnInit {
   sweetAlertEnviado() {
     if (this.flagRadioDireccion === true) {
       Swal.fire(
-        'Su pedido fue enviado!',
-        "De acuerdo al tiempo de espera, en " + this.tiempoPedido + " minutos llegará a su domicilio. <br/> Recuerde que puede consultar su factura y el estado de su pedido en 'Mi Perfil'.",
+        'Su pedido fue enviado! Ya posee su factura en su mail!',
+        "De acuerdo al tiempo de espera, en " + this.tiempoPedido + " minutos llegará a su domicilio. <br/> Recuerde que tambien puede consultar su factura y el estado de su pedido en 'Mi Perfil'.",
         'success'
       )
     } else {
       Swal.fire(
-        'Su pedido fue enviado!',
-        "De acuerdo al tiempo de espera, en " + this.tiempoPedido + " minutos estará listo para retirar. <br/> Recuerde que puede consultar su factura y el estado de su pedido en 'Mi Perfil'.",
+        'Su pedido fue enviado! Ya posee su factura en su mail!',
+        "De acuerdo al tiempo de espera, en " + this.tiempoPedido + " minutos estará listo para retirar. <br/> Recuerde que tambien puede consultar su factura y el estado de su pedido en 'Mi Perfil'.",
         'success'
       )
     }
@@ -349,5 +348,4 @@ export class CarritoComponent implements OnInit {
       this.router.navigate(['/cajero']);
     }
   }
-  
 }

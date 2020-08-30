@@ -1,23 +1,33 @@
+<ngx-spinner></ngx-spinner>
+<div class="row" style="margin: 1%">
+    <button type="button" class="btn btn-warning btn-block" (click)="downloadFactura()"><b>Descargar factura como
+            PDF</b></button>
+</div>
 <div id="fact" class="letra">
-    <div *ngIf="cargarFactura === true" class="col-sm-6" style="margin: 1%;">
-        <h2>Factura Nro: {{facturaObtenida.id}}</h2>
-        <h2>Tipo de Factura: {{facturaObtenida.tipoFactura}}</h2>
-    </div>
-        <div class="row" style="margin: 1%;">
-            <div class="col-sm-12">
-                <h2>Datos de la Empresa</h2>
-            </div>
-            <div class="col-sm-6">
-                <h3><b>Nombre: </b>{{empresa.nombre}}</h3>
-                <h3><b>Email: </b>{{empresa.email}}</h3>
-                <h3><b>Teléfono: </b>{{empresa.telefono}}</h3>
-            </div>
-            <div class="col-sm-6">
-                <h3><b>Sociedad: </b>{{empresa.sociedad}}</h3>
-                <h3><b>CUIT: </b>{{empresa.cuit}}</h3>
-                <h3><b>Número Fiscal: </b>{{empresa.numeroFiscal}}</h3>
-            </div>
+
+    <div *ngIf="cargarFactura === true" class="row" style="margin: 1%;">
+        <div class="col-sm-6">
+            <h2>Factura Nro: {{facturaObtenida.id}}</h2>
+            <h2>Tipo de Factura: {{facturaObtenida.tipoFactura}}</h2>
+            <h2>Fecha de emisión: {{facturaObtenida.fecha}}</h2>
         </div>
+    </div>
+
+    <div class="row" style="margin: 1%;">
+        <div class="col-sm-12">
+            <h2>Datos de la Empresa</h2>
+        </div>
+        <div class="col-sm-6">
+            <h3><b>Nombre: </b>{{empresa.nombre}}</h3>
+            <h3><b>Email: </b>{{empresa.email}}</h3>
+            <h3><b>Teléfono: </b>{{empresa.telefono}}</h3>
+        </div>
+        <div class="col-sm-6">
+            <h3><b>Sociedad: </b>{{empresa.sociedad}}</h3>
+            <h3><b>CUIT: </b>{{empresa.cuit}}</h3>
+            <h3><b>Número Fiscal: </b>{{empresa.numeroFiscal}}</h3>
+        </div>
+    </div>
 
     <div class="row" style="margin: 1%;">
         <div class="col-sm-12">
@@ -34,26 +44,43 @@
         </div>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th hidden scope="col">#</th>
-                    <th scope="col">Cantidad</th>
-                    <th scope="col">Descripcion</th>
-                    <th scope="col">Precio Unitario</th>
-                    <th scope="col">Precio Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of detalles">
-                    <th scope="row" hidden>{{item.id}}</th>
-                    <td>{{item.cantidad}}</td>
-                    <td>{{item.plato.nombre}}</td>
-                    <td>$ {{item.plato.precioVenta}}</td>
-                    <td>$ {{item.cantidad * item.plato.precioVenta}}</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="row" style="margin: 2%;">
+        <h2>Detalles de su Pedido: </h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th hidden scope="col">#</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Descripcion</th>
+                        <th scope="col">Precio Unitario</th>
+                        <th scope="col">Precio Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of detalles">
+                        <th scope="row" hidden>{{item.id}}</th>
+                        <td>{{item.cantidad}}</td>
+                        <td>{{item.plato.nombre}}</td>
+                        <td>$ {{item.plato.precioVenta}}</td>
+                        <td>$ {{item.cantidad * item.plato.precioVenta}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+
+
+    <div class="row" style="margin: 1%;">
+        <div class="col-sm-6">
+            <h2>Tipo de Pago: {{facturaObtenida.tipoPago}}</h2>
+            <h2>Envio: {{envio}}</h2>
+        </div>
+        <div class="col-sm-6">
+            <h2>Total Neto: $ {{facturaObtenida.subtotal}}</h2>
+            <h2>Descuento: $ {{facturaObtenida.montoDescuento}}</h2>
+            <h2>Total Final: $ {{facturaObtenida.total}}</h2>
+        </div>
+    </div>
+
 </div>

@@ -201,7 +201,7 @@ export class PaginaPerfilComponent implements OnInit {
   }
 
   IdPedidoSeleccionado(id: number){
-    this.router.navigate(['factura/'+id]);
+    window.location.replace("http://localhost:4200/factura/"+id);
   }
 
   onChangeRol(event) {
