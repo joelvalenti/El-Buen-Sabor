@@ -1,19 +1,17 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { Plato } from '../models/Plato';
 
 @Pipe({
   name: 'filterBuscarReceta',
 })
 export class FilterBuscarRecetaPipe implements PipeTransform {
-  transform(value: any, args: string): any {
+  transform(value: Plato[], args: string): Plato[] {
     const result = [];
-    if (args.toString.length === 0) {
+    if (args.length === 0) {
       return value;
     }
     for (const iterator of value) {
-      if (
-        iterator.nombre.toLowerCase().indexOf(args.toString().toLowerCase()) >
-        -1
-      ) {
+      if (iterator.nombre.toLowerCase().indexOf(args.toLowerCase()) > -1) {
         result.push(iterator);
       }
     }

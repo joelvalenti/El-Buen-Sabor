@@ -3,11 +3,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ConfiguracionService {
-
-  constructor(protected http: HttpClient) { }
+  constructor(protected http: HttpClient) {}
 
   protected miUrl = 'http://localhost:9000/api/v1/configuracionEmpresa';
 
@@ -26,5 +25,4 @@ export class ConfiguracionService {
   put(id: number, entity: ConfiguracionEmpresa) {
     return this.http.put<ConfiguracionEmpresa>(this.miUrl + '/' + id, entity);
   }
-
 }

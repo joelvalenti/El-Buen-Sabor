@@ -1,10 +1,11 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { Pedido } from '../models/Pedido';
 
 @Pipe({
   name: 'filterBuscarLocalidad',
 })
 export class FilterBuscarLocalidadPipe implements PipeTransform {
-  transform(value: any, ...args: any[]): any {
+  transform(value: Pedido[], ...args: any[]): Pedido[] {
     let result = [];
     if (args.toString() === '') {
       result = value;

@@ -7,8 +7,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class InsumoCategoriaService extends BaseService<CategoriaInsumo>{
-
+export class InsumoCategoriaService extends BaseService<CategoriaInsumo> {
   protected miUrl = 'http://localhost:9000/api/v1/insumo/categoria/';
   protected miUrl2 = 'http://localhost:9000/api/v1/insumo/categoria/NoInsumo/';
 
@@ -19,5 +18,4 @@ export class InsumoCategoriaService extends BaseService<CategoriaInsumo>{
   buscarporCategoria(): Observable<CategoriaInsumo[]> {
     return this.http.get<CategoriaInsumo[]>(this.miUrl2);
   }
-
 }

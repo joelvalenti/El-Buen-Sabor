@@ -1,5 +1,5 @@
 export interface Estado {
-    id: number;
-    nombre: string;
-    eliminado: boolean;
+  id: number;
+  nombre: string;
+  eliminado: boolean;
 }

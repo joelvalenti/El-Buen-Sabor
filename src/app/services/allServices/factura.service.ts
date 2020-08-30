@@ -10,7 +10,6 @@ import { PlatosPopulares } from 'src/app/models/PlatosPopulares';
   providedIn: 'root',
 })
 export class FacturaService extends BaseService<Factura> {
-
   protected miUrl = 'http://localhost:9000/api/v1/factura/';
   protected miUrl2 = 'http://localhost:9000/api/v1/factura/platosPopulares/';
 
@@ -18,12 +17,20 @@ export class FacturaService extends BaseService<Factura> {
     super(http);
   }
 
-  platosPopulares(fechaDesde:String, fechaHasta:String): Observable<PlatosPopulares> {
-    return this.http.get<PlatosPopulares>(this.miUrl2 + fechaDesde + "/" + fechaHasta + "/");
+  platosPopulares(
+    fechaDesde: String,
+    fechaHasta: String
+  ): Observable<PlatosPopulares> {
+    return this.http.get<PlatosPopulares>(
+      this.miUrl2 + fechaDesde + '/' + fechaHasta + '/'
+    );
   }
-  recaudaciones(fechaDesde:String, fechaHasta:String): Observable<Recaudaciones> {
-    return this.http.get<Recaudaciones>(this.miUrl + 'recaudaciones/' + fechaDesde + "/" + fechaHasta + "/");
+  recaudaciones(
+    fechaDesde: String,
+    fechaHasta: String
+  ): Observable<Recaudaciones> {
+    return this.http.get<Recaudaciones>(
+      this.miUrl + 'recaudaciones/' + fechaDesde + '/' + fechaHasta + '/'
+    );
   }
-
-  
 }
