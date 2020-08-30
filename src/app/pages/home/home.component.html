@@ -1,36 +1,66 @@
 <div class="home">
-    <div class="titulo">
-       <h1 class="title"> EL BUEN SABOR </h1>
+    <div class="container">
+        <h1 style="color: white; font-family: Verdana; text-align: center;">EL BUEN SABOR</h1>
     </div>
-    <div class="row">
-        <p class="descripcion">
+    <div class="row" style="margin: 1%;">
+        <h3 style="color: white; font-family: Verdana;">
             Nos caracteriza la calidad, el buen sabor y la excelencia. Mirá nuestro menu, elegí desde
             la comodidad de tu casa, y en cuestion de un momento uno de nuestros delivery estará entregando
             el pedido en tu casa.
-        </p>
-        <p class="descripcion">
+        </h3>
+        <h3 style="color: white; font-family: Verdana;">
             Horarios de Atención: Lunes a Domingos 20:00 a 00:00. Sabados y Domingos 11:00 a 15:00
-        </p>
+        </h3>
     </div>
-    <div class="row">
+    <div class="container" style="text-align:center;">
         <ul class="steps">
-            <li><img class="imagenPaso" src="../../assets/imagenes/adress.png" alt="iconoDireccion"> Ingresá o Registrate con tus datos</li>
-            <li><img class="imagenPaso" src="../../assets/imagenes/burguer.png" alt="iconoComida"> Elegí tu comida</li>
-            <li><img class="imagenPaso" src="../../assets/imagenes/creditcard.png" alt="iconoPago"> Selecciona medio de pago y espera tu comida</li>
+            <li style="font-family: Verdana;"><img class="imagenPaso" src="../../assets/imagenes/adress.png"
+                    alt="iconoDireccion"> Ingresá o
+                Registrate con tus datos</li>
+            <li style="font-family: Verdana;"><img class="imagenPaso" src="../../assets/imagenes/burguer.png"
+                    alt="iconoComida"> Elegí tu comida</li>
+            <li style="font-family: Verdana;"><img class="imagenPaso" src="../../assets/imagenes/creditcard.png"
+                    alt="iconoPago"> Selecciona medio de
+                pago y espera tu comida</li>
         </ul>
-    </div>  
+    </div>
 </div>
-<div class="medium">
-    <div class="container">
-        <div class="row" id="rowtitle">
-            <h1 class="platos">ALGUNOS DE NUESTROS MEJORES PLATOS</h1>
+<div>
+    <div class="row">
+        <div class="col-sm-12">
+            <h1 style="text-align: center; font-family: Verdana; margin-top: 1%; text-align: center;"><b>Algunos de
+                    nuestros mejores platos</b></h1>
         </div>
-        <div class="row">
-            <div class="col-sm" *ngFor="let plato of platos">
-                <img src="{{plato.imagen}}" alt="plato" class="plate">
-                <h2>{{plato.nombre}}</h2>
-            </div>
+    </div>
+    <div class="row" style="text-align: center;">
+        <div class="col-sm-4" *ngFor="let plato of platos">
+            <a href="/catalogo"><img src="{{plato.imagen}}" alt="plato" class="plate"></a>
+            <h2>{{plato.nombre}}</h2>
         </div>
+    </div>
+</div>
+<div class="row" style="margin: 1%;">
+    <div class="col-sm-12">
+        <h2 style="text-align: center; margin-top: 1%;"><b>Imágenes de nuestro local</b></h2>
+        <h3 style="font-family: Verdana;">Somos una empresa mendocina que nació en Junio del 2020 y actualmente nos
+            encontramos
+            en crecimiento. Buscamos ofrecer la mejor calidad de la industria y aportar un nuevo
+            sabor a todos los mendocinos.
+        </h3>
+    </div>
+    <div class="col-sm-6" style="text-align: center;">
+        <img src="../../../assets/imagenes/restaurante.jpg" width="100%" />
+    </div>
+    <div class="col-sm-6" style="text-align: center;">
+        <img src="../../../assets/imagenes/restaurante2.jpg" width="100%" />
+    </div>
+    <div class="col-sm-12">
+        <h2 style="text-align: center; margin-top: 2%;"><b>Nuestra Ubicación</b></h2>
+    </div>
+    <div class="col-sm-12">
+        <iframe width="100%" height="350px"
+            src="https://www.google.com/maps/embed?pb=!1m23!1m12!1m3!1d1675.2177980277993!2d-68.83822011604411!3d-32.886649571576136!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m8!3e3!4m0!4m5!1s0x967e096e79a16c35%3A0x523ca1697836307d!2sCl%C3%ADnica%20Arizu%2C%20Av.%20San%20Mart%C3%ADn%201501%2C%20M5500%20EGF%2C%20Mendoza!3m2!1d-32.8863051!2d-68.8382731!5e0!3m2!1ses-419!2sar!4v1587378258014!5m2!1ses-419!2sar"></iframe>
+        <h3>Ubicación Av. Las Heras y Av. San Martin, Ciudad de Mendoza</h3>
     </div>
 </div>
 <div class="footer">

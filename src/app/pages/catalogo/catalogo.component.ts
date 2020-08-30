@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Categoria } from '../../models/Categoria';
 import { Plato } from '../../models/Plato';
 import { CategoriaService } from '../../services/allServices/categoria.service';

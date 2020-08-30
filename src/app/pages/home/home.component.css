@@ -1,4 +1,5 @@
 .home{
+    font-family: Verdana;
     background-color: orangered;
     padding: 2%;
     background-image: linear-gradient(rgba(0,0,0,0.705),rgba(0,0,0,0.705)), url('../burrito.png');
@@ -7,6 +8,7 @@
     background-attachment: fixed;
 }
 .title{
+    font-family: Verdana;
     word-spacing: 2px;
     text-align: center;
     letter-spacing: 1px;
@@ -15,6 +17,7 @@
     text-rendering: optimizeLegibility;
 }
 .descripcion{
+    font-family: Verdana;
     color: whitesmoke;
     text-rendering: optimizeLegibility;
     margin-left: 10%;
@@ -22,6 +25,7 @@
     width: 70%;
 }
 h1:after {
+    font-family: Verdana;
     text-align: center;
     display: block;
     height: 2px;
@@ -32,12 +36,15 @@ h1:after {
     margin-top: 30px;
 }
 h2{
+    font-family: Verdana;
     width: 90%;
 }
 .steps{
+    font-family: Verdana;
     list-style: none;
 }
 .steps li{
+    font-family: Verdana;
     display: inline-block;
     margin-left: 40px;
     font-family: 'Roboto', sans-serif;

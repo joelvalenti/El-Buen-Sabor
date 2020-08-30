@@ -42,6 +42,21 @@ export class HomeComponent implements OnInit {
     }, err =>{
       console.log('error');
     });
+    this.servicio.getOne(4).subscribe(res => {
+      this.platos.push(res);
+    }, err =>{
+      console.log('error');
+    });
+    this.servicio.getOne(5).subscribe(res => {
+      this.platos.push(res);
+    }, err =>{
+      console.log('error');
+    });
+    this.servicio.getOne(6).subscribe(res => {
+      this.platos.push(res);
+    }, err =>{
+      console.log('error');
+    });
   }
 
 }
