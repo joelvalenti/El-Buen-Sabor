@@ -1,4 +1,3 @@
-<ngx-spinner></ngx-spinner>
 <div class="row" style="margin: 1%">
     <button type="button" class="btn btn-warning btn-block" (click)="downloadFactura()"><b>Descargar factura como
             PDF</b></button>
@@ -62,11 +61,20 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of detalles">
-                        <th scope="row" hidden>{{item.id}}</th>
-                        <td>{{item.cantidad}}</td>
-                        <td>{{item.plato.nombre}}</td>
-                        <td>$ {{item.plato.precioVenta}}</td>
-                        <td>$ {{item.cantidad * item.plato.precioVenta}}</td>
+                        <ng-container *ngIf="item.plato !== null else bebida">
+                            <th scope="row" hidden>{{item.id}}</th>
+                            <td>{{item.cantidad}}</td>
+                            <td>{{item.plato.nombre}}</td>
+                            <td>$ {{item.plato.precioVenta}}</td>
+                            <td>$ {{item.cantidad * item.plato.precioVenta}}</td>
+                        </ng-container>
+                        <ng-template #bebida>
+                            <th scope="row" hidden>{{item.id}}</th>
+                            <td>{{item.cantidad}}</td>
+                            <td>{{item.insumo.nombre}}</td>
+                            <td>$ {{item.insumo.precioVenta}}</td>
+                            <td>$ {{item.cantidad * item.insumo.precioVenta}}</td>
+                        </ng-template>
                     </tr>
                 </tbody>
             </table>
