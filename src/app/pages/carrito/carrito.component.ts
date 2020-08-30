@@ -158,10 +158,17 @@ export class CarritoComponent implements OnInit {
   }
 
   getTotalNeto(): number {
+    console.log('Detalles: ',this.detalles);
     let totalNeto = 0;
+    var precioTotalXProducto = 0;
     for (let i = 0; i < this.detalles.length; i++) {
-      let precioTotalxProducto = this.detalles[i].plato.precioVenta * this.detalles[i].cantidad;
-      totalNeto += precioTotalxProducto;
+      if(this.detalles[i].plato == null){
+        precioTotalXProducto = this.detalles[i].insumo.precioVenta * this.detalles[i].cantidad;
+        totalNeto += precioTotalXProducto;
+      }else{
+        precioTotalXProducto = this.detalles[i].plato.precioVenta * this.detalles[i].cantidad;
+        totalNeto += precioTotalXProducto;
+      }
     }
     return totalNeto;
   }
@@ -268,8 +275,10 @@ export class CarritoComponent implements OnInit {
       this.detallesEnPreparacion = this.detalles;
     }
     for (let index = 0; index < this.detallesEnPreparacion.length; index++) {
-      let cantidad = this.detallesEnPreparacion[index].cantidad;
-      tiempoSinCocineros += this.detallesEnPreparacion[index].plato.tiempoPreparacion * cantidad;
+      if(this.detallesEnPreparacion[index].plato !== null){
+        let cantidad = this.detallesEnPreparacion[index].cantidad;
+        tiempoSinCocineros += this.detallesEnPreparacion[index].plato.tiempoPreparacion * cantidad;
+      }
     }
     if (this.cocineros.length > 0) {
       this.tiempoPedido = tiempoSinCocineros / this.cocineros.length;

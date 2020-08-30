@@ -61,14 +61,10 @@ export class FacturapdfComponent implements OnInit {
   constructor(private usuarioService: UsuarioService, private rolesService: RolesService,
     private datePipe: DatePipe, private pedidoService: PedidoService, private detalleService: DetalleService,
     private facturaService: FacturaService, private actRouter: ActivatedRoute,
-    private empresaService: ConfiguracionService, private spinner: NgxSpinnerService) {
+    private empresaService: ConfiguracionService) {
   }
 
   ngOnInit() {
-    this.spinner.show();
-    setTimeout(() => {
-      this.spinner.hide();
-    }, 1200);
     this.getEmpresa();
     this.actRouter.params.subscribe(data => {
       this.pedidoId = data['id'];
