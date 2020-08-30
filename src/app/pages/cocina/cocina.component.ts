@@ -52,7 +52,7 @@ export class CocinaComponent implements OnInit {
   public ver(): void {
     if (this.usuario === null) {
       setTimeout(() => this.r(), 500);
-    } else if (this.usuario.rol.toLocaleLowerCase() !== 'cocinero') {
+    } else if (this.usuario.rol.toLocaleLowerCase() !== 'cocinero' && this.usuario.rol.toLocaleLowerCase() !== 'administrador') {
       setTimeout(() => this.r(), 500);
     } else {
       setInterval(() => {
