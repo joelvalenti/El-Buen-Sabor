@@ -29,16 +29,27 @@ export class PedidoService extends BaseService<Pedido> {
     return this.http.get<any[]>(this.miUrl + 'getPedidos');
   }
 
-  getPedidoEstado(id: number, id2: number): Observable<any[]>{
-    return this.http.get<any[]>(this.miUrl2+id+'/'+id2);
+  getPedidoEstado(id: number, id2: number): Observable<any[]> {
+    return this.http.get<any[]>(this.miUrl2 + id + '/' + id2);
   }
 
-  getAllPedidosXId(id:number): Observable<any[]>{
-    return this.http.get<any[]>(this.miUrl3+id);
+  getAllPedidosXId(id: number): Observable<any[]> {
+    return this.http.get<any[]>(this.miUrl3 + id);
   }
 
-  getPedidosPorUsuario(id:number,fechaDesde:String, fechaHasta:String): Observable<Pedido[]>{
-    return this.http.get<Pedido[]>(this.miUrl+ '/getPedidosPorUsuario/' + id + '/' + fechaDesde + '/' + fechaHasta);
+  getPedidosPorUsuario(
+    id: number,
+    fechaDesde: String,
+    fechaHasta: String
+  ): Observable<Pedido[]> {
+    return this.http.get<Pedido[]>(
+      this.miUrl +
+        '/getPedidosPorUsuario/' +
+        id +
+        '/' +
+        fechaDesde +
+        '/' +
+        fechaHasta
+    );
   }
-
 }

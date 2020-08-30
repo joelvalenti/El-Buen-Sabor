@@ -7,42 +7,39 @@ import { Usuario } from 'src/app/models/Usuario';
 @Component({
   selector: 'app-index',
   templateUrl: './index.component.html',
-  styleUrls: ['./index.component.css']
+  styleUrls: ['./index.component.css'],
 })
 export class IndexAdminComponent implements OnInit {
-
-  constructor(private rolesService: RolesService,
-    private usuarioService: UsuarioService, private router: Router) { }
+  constructor(
+    private rolesService: RolesService,
+    private usuarioService: UsuarioService,
+    private router: Router
+  ) {}
 
   public usuario: Usuario;
 
   ngOnInit(): void {
     this.isAuth();
     setTimeout(() => this.ver(), 500);
-
   }
 
-  isAuth() {
-    this.usuarioService.isAuth().subscribe(res => {
-      const email = res.email;
-      this.rolesService.getEmail(email).subscribe(res => {
-        this.usuario = res;
-      })
+  isAuth(): void {
+    this.usuarioService.isAuth().subscribe((resA) => {
+      const email = resA.email;
+      this.rolesService.getEmail(email).subscribe((resR) => {
+        this.usuario = resR;
+      });
     });
   }
-  
-  public ver() {
-    if (this.usuario == null) {
+
+  public ver(): void {
+    if (this.usuario === null) {
       setTimeout(() => this.r(), 500);
-    } else {
-      if (this.usuario.rol != 'administrador') {
-        setTimeout(() => this.r(), 500);
-      }
+    } else if (this.usuario.rol.toLocaleLowerCase() !== 'administrador') {
+      setTimeout(() => this.r(), 500);
     }
   }
-  public r() {
+  public r(): void {
     this.router.navigate(['']);
-    console.log("Se envio");
   }
-
 }

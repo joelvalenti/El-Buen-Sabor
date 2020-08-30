@@ -2,6 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DetalleService } from '../../services/allServices/detalle.service';
 import { PlatoService } from '../../services/allServices/plato.service';
 import { PedidoService } from '../../services/allServices/pedido.service';
+import { Plato } from 'src/app/models/Plato';
+import { Detalle } from 'src/app/models/Detalle';
 
 @Component({
   selector: 'app-comanda',
@@ -13,8 +15,9 @@ export class ComandaComponent implements OnInit {
   @Input() tipoPago;
   @Input() total;
   @Output() eliminarComanda = new EventEmitter();
-  productos = [];
-  cantidad = [];
+  @Output() pedidoEntregado = new EventEmitter();
+  productos: Plato[] = [];
+  cantidad: number[] = [];
   idDetalle = 0;
 
   constructor(
@@ -48,14 +51,26 @@ export class ComandaComponent implements OnInit {
         });
       });
   }
-  pedidoEntregado(): void {
-    this.pedidoService.updateEstado(6, this.comanda).subscribe();
+  pedidoEntregar(id: number): void {
+    this.pedidoService.updateEstado(6, this.comanda).subscribe(() => {
+      this.onPedidoEntregado(id);
+    });
   }
-  terminarPedido(): void {
-    this.pedidoService.updateEstado(1, this.comanda).subscribe();
-    this.onEliminarComanda(this.comanda.id);
+  terminarPedido(id: number): void {
+    this.pedidoService.updateEstado(1, this.comanda).subscribe(() => {
+      this.detalleService.getOne(id).subscribe((detalle) => {
+        this.detalleService
+          .subirPlato(detalle.plato.id, detalle)
+          .subscribe(() => {
+            this.onEliminarComanda(id);
+          });
+      });
+    });
   }
 
+  onPedidoEntregado(id: number): void {
+    this.pedidoEntregado.emit(id);
+  }
   onEliminarComanda(id: number): void {
     this.eliminarComanda.emit(id);
   }

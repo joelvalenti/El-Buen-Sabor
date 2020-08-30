@@ -3,11 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export abstract class BaseService <E> {
-
-  constructor(protected http: HttpClient) { }
+export abstract class BaseService<E> {
+  constructor(protected http: HttpClient) {}
 
   protected miUrl: string;
 

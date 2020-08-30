@@ -6,6 +6,11 @@ import { PlatoService } from '../../services/allServices/plato.service';
 import { Plato } from '../../models/Plato';
 import { Pedido } from '../../models/Pedido';
 import { Detalle } from '../../models/Detalle';
+import { DetallePlato } from '../../models/DetallePlato';
+import { Usuario } from 'src/app/models/Usuario';
+import { RolesService } from 'src/app/services/allServices/roles.service';
+import { Router } from '@angular/router';
+import { UsuarioService } from 'src/app/services/allServices/usuario.service';
 
 @Component({
   selector: 'app-cocina',
@@ -16,25 +21,51 @@ export class CocinaComponent implements OnInit {
   recetas: Plato[] = [];
   filterB = '';
   modalNombre = '';
-  modalDetalle = [];
+  modalDetalle: DetallePlato[] = [];
   spinner = true;
   detalles: Detalle[] = [];
   platos: Plato[] = [];
 
+  public usuario: Usuario;
+
   constructor(
     private pedidoService: PedidoService,
-    private detalleService: DetalleService,
-    private insumoService: InsumoService,
-    private platoService: PlatoService
+    private platoService: PlatoService,
+    private rolesService: RolesService,
+    private usuarioService: UsuarioService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    setInterval(() => {
-      this.cargarComandas();
-    }, 5000);
+    this.isAuth();
+    setTimeout(() => this.ver(), 500);
   }
 
-  modalDatos(nombre: string, detalle: any): void {
+  isAuth(): void {
+    this.usuarioService.isAuth().subscribe((resA) => {
+      const email = resA.email;
+      this.rolesService.getEmail(email).subscribe((resR) => {
+        this.usuario = resR;
+      });
+    });
+  }
+  public ver(): void {
+    if (this.usuario === null) {
+      setTimeout(() => this.r(), 500);
+    } else if (this.usuario.rol.toLocaleLowerCase() !== 'cocinero') {
+      setTimeout(() => this.r(), 500);
+    } else {
+      setInterval(() => {
+        this.cargarComandas();
+      }, 5000);
+      this.cargarRecetas();
+    }
+  }
+  public r(): void {
+    this.router.navigate(['']);
+  }
+
+  modalDatos(nombre: string, detalle: DetallePlato[]): void {
     this.modalNombre = nombre;
     this.modalDetalle = detalle;
   }
@@ -57,62 +88,18 @@ export class CocinaComponent implements OnInit {
         }
       });
     });
-    this.cargarRecetas();
     this.comandas.length > 0 ? (this.spinner = false) : (this.spinner = true);
   }
   cargarRecetas(): void {
-    this.comandas.forEach((com) => {
-      this.detalleService
-        .buscarPorPedido(com.id)
-        .subscribe((cop: Detalle[]) => {
-          cop.forEach((algo: Detalle) => {
-            if (this.detalles.length === 0) {
-              this.detalles.push(algo);
-            } else {
-              this.detalles.forEach((datalle) => {
-                if (algo.id !== datalle.id) {
-                  this.detalles.push(algo);
-                }
-              });
-            }
-          });
-        });
-    });
-    this.detalles.forEach((deta1) => {
-      if (this.platos.length === 0) {
-        this.platos.push(deta1.plato);
-      } else {
-        this.platos.forEach((plato1) => {
-          if (deta1.plato.nombre !== plato1.nombre) {
-            this.platos.push(deta1.plato);
-          }
-        });
-      }
-    });
-    this.platos.forEach((platoU) => {
-      this.platoService.getOne(platoU.id).subscribe((plat: Plato) => {
-        this.recetas.push(plat);
+    this.platoService.getAll().subscribe((platos) => {
+      platos.forEach((platoU) => {
+        this.recetas.push(platoU);
       });
     });
   }
   eliminarComanda(id: number): void {
     for (let indxCom = 0; indxCom < this.comandas.length; indxCom++) {
       if (this.comandas[indxCom].id === id) {
-        this.detalleService
-          .buscarPorPedido(this.comandas[indxCom].id)
-          .subscribe((detalles) => {
-            detalles.forEach((detalle) => {
-              this.platoService.getOne(detalle.plato.id).subscribe((plato) => {
-                if (plato.nombre !== 'Plato Vacio') {
-                  this.recetas.forEach((rec, ind) => {
-                    if (plato.nombre === rec.nombre) {
-                      this.recetas.splice(ind, 1);
-                    }
-                  });
-                }
-              });
-            });
-          });
         this.comandas.splice(indxCom, 1);
         break;
       }
