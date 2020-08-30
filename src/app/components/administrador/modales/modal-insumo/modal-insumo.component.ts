@@ -2,11 +2,15 @@ import { UnidadMedidaService } from './../../../../services/allServices/unidadMe
 import { CategoriaInsumoService } from 'src/app/services/allServices/categoriaInsumo.service';
 import { CategoriaInsumo } from './../../../../models/CategoriaInsumo';
 import { UnidadMedida } from './../../../../models/UnidadMedida';
-import { Component, OnInit, Inject, Optional, Input } from '@angular/core';
+import { Component, OnInit, Inject, Optional, Input, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, FormControl, NgControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
 import { Insumo } from 'src/app/models/Insumo';
+//imagenes
+import { AngularFireStorage } from '@angular/fire/storage';
+import {finalize} from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-modal-insumo',
@@ -15,7 +19,12 @@ import { Insumo } from 'src/app/models/Insumo';
 })
 export class ModalInsumoComponent implements OnInit {
 
- 
+  //variables para subida de imagenes
+  uploadPercent : Observable<number>;
+  urlImage : Observable<string>;
+  urlString : string;
+  bandera : boolean = false;
+  @ViewChild('imagenInsumo')  imagenInsumo : ElementRef;
   
   public localData: any;
   public action: string;
@@ -31,7 +40,7 @@ export class ModalInsumoComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<ModalInsumoComponent>,
     public formBuilder: FormBuilder,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: Insumo, private datePipe: DatePipe, private service:CategoriaInsumoService, private service2:UnidadMedidaService) {
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: Insumo, private datePipe: DatePipe, private service:CategoriaInsumoService,private storage : AngularFireStorage, private service2:UnidadMedidaService) {
     this.localData = { ...data };
     console.log("data.categoria.id "+ data.categoria)
     if(data.categoria === undefined ){
@@ -50,6 +59,25 @@ export class ModalInsumoComponent implements OnInit {
       this.form.controls['esInsumoOpciones'].setValue(this.localData.esInsumo.toString());
     }
     
+  }
+
+
+    onUpload(e){
+    const id = Math.random().toString(36).substring(2);
+    const file = e.target.files[0];
+    const filePath = `upload/foto_${id}`;
+    const ref = this.storage.ref(filePath);
+    const task = this.storage.upload(filePath, file);
+    //Imagen subida, ahora recuperamos la imagen
+    this.uploadPercent = task.percentageChanges();
+    task.snapshotChanges().pipe(
+      finalize( ()=>{
+        this.urlImage = ref.getDownloadURL();
+        this.bandera = true;
+        console.log('Bandera cambiada', this.bandera);
+      }  )
+    ).subscribe( 
+    );
   }
 
   getAllCategoria():void{
@@ -92,7 +120,10 @@ export class ModalInsumoComponent implements OnInit {
   }
 
   onAction() {
-    this.dialogRef.close({ event: this.action, data: {object:this.form.value} });
+    if(this.bandera){
+      this.form.controls['imagen'].setValue(this.imagenInsumo.nativeElement.value);
+      this.dialogRef.close({ event: this.action, data: {object:this.form.value} });
+    }
   }
 
   onCancel() {
