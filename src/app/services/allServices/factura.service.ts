@@ -24,4 +24,6 @@ export class FacturaService extends BaseService<Factura> {
   recaudaciones(fechaDesde:String, fechaHasta:String): Observable<Recaudaciones> {
     return this.http.get<Recaudaciones>(this.miUrl + 'recaudaciones/' + fechaDesde + "/" + fechaHasta + "/");
   }
+
+  
 }
