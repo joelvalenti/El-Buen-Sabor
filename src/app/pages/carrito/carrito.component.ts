@@ -313,7 +313,7 @@ export class CarritoComponent implements OnInit {
       subtotal: this.getTotalNeto(),
       fecha: this.pedidos[0].fecha,
       tipoPago: tipoDePago,
-      montoDescuento: this.getTotalFinal() - this.getTotalNeto(),
+      montoDescuento: (this.getTotalFinal() - this.getTotalNeto()) * -1,
       total: this.getTotalFinal(),
       nroTarjeta: this.numeroTarjeta,
       dniTitular: this.dniTitularTarjeta,

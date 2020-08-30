@@ -100,13 +100,13 @@ export class FacturapdfComponent implements OnInit {
   getAllFacturas() {
     this.facturaService.getAll().subscribe(res => {
       this.facturas = res;
-      this.obtenerFacturaDePedido();
     })
   }
 
   getPedido() {
     this.pedidoService.getOne(this.pedidoId).subscribe(res => {
       this.pedidoObtenido = res;
+      this.obtenerFacturaDePedido();
       this.pedidoObtenido.envioDelivery === true ? this.envio = 'Delivery' : this.envio = 'Retiro en Local';
       this.getDetallesXPedido();
     })

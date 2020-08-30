@@ -4,6 +4,9 @@
             PDF</b></button>
 </div>
 <div id="fact" class="letra">
+    <br><br>
+    <h1 style="margin-left: 2%;"><b>Factura Generada por El Buen Sabor</b></h1>
+    <img src="../../../favicon.ico" style="float: right; margin-right: 5%;">
 
     <div *ngIf="cargarFactura === true" class="row" style="margin: 1%;">
         <div class="col-sm-6">
@@ -70,17 +73,19 @@
         </div>
     </div>
 
-
-    <div class="row" style="margin: 1%;">
-        <div class="col-sm-6">
-            <h2>Tipo de Pago: {{facturaObtenida.tipoPago}}</h2>
-            <h2>Envio: {{envio}}</h2>
-        </div>
-        <div class="col-sm-6">
-            <h2>Total Neto: $ {{facturaObtenida.subtotal}}</h2>
-            <h2>Descuento: $ {{facturaObtenida.montoDescuento}}</h2>
-            <h2>Total Final: $ {{facturaObtenida.total}}</h2>
+    <div *ngIf="cargarFactura === true">
+        <div class="row" style="margin: 1%;">
+            <div class="col-sm-6">
+                <h2>Tipo de Pago: {{facturaObtenida.tipoPago}}</h2>
+                <h2>Envio: {{envio}}</h2>
+            </div>
+            <div class="col-sm-6">
+                <h2>Total Neto: $ {{facturaObtenida.subtotal}}</h2>
+                <h2>Descuento: $ {{facturaObtenida.montoDescuento}}</h2>
+                <h2>Total Final: $ {{facturaObtenida.total}}</h2>
+            </div>
         </div>
     </div>
+
 
 </div>
