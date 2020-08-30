@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Pedido } from './../../models/Pedido';
 import { PedidoService } from 'src/app/services/allServices/pedido.service';
 import { SweetAlertsService } from './../../services/allServices/sweet-alerts.service';
@@ -29,8 +30,9 @@ export class PaginaPerfilComponent implements OnInit {
   public esAdministrador;
   public esAdministradorActualmente;
   pageActual: number = 1;
-  public pedidosXId: Pedido[] = [];
+  public pedidosFacturados: Pedido[] = [];
   public pedidosXIdAux;
+  public pedidosActuales;
 
   usuario: Usuario = {
     id: 0,
@@ -46,6 +48,7 @@ export class PaginaPerfilComponent implements OnInit {
     esCliente: true,
     telefono: 0
   }
+
   public domicilioSeleccionado: Domicilio = {
     id: 0,
     calle: '',
@@ -71,7 +74,7 @@ export class PaginaPerfilComponent implements OnInit {
   constructor(private usuarioService: UsuarioService, private rolesService: RolesService,
     private domicilioService: DomicilioService, private localidadService: LocalidadService,
     private alertsService: SweetAlertsService, private datePipe: DatePipe,
-    private pedidoService: PedidoService) { }
+    private pedidoService: PedidoService, private router: Router) {}
 
   ngOnInit() {
     this.isAuth();
@@ -89,7 +92,8 @@ export class PaginaPerfilComponent implements OnInit {
         }
         this.reformatDate = this.datePipe.transform(this.usuario.fechaNacimiento, "yyyy-MM-dd");
         this.getAllDomiciliosXUsuario();
-        this.getPedidosXId();
+        this.getPedidosFacturados();
+        this.getPedidosActuales();
       })
     });
   }
@@ -106,10 +110,20 @@ export class PaginaPerfilComponent implements OnInit {
     })
   }
 
-  getPedidosXId() {
+  getPedidosFacturados() {
     this.pedidoService.getPedidoEstado(this.usuario.id, 6).subscribe(res => {
-      this.pedidosXId = res;
+      this.pedidosFacturados = res;
       this.pedidosXIdAux = res;
+    },
+      () => {
+        this.alertsService.errorAlert('Opss..', 'No se pudo recolectar la información del carrito');
+      });
+  }
+
+  getPedidosActuales() {
+    this.pedidoService.getPedidoEstado(this.usuario.id, 2).subscribe(res => {
+      this.pedidosActuales = res;
+      console.log('pedidos actuales: ',this.pedidosActuales);
     },
       () => {
         this.alertsService.errorAlert('Opss..', 'No se pudo recolectar la información del carrito');
@@ -122,11 +136,11 @@ export class PaginaPerfilComponent implements OnInit {
     for (let i = 0; i < this.pedidosXIdAux.length; i++) {
       if (this.pedidosXIdAux[i].fecha.toLowerCase().includes(filter)) {
         platosFiltrados.push(this.pedidosXIdAux[i]);
-        this.pedidosXId = platosFiltrados;
+        this.pedidosFacturados = platosFiltrados;
       }
     }
     if(filter == ''){
-      this.pedidosXId = this.pedidosXIdAux;
+      this.pedidosFacturados = this.pedidosXIdAux;
     }
   }
 
@@ -184,6 +198,10 @@ export class PaginaPerfilComponent implements OnInit {
 
   onPreUpdate(domicilio: Domicilio) {
     this.domicilioSeleccionado = domicilio;
+  }
+
+  IdPedidoSeleccionado(id: number){
+    this.router.navigate(['factura/'+id]);
   }
 
   onChangeRol(event) {

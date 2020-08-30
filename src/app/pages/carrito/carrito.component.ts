@@ -295,6 +295,7 @@ export class CarritoComponent implements OnInit {
     } else {
       this.pedidos[0].domicilio = this.direccionElegida[0];
     }
+    this.pedidos[0].monto = this.getTotalFinal();
     console.log('Pedido enviado a Cajero: ', this.pedidos[0]);
     this.generarFactura();
     this.pedidoService.put(this.pedidos[0].id, this.pedidos[0]).subscribe(() => {

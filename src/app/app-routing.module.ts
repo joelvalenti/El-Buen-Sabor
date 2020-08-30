@@ -23,9 +23,7 @@ const routes: Routes = [
   { path: 'cocina', component: CocinaComponent, canActivate:[AuthGuard] },
   { path: 'administrador', component: IndexAdminComponent, canActivate:[AuthGuard]},
   { path: 'cajero', component: IndexCajeroComponent, canActivate:[AuthGuard]},
-  { path: 'factura', component: FacturapdfComponent, canActivate:[AuthGuard]}
-
-
+  { path: 'factura/:id', component: FacturapdfComponent, canActivate:[AuthGuard]}
 ];
 
 @NgModule({
