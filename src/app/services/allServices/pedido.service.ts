@@ -37,4 +37,8 @@ export class PedidoService extends BaseService<Pedido> {
     return this.http.get<any[]>(this.miUrl3+id);
   }
 
+  getPedidosPorUsuario(id:number,fechaDesde:String, fechaHasta:String): Observable<Pedido[]>{
+    return this.http.get<Pedido[]>(this.miUrl+ '/getPedidosPorUsuario/' + id + '/' + fechaDesde + '/' + fechaHasta);
+  }
+
 }

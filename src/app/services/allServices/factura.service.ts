@@ -1,3 +1,4 @@
+import { Recaudaciones } from './../../models/Recaudaciones';
 import { Factura } from './../../models/Factura';
 import { Injectable } from '@angular/core';
 import { BaseService } from '../base.service';
@@ -19,5 +20,8 @@ export class FacturaService extends BaseService<Factura> {
 
   platosPopulares(fechaDesde:String, fechaHasta:String): Observable<PlatosPopulares> {
     return this.http.get<PlatosPopulares>(this.miUrl2 + fechaDesde + "/" + fechaHasta + "/");
+  }
+  recaudaciones(fechaDesde:String, fechaHasta:String): Observable<Recaudaciones> {
+    return this.http.get<Recaudaciones>(this.miUrl + 'recaudaciones/' + fechaDesde + "/" + fechaHasta + "/");
   }
 }

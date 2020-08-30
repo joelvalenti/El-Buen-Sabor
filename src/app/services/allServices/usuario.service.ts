@@ -28,6 +28,10 @@ export class UsuarioService extends BaseService<Usuario> {
     return this.http.get<Usuario>(this.miUrl2);
   }
 
+  traerPorRol(rol:String) : Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(this.miUrl + 'traerPorRol/' + rol);
+  }
+
   registerUser(email: string, pass: string){
     return new Promise((resolve, reject) =>{
       this.afsAuth.createUserWithEmailAndPassword(email, pass)

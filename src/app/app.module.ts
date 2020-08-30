@@ -1,4 +1,4 @@
-
+import { PedidosCrearUsuariosComponent } from './components/administrador/modales/pedidos-crear-usuarios/pedidos-crear-usuarios.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -49,8 +49,10 @@ import { PaginaPerfilComponent } from './pages/pagina-perfil/pagina-perfil.compo
 import { ModalDomUsuarioComponent } from './components/modal-domicilio/modal-dom-usuario/modal-dom-usuario.component';
 import { ModalDetalleComponent } from './components/modal-detalle/modal-detalle.component';
 import { UsuarioComponent } from './components/administrador/usuario/usuario.component';
-import { EstadisticasComponent } from './components/administrador/estadisticas/estadisticas.component';
 import { FacturapdfComponent } from './components/facturapdf/facturapdf.component';
+import { RecaudacionesComponent } from './components/administrador/recaudaciones/recaudaciones.component';
+import { PedidosAgrupadosPorClienteComponent } from './components/administrador/pedidos-agrupados-por-cliente/pedidos-agrupados-por-cliente.component';
+import { PedidosUsuariosComponent } from './components/administrador/modales/pedidos-usuarios/pedidos-usuarios.component';
 
 // Pipes
 import { FilterBuscarRecetaPipe } from './pipes/filter-buscar-receta.pipe';
@@ -114,7 +116,10 @@ import { MatTableExporterModule } from 'mat-table-exporter';
     PaginaPerfilComponent,
     ModalDomUsuarioComponent,
     FacturapdfComponent,
-    EstadisticasComponent
+    PedidosAgrupadosPorClienteComponent,
+    RecaudacionesComponent,
+    PedidosUsuariosComponent,
+    PedidosCrearUsuariosComponent
   ],
   imports: [
     MatTableExporterModule,

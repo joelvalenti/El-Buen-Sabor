@@ -136,13 +136,17 @@ export class RealizarPedidoComponent implements OnInit {
     var tiempoSinCocineros = 0;
     let key: boolean = false;
     //this detalles en preparacion es lo que se encuentra en cocina, y le concateno el detalle que acabas de armar
-    this.detallesEnPreparacion.forEach(element => {
-      if (element.id == detalle.id) {
-        element.cantidad = detalle.cantidad;
-        key = true;
+    if (this.detallesEnPreparacion.length === null) {
+      this.detallesEnPreparacion.forEach(element => {
+        if (element.id == detalle.id) {
+          element.cantidad = detalle.cantidad;
+          key = true;
+        }
+      });
+      if (!key) {
+        this.detallesEnPreparacion = this.detallesEnPreparacion.concat(detalle);
       }
-    });
-    if (!key) {
+    } else {
       this.detallesEnPreparacion = this.detallesEnPreparacion.concat(detalle);
     }
     for (let index = 0; index < this.detallesEnPreparacion.length; index++) {
@@ -160,7 +164,7 @@ export class RealizarPedidoComponent implements OnInit {
     console.log('Tiempo de preparacion final: ', this.tiempoPedido);
 
     this.form3.controls['tiempoPreparacion'].setValue(this.tiempoPedido);
-    
+
   }
 
   obtenerFecha(): String {
@@ -182,7 +186,6 @@ export class RealizarPedidoComponent implements OnInit {
 
   public cargarPedido() {
     var d = new Date();
-    this.form3.controls['horaEstimada'].setValue(d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds());
     this.form3.controls['fecha'].setValue(this.obtenerFecha());
     this.form3.controls['envioDelivery'].setValue(!this.retirarLocal);
     this.form3.controls['eliminado'].setValue(false);
@@ -234,13 +237,12 @@ export class RealizarPedidoComponent implements OnInit {
   buildForm3() {
     this.form3 = this.formBuilder3.group({
       id: [this.localData.id],
-      horaEstimada: [this.localData.horaEstimada],
       envioDelivery: [this.localData.envioDelivery],
       fecha: [this.localData.fecha],
       estado: [this.localData.estado],
       usuario: [this.localData.usuario],
       domicilio: [this.localData.domicilio],
-      tiempoPreparacion:[this.localData.tiempoPreparacion],
+      tiempoPreparacion: [this.localData.tiempoPreparacion],
       eliminado: [this.localData.eliminado]
     });
 
@@ -428,7 +430,7 @@ export class RealizarPedidoComponent implements OnInit {
     this.service7.post(this.form4.value).subscribe((data) => {
       this.getAllDetalles();
       let key: boolean = false;
-      this.service7.getOne(data.id).subscribe((data2)=>{
+      this.service7.getOne(data.id).subscribe((data2) => {
         this.calcularTiempo(data2);
       })
     });
@@ -504,7 +506,7 @@ export class RealizarPedidoComponent implements OnInit {
     this.form4.controls['eliminado'].setValue(eliminado);
     console.log(this.form4.value)
     this.service7.put(detalle.id, this.form4.value).subscribe((data) => {
-      this.service7.getOne(detalle.id).subscribe((data2)=>{
+      this.service7.getOne(detalle.id).subscribe((data2) => {
         this.calcularTiempo(data2);
         console.log("CALCULO TIEMPO");
       });
@@ -536,7 +538,7 @@ export class RealizarPedidoComponent implements OnInit {
 
     this.service10.post(this.form5.value).subscribe(data => {
       this.paso = 5;
-      this.service3.put(this.pedidoSelec.id,this.form3.value).subscribe(data2=>{
+      this.service3.put(this.pedidoSelec.id, this.form3.value).subscribe(data2 => {
         Swal.fire({
           position: 'center',
           icon: 'success',
@@ -564,8 +566,8 @@ export class RealizarPedidoComponent implements OnInit {
     this.localDataDetalle = null;
     this.localDataDetalles = null;
     this.localDataPlatos = null;
-    this.detallesEnPreparacion=null;
-    this.tiempoPedido=0;
+    this.detallesEnPreparacion = null;
+    this.tiempoPedido = 0;
   }
 
 }

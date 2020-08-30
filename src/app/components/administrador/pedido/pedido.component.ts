@@ -18,7 +18,7 @@ import Swal from'sweetalert2';
 export class PedidoComponent implements OnInit {
 
 
-  public displayedColumns: string[] = ['numero', 'detallePedido','fecha','horaEstimada', 'envioDelivery', 'domicilio', 'estado'];
+  public displayedColumns: string[] = ['numero', 'detallePedido','fecha', 'envioDelivery', 'domicilio', 'estado'];
   //,'envio','hora','nombreCliente','direccion','telefono','pago','estado'
   public dataSource: MatTableDataSource<Pedido> = new MatTableDataSource();
   public dataSourceDP: MatTableDataSource<Detalle> = new MatTableDataSource();

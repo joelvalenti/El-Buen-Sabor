@@ -1,3 +1,4 @@
+import { PedidosCrearUsuariosComponent } from './../pedidos-crear-usuarios/pedidos-crear-usuarios.component';
 import { Component, OnInit, Inject, Optional, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -7,14 +8,15 @@ import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { Usuario } from 'src/app/models/Usuario';
 import { UsuarioService } from 'src/app/services/allServices/usuario.service';
-import { ModalRealizarPedidoUsuarioCrearComponent } from '../modal-realizar-pedido-usuario-crear/modal-realizar-pedido-usuario-crear.component';
+
 
 @Component({
-  selector: 'app-modal-realizar-pedido-usuario',
-  templateUrl: './modal-realizar-pedido-usuario.component.html',
-  styleUrls: ['./modal-realizar-pedido-usuario.component.css']
+  selector: 'app-pedidos-usuarios',
+  templateUrl: './pedidos-usuarios.component.html',
+  styleUrls: ['./pedidos-usuarios.component.css']
 })
-export class ModalRealizarPedidoUsuarioComponent implements OnInit {
+export class PedidosUsuariosComponent implements OnInit {
+
   public displayedColumns: string[] = ['nombre', 'apellido', 'dni', 'email', 'telefono'];
   public dataSource: MatTableDataSource<Usuario> = new MatTableDataSource();
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -24,7 +26,7 @@ export class ModalRealizarPedidoUsuarioComponent implements OnInit {
   public userId: number;
 
 
-  constructor(public dialog: MatDialog, public service: UsuarioService, public dialogRef: MatDialogRef<ModalRealizarPedidoUsuarioComponent>) { }
+  constructor(public dialog: MatDialog, public service: UsuarioService, public dialogRef: MatDialogRef<PedidosUsuariosComponent>) { }
 
 
   ngOnInit(): void {
@@ -59,7 +61,7 @@ export class ModalRealizarPedidoUsuarioComponent implements OnInit {
 
 
   onSubmit(object: any) {
-    this.dialog.open(ModalRealizarPedidoUsuarioCrearComponent, { data: object })
+    this.dialog.open(PedidosCrearUsuariosComponent, { data: object })
       .afterClosed().subscribe(result => {
         this.crear(result.data);
         Swal.fire({
@@ -97,4 +99,5 @@ export class ModalRealizarPedidoUsuarioComponent implements OnInit {
   notifyTable() {
     this.dataSource.data = [...this.dataSource.data];
   }
+
 }
