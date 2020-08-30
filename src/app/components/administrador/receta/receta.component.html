@@ -9,9 +9,12 @@
                 <div class="botonagregar">
                     <button mat-raised-button class="my-agregar" (click)="onSubmit({})">Agregar</button>
                 </div>
+                <button mat-raised-button class="exportar" (click)="exporter.exportTable('xlxs',{fileName:'platos'})">
+                    Exportar a Excel
+                </button>
             </div>
         
-            <table mat-table  [dataSource]="dataSource" matSort class="mat-elevation-z8">
+            <table mat-table matTableExporter  #exporter="matTableExporter" [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
                 <!-- Nombre Column -->
                 <ng-container matColumnDef="nombre">
@@ -51,11 +54,11 @@
                 <ng-container matColumnDef="actions">
                     <th mat-header-cell *matHeaderCellDef></th>
                     <td mat-cell *matCellDef="let element"> 
-                        <button mat-mini-fab class="my-editar" matTooltip="Editar" (click)="onSubmit(element)">
-                            <mat-icon [inline]="true">create</mat-icon>
+                        <button mat-mini-fab  class="my-editar purple" matTooltip="Editar" (click)="onSubmit(element)">
+                            <mat-icon [inline]="true" class="fa fa-pencil purple" ></mat-icon>
                         </button>
-                        <button mat-mini-fab class="my-eliminar" (click)="eliminar(element)">
-                            <mat-icon [inline]="true">delete_forever</mat-icon>
+                        <button mat-mini-fab  class="my-eliminar purple" (click)="eliminar(element)">
+                            <mat-icon [inline]="true" class="fa fa-trash purple"></mat-icon>
                         </button>
                     </td>
                 </ng-container>

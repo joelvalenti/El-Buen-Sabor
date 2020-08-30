@@ -48,3 +48,6 @@
 table {
     width: 100%;
   }
+.exportar{
+    float: right;
+}

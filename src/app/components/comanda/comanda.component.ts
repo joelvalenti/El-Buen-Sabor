@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DetalleService } from '../../services/allServices/detalle.service';
 import { PlatoService } from '../../services/allServices/plato.service';
 import { PedidoService } from '../../services/allServices/pedido.service';
@@ -12,6 +12,7 @@ export class ComandaComponent implements OnInit {
   @Input() delivery;
   @Input() tipoPago;
   @Input() total;
+  @Output() eliminarComanda = new EventEmitter();
   productos = [];
   cantidad = [];
   idDetalle = 0;
@@ -52,5 +53,10 @@ export class ComandaComponent implements OnInit {
   }
   terminarPedido(): void {
     this.pedidoService.updateEstado(1, this.comanda).subscribe();
+    this.onEliminarComanda(this.comanda.id);
+  }
+
+  onEliminarComanda(id: number): void {
+    this.eliminarComanda.emit(id);
   }
 }
