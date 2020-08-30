@@ -131,8 +131,8 @@
                             <td>{{item.estado.nombre}}</td>
                             <td>{{item.fecha}}</td>
                             <td>
-                                <button type="button" class="btn btn-primary" 
-                                    (click)="IdPedidoSeleccionado(item.id)">Descargar Factura</button>
+                                <button type="button" class="btn btn-success" 
+                                    (click)="IdPedidoSeleccionado(item.id)">Ver Factura</button>
                             </td>
                         </tr>
                     </tbody>
@@ -164,7 +164,10 @@
                             <th scope="row">{{item.id}}</th>
                             <td>{{item.estado.nombre}}</td>
                             <td>{{item.fecha}}</td>
-                            <td>Descargar Factura</td>
+                            <td>
+                                <button type="button" class="btn btn-success" 
+                                    (click)="IdPedidoSeleccionado(item.id)">Ver Factura</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

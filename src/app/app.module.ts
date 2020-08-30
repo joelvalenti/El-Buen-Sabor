@@ -67,6 +67,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 
 //Excel
 import { MatTableExporterModule } from 'mat-table-exporter';
+import { NgxSpinnerModule } from "ngx-spinner";
 
 @NgModule({
   entryComponents: [],
@@ -128,7 +129,8 @@ import { MatTableExporterModule } from 'mat-table-exporter';
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
 		AngularFireDatabaseModule,
-		AngularFireStorageModule
+    AngularFireStorageModule,
+    NgxSpinnerModule
   ],
   providers: [DatePipe, AngularFireAuth, AngularFirestore],
   bootstrap: [AppComponent],

@@ -13,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: 'app-facturapdf',
@@ -21,17 +22,7 @@ import html2canvas from 'html2canvas';
 })
 export class FacturapdfComponent implements OnInit {
 
-  public empresa: ConfiguracionEmpresa = {
-    id: 0,
-    nombre: '',
-    cantidadCocineros: 0,
-    cuit: 0,
-    email: '',
-    numeroFiscal: 0,
-    sociedad: '',
-    telefono: 0,
-    eliminado: false,
-  }
+  public envio;
   public cargarFactura = false;
   public cargarEmpresa = false;
   public facturas: Factura[] = [];
@@ -55,14 +46,29 @@ export class FacturapdfComponent implements OnInit {
     esCliente: true,
     telefono: 0
   }
+  public empresa: ConfiguracionEmpresa = {
+    id: 0,
+    nombre: '',
+    cantidadCocineros: 0,
+    cuit: 0,
+    email: '',
+    numeroFiscal: 0,
+    sociedad: '',
+    telefono: 0,
+    eliminado: false,
+  }
 
   constructor(private usuarioService: UsuarioService, private rolesService: RolesService,
     private datePipe: DatePipe, private pedidoService: PedidoService, private detalleService: DetalleService,
     private facturaService: FacturaService, private actRouter: ActivatedRoute,
-    private empresaService: ConfiguracionService) {
+    private empresaService: ConfiguracionService, private spinner: NgxSpinnerService) {
   }
 
   ngOnInit() {
+    this.spinner.show();
+    setTimeout(() => {
+      this.spinner.hide();
+    }, 1200);
     this.getEmpresa();
     this.actRouter.params.subscribe(data => {
       this.pedidoId = data['id'];
@@ -101,6 +107,7 @@ export class FacturapdfComponent implements OnInit {
   getPedido() {
     this.pedidoService.getOne(this.pedidoId).subscribe(res => {
       this.pedidoObtenido = res;
+      this.pedidoObtenido.envioDelivery === true ? this.envio = 'Delivery' : this.envio = 'Retiro en Local';
       this.getDetallesXPedido();
     })
   }

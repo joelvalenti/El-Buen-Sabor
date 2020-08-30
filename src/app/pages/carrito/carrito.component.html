@@ -1,5 +1,7 @@
 <!-- Tabla Carrito -->
 <section style="margin-left: 1%;">
+  <script src="https://smtpjs.com/v3/smtp.js">
+  </script>
   <h1 class="titulos" style="margin-top: 1%;">Carrito de compras</h1>
   <div class="table-responsive">
     <table class="table table-bordered table-hover">
@@ -94,7 +96,6 @@
             <option *ngFor="let dom of domicilios">{{dom.calle}}</option>
           </select>
         </div>
-        <!-- Agregar nueva dirección -->
         <button type="button" class="btn btn-primary btn-block titulos" data-toggle="modal"
           data-target="#modalDomicilio">+ Agregar Direccion</button>
         <app-modal-domicilio [id]="idPersona"></app-modal-domicilio>
