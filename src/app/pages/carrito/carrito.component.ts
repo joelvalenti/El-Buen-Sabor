@@ -158,10 +158,10 @@ export class CarritoComponent implements OnInit {
     let totalNeto = 0;
     var precioTotalXProducto = 0;
     for (let i = 0; i < this.detalles.length; i++) {
-      if(this.detalles[i].plato == null){
+      if (this.detalles[i].plato == null) {
         precioTotalXProducto = this.detalles[i].insumo.precioVenta * this.detalles[i].cantidad;
         totalNeto += precioTotalXProducto;
-      }else{
+      } else {
         precioTotalXProducto = this.detalles[i].plato.precioVenta * this.detalles[i].cantidad;
         totalNeto += precioTotalXProducto;
       }
@@ -271,7 +271,7 @@ export class CarritoComponent implements OnInit {
       this.detallesEnPreparacion = this.detalles;
     }
     for (let index = 0; index < this.detallesEnPreparacion.length; index++) {
-      if(this.detallesEnPreparacion[index].plato !== null){
+      if (this.detallesEnPreparacion[index].plato !== null) {
         let cantidad = this.detallesEnPreparacion[index].cantidad;
         tiempoSinCocineros += this.detallesEnPreparacion[index].plato.tiempoPreparacion * cantidad;
       }
@@ -288,22 +288,26 @@ export class CarritoComponent implements OnInit {
   }
 
   realizarPedido() {
-    this.pedidos[0].estado = this.estado;
-    this.pedidos[0].envioDelivery = this.flagRadioDireccion;
-    var utc = new Date().toJSON().slice(0, 10);
-    this.pedidos[0].fecha = new Date(utc);
-    this.pedidos[0].tiempoPreparacion = this.calcularTiempo();
-    if (this.flagRadioDireccion === false) {
-      this.pedidos[0].domicilio = this.domBuenSabor;
-    } else {
-      this.pedidos[0].domicilio = this.direccionElegida[0];
+    try {
+      this.pedidos[0].estado = this.estado;
+      this.pedidos[0].envioDelivery = this.flagRadioDireccion;
+      var utc = new Date().toJSON().slice(0, 10);
+      this.pedidos[0].fecha = new Date(utc);
+      this.pedidos[0].tiempoPreparacion = this.calcularTiempo();
+      if (this.flagRadioDireccion === false) {
+        this.pedidos[0].domicilio = this.domBuenSabor;
+      } else {
+        this.pedidos[0].domicilio = this.direccionElegida[0];
+      }
+      this.pedidos[0].monto = this.getTotalFinal();
+      this.generarFactura();
+      this.pedidoService.put(this.pedidos[0].id, this.pedidos[0]).subscribe(() => {
+        this.sweetAlertEnviado();
+      })
+      this.redireccion();
+    } catch (error) {
+      this.alertsService.errorAlert('No se pudo enviar el pedido', 'Verifique que todo esté cargado.')
     }
-    this.pedidos[0].monto = this.getTotalFinal();
-    this.generarFactura();
-    this.pedidoService.put(this.pedidos[0].id, this.pedidos[0]).subscribe(() => {
-      this.sweetAlertEnviado();
-    })
-    this.redireccion();
   }
 
   generarFactura() {
