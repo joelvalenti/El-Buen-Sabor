@@ -137,7 +137,7 @@ export class RealizarPedidoComponent implements OnInit {
     var tiempoSinCocineros = 0;
     let key: boolean = false;
     //this detalles en preparacion es lo que se encuentra en cocina, y le concateno el detalle que acabas de armar
-    if (this.detallesEnPreparacion.length === null) {
+    if (this.detallesEnPreparacion.length < 1) {
       this.detallesEnPreparacion.forEach(element => {
         if (element.id == detalle.id) {
           element.cantidad = detalle.cantidad;
