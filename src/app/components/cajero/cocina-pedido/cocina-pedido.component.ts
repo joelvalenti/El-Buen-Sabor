@@ -97,7 +97,7 @@ export class CocinaPedidoComponent implements OnInit {
             if (bool) {
               this.facturasConfirmar.splice(idx, 1, ped);
             } else {
-              this.facturasConfirmar.push(ped);
+              this.facturas.push(ped);
             }
           }
         }

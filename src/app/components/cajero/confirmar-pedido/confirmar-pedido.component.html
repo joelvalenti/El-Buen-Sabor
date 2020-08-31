@@ -42,8 +42,10 @@
             </td>
         </tr>
     </tbody>
-<pagination-controls style="width:100%;" (pageChange)="pageActual = $event"></pagination-controls>
 </table>
+<span *ngIf="facturas.length>0">
+    <pagination-controls  style="width:100%;" (pageChange)="pageActual = $event"></pagination-controls>
+    </span>
 <div style="text-align: center;"><button class="myButton" (click)="this.cargarFacturas()">Actualizar</button></div>
 </div>
 <div class="modal fade z" id="modalDetalle" tabindex="-1" role="dialog" data-backdrop="false">
