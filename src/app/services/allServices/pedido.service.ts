@@ -33,6 +33,10 @@ export class PedidoService extends BaseService<Pedido> {
     return this.http.get<any[]>(this.miUrl2 + id + '/' + id2);
   }
 
+  getPedidosMenosFacturados(): Observable<Pedido[]> {
+    return this.http.get<Pedido[]>(this.miUrl + 'getPedidosMenosFacturados/');
+  }
+
   getAllPedidosXId(id: number): Observable<any[]> {
     return this.http.get<any[]>(this.miUrl3 + id);
   }

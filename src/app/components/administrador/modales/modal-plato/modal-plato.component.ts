@@ -192,8 +192,10 @@ export class ModalPlatoComponent implements OnInit {
   }
 
   onAction() {
-    if(this.bandera){
-      this.form.controls['imagen'].setValue(this.imagenPlato.nativeElement.value);
+    if(this.bandera || this.localData.imagen!==null){
+      if(this.imagenPlato.nativeElement.value!=="" && this.imagenPlato.nativeElement.value!==null){
+        this.form.controls['imagen'].setValue(this.imagenPlato.nativeElement.value);
+      }
       this.form.controls['detalle'].setValue(this.localData.detalle);
       this.dialogRef.close({ event: this.action, data: this.form.value });
       

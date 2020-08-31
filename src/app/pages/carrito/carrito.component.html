@@ -17,16 +17,30 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of detalles">
-          <th scope="row" hidden>{{item.id}}</th>
-          <td>{{item.cantidad}}</td>
-          <td>{{item.plato.nombre}}</td>
-          <td>$ {{item.plato.precioVenta}}</td>
-          <td>$ {{item.cantidad * item.plato.precioVenta}}</td>
-          <td>
-            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modalDetalle"
-              (click)="onPreUpdate(item)">Editar</button>
-            <button type="button" class="btn btn-danger" (click)="delete(item)">Borrar</button>
-          </td>
+          <ng-container *ngIf="item.plato !== null else bebida">
+            <th scope="row" hidden>{{item.id}}</th>
+            <td>{{item.cantidad}}</td>
+            <td>{{item.plato.nombre}}</td>
+            <td>$ {{item.plato.precioVenta}}</td>
+            <td>$ {{item.cantidad * item.plato.precioVenta}}</td>
+            <td>
+              <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modalDetalle"
+                (click)="onPreUpdate(item)">Editar</button>
+              <button type="button" class="btn btn-danger" (click)="delete(item)">Borrar</button>
+            </td>
+          </ng-container>
+          <ng-template #bebida>
+            <th scope="row" hidden>{{item.id}}</th>
+            <td>{{item.cantidad}}</td>
+            <td>{{item.insumo.nombre}}</td>
+            <td>$ {{item.insumo.precioVenta}}</td>
+            <td>$ {{item.cantidad * item.insumo.precioVenta}}</td>
+            <td>
+              <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modalDetalle"
+                (click)="onPreUpdate(item)">Editar</button>
+              <button type="button" class="btn btn-danger" (click)="delete(item)">Borrar</button>
+            </td>
+          </ng-template>
         </tr>
       </tbody>
       <tfoot>

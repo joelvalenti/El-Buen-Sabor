@@ -33,4 +33,7 @@ export class FacturaService extends BaseService<Factura> {
       this.miUrl + 'recaudaciones/' + fechaDesde + '/' + fechaHasta + '/'
     );
   }
+  getAllMenosFacturados():Observable<Factura[]>{
+    return this.http.get<Factura[]>(this.miUrl + 'getFacturasMenosFacturados/');
+  }
 }

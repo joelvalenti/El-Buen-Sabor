@@ -127,16 +127,6 @@ export class CatalogoComponent implements OnInit {
     });
   }
 
-  // async agregarAlPedido(plato: Plato){
-  //   this.stock = await this.consultarStock(plato,1);
-  //   console.log('stock en linea 127', this.stock);
-  //    this.agregarPlato(plato);
-  //    console.log('stock en linea 130', this.stock);
-  // }
- 
-
-
-
   agregarGaseosa(bebida) {
     let nuevoDetalle: Detalle = {};
     if (this.carritoBebidas.length < 1) {
@@ -225,19 +215,19 @@ export class CatalogoComponent implements OnInit {
   }
 
   setearPedido() {
-    console.log('Entre a setear pedidos.');
-    let estado: Estado = {
-      id: 7,
-      eliminado: false,
-      nombre: 'En Pedido'
-    };
-    this.pedidoNuevo.usuario = this.usuario;
-    this.pedidoNuevo.estado = estado;
-    this.pedidoNuevo.eliminado = false;
-    this.servicioPedido.post(this.pedidoNuevo).subscribe(res => {
-      this.ultimopedido = res;
-      this.setearDetalles();
-    }, err => console.log(err));
+            console.log('Entre a setear pedidos.');
+            let estado: Estado = {
+              id: 7,
+              eliminado: false,
+              nombre: 'En Pedido'
+            };
+            this.pedidoNuevo.usuario = this.usuario;
+            this.pedidoNuevo.estado = estado;
+            this.pedidoNuevo.eliminado = false;
+            this.servicioPedido.post(this.pedidoNuevo).subscribe(res => {
+              this.ultimopedido = res;
+              this.setearDetalles();
+            }, err => console.log(err));
   }
 
   setearDetalles() {
@@ -284,7 +274,25 @@ export class CatalogoComponent implements OnInit {
               const nuevoIndice = this.carritoFinal.findIndex(ref => ref.plato.nombre == otro.plato.nombre);
             } else {
               this.carritoFinal[indice].cantidad++;
-              this.total += plato.precioVenta;
+              let nuevaCantidad = this.carritoFinal[indice].cantidad;
+              console.log('Se consulto stock por cantidad', nuevaCantidad);
+              this.servicioPlato.consultarStock(plato.id, nuevaCantidad).subscribe(
+                ref=>{
+                  console.log('Se consulto por cantidad ' + nuevaCantidad + ' respuesta back ' + ref);
+                   if(ref === true){
+                      this.total += plato.precioVenta;
+                   }else{
+                    this.carritoFinal[indice].cantidad--;
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'No hay suficiente stock para ' + plato.nombre,
+                      showConfirmButton: false,
+                      timer: 1500
+                    })
+                   }
+                },
+                err=>{ console.log('error ', err)}
+              );
             }
           }
         }else{
@@ -302,17 +310,5 @@ export class CatalogoComponent implements OnInit {
       }
     );
   }
-  //  consultarStock(plato : Plato, cantidad : number): any{
-  //   this.servicioPlato.consultarStock(plato.id,cantidad).subscribe(
-  //     res=>{
-  //       console.log('respuesta consultarStock ', res);
-  //       return this.stock = res;
-  //     },
-  //     err=>{
-  //       console.log('error ', err);
-  //       return false;
-  //     }
-  //   );
-  // }
-
+  
 }

@@ -1,5 +1,5 @@
 <button mat-button mat-dialog-close color="warn" style="float:right;">X</button>
-<h1 mat-dialog-title><strong>{{action}} Usuario</strong></h1>
+<h1 mat-dialog-title><strong>{{action}} Ingredientes</strong></h1>
 
 <div mat-dialog-content>
 
@@ -32,9 +32,9 @@
                 </mat-error>
             </mat-form-field>
 
-            <mat-form-field class="form-group col-md-4" disabled>
+            <mat-form-field class="form-group col-md-4" readonly>
                 <mat-label>Unidad Medida</mat-label>
-                <input matInput placeholder="Unidad Medida" formControlName="unidadMedida">
+                <input matInput placeholder="Unidad Medida" formControlName="unidadMedida" readonly>
             </mat-form-field>
 
 

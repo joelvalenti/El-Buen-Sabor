@@ -1,5 +1,5 @@
 <div *ngIf="this.usuario!=null">
-    <div *ngIf="this.usuario.rol==='cocinero'">
+    <div *ngIf="this.usuario.rol==='cocinero' || this.usuario.rol==='administrador'">
         <div class="text-center">
             <h1>COCINA</h1>
             <mat-tab-group class="m-2">
