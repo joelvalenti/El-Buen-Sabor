@@ -5,6 +5,8 @@ import { FacturaService } from 'src/app/services/allServices/factura.service';
 import { InsumoService } from 'src/app/services/allServices/insumo.service';
 import { UsuarioService } from 'src/app/services/allServices/usuario.service';
 import { PlatoService } from 'src/app/services/allServices/plato.service';
+import { Pedido } from 'src/app/models/Pedido';
+import { Estado } from 'src/app/models/Estado';
 
 @Component({
   selector: 'app-cocina-pedido',
@@ -36,7 +38,7 @@ export class CocinaPedidoComponent implements OnInit {
   }
 
   cargarFacturas(): void {
-    this.facturaService.getAll().subscribe((facturas) => {
+    this.facturaService.getAllMenosFacturados().subscribe((facturas) => {
       facturas.forEach((fact) => {
         if (this.facturas.length === 0) {
           this.cargarUnPedido(fact.id, false, 0);
@@ -77,7 +79,7 @@ export class CocinaPedidoComponent implements OnInit {
     this.facturaService.getOne(id).subscribe((ped) => {
       this.pedidoService.getOne(ped.pedido.id).subscribe((cop) => {
         if (cop.estado.nombre !== 'Cancelado') {
-          if (cop.estado.nombre !== 'En Aprobacion') {
+          if (cop.estado.nombre !== 'En Aprobacion' && cop.estado.nombre !== 'Facturado') {
             ped.pedido = cop;
             this.usuarioService.getOne(ped.usuario.id).subscribe((us) => {
               ped.usuario = us;
@@ -138,6 +140,17 @@ export class CocinaPedidoComponent implements OnInit {
       .subscribe();
     this.facturas.push(this.facturasConfirmar[idx]);
     this.facturasConfirmar.splice(idx, 1);
+  }
+  facturar(pedido:Pedido){
+    let estado:Estado={
+      id:6,
+      nombre:'Facturado',
+      eliminado:false
+    }
+    pedido.estado=estado;
+    this.pedidoService.put(pedido.id,pedido).subscribe(data=>{
+      this.cargarFacturas();
+    });
   }
 
 }

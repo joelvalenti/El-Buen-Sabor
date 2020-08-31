@@ -121,7 +121,9 @@ export class ModalInsumoComponent implements OnInit {
 
   onAction() {
     if(this.bandera || this.localData.imagen!==null){ 
-      this.form.controls['imagen'].setValue(this.imagenInsumo.nativeElement.value);
+      if(this.imagenInsumo.nativeElement.value!=="" && this.imagenInsumo.nativeElement.value!==null){
+        this.form.controls['imagen'].setValue(this.imagenInsumo.nativeElement.value);
+      }
       this.dialogRef.close({ event: this.action, data: {object:this.form.value} });
     }
   }
