@@ -52,7 +52,6 @@ export class FaltanteStockComponent implements OnInit {
   async getCategoria() {
     await this.service2.getAll().subscribe(response => {
       this.categorias = response;
-      console.log(response[0].id);
       this.getInsumoporCategoria(response[0].id);
     },
       error => {
@@ -63,7 +62,6 @@ export class FaltanteStockComponent implements OnInit {
   getInsumoporCategoria(id: number) {
     this.service.getStocks(id).subscribe(response => {
       this.dataSource.data = response;
-      console.log(this.dataSource.data);
     },
       error => {
         alert("Error en getAll" + error);
@@ -117,7 +115,6 @@ export class FaltanteStockComponent implements OnInit {
   }
 
   public actualizar(element: Insumo) {
-    console.log(element);
     this.service.put(element.id, element).subscribe(() => {
       this.dataSource.data.filter((value) => {
         if (value.id === element.id) {

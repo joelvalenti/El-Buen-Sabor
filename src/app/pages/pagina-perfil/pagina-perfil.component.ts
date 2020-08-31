@@ -123,7 +123,6 @@ export class PaginaPerfilComponent implements OnInit {
   getPedidosActuales() {
     this.pedidoService.getPedidoEstado(this.usuario.id, 2).subscribe(res => {
       this.pedidosActuales = res;
-      console.log('pedidos actuales: ',this.pedidosActuales);
     },
       () => {
         this.alertsService.errorAlert('Opss..', 'No se pudo recolectar la información del carrito');
@@ -158,7 +157,6 @@ export class PaginaPerfilComponent implements OnInit {
           this.esAdministrador = false;
         }
         if(this.esAdministradorActualmente == true){
-          console.log('entré al if.');
           window.location.reload();
           this.esAdministradorActualmente = false;
         }

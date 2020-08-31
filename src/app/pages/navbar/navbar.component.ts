@@ -34,7 +34,6 @@ export class NavbarComponent implements OnInit {
               this.rol = res.rol;
             },
             err => {
-              console.log(':C');
             }
           );
         }
@@ -62,19 +61,14 @@ export class NavbarComponent implements OnInit {
   }
 
   inputlistener(parameter: any) {
-    console.log('esto se ejecuto: ', parameter);
     this.rol = parameter;
   }
 
   esquere() {
-    console.log('ROL DEL USER ACTUAL: ', this.rol);
   }
 
   isAuth() {
     this.servicio.isAuth().subscribe(res => {
-      console.log('display name', res.displayName);
-      console.log('email', res.email);
-      console.log('res completa', res);
     });
   }
 }

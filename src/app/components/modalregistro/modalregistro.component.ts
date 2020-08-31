@@ -78,8 +78,8 @@ export class ModalregistroComponent implements OnInit {
         this.nuevoUsuario.telefono = formRegistro.value.telefono;
         
         this.serviciorol.post(this.nuevoUsuario).subscribe(
-          res => { console.log('Todo bien', res); window.location.reload();},
-          err => {console.log('Todo mal', err)}
+          res => { window.location.reload();},
+          err => {}
         );
         //end
         this.btnClose.nativeElement.click();
@@ -89,7 +89,6 @@ export class ModalregistroComponent implements OnInit {
       
     ).catch ( (error) => {
       this.errormsg = error.message;
-      console.log('ERROR ',error.message);
       });
     this.nuevoUsuario = {};
   }
@@ -100,7 +99,6 @@ export class ModalregistroComponent implements OnInit {
       this.authService.isAuth().subscribe(res=>{
         const correo = res.email;
         this.serviciorol.getEmail(correo).subscribe( res=>{
-          console.log('Usted ya esta registrado cumpa', res);
           window.location.reload();
         }, err=>{
           this.nuevoUsuario.email = correo;
@@ -115,20 +113,16 @@ export class ModalregistroComponent implements OnInit {
             this.nuevoUsuario.fechaNacimiento =  this.fechaNacimiento;
             this.nuevoUsuario.telefono = this.telefono;
            //post user
-            console.log('nuevo usuario que vamos a postear: ', this.nuevoUsuario);
             this.serviciorol.post(this.nuevoUsuario).subscribe(res =>{
-              console.log('Succesfully posted', res); 
               window.location.reload();
             }, 
             err=>{
-              console.log('Something went wrong.'); 
             });
         });
       });
       this.btnClose.nativeElement.click();
     }).catch ( (error) => {
       this.errormsg = error.message;
-      console.log('ERROR ',error.message);
       });
     
    this.nuevoUsuario = {};

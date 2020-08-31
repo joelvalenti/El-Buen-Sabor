@@ -90,7 +90,6 @@ export class CatalogoComponent implements OnInit {
       }
     }
 
-    console.log('Bandera hoy ', this.fechahoy);
   }
 
   volverANulo() {
@@ -101,18 +100,14 @@ export class CatalogoComponent implements OnInit {
     this.seleccionBebidas = true;
     this.servicioBebida.getEsInsumo(false).subscribe(res => {
       this.gaseosas = res;
-      console.log(res);
     }, err => {
-      console.log('Error al traer bebidas', err);
     });
   }
 
   getCategorias() {
     this.servicioCategoria.getAll().subscribe(res => {
       this.categorias = res;
-      console.log(res);
     }, err => {
-      console.log('Error al traer categorias', err);
     });
   }
 
@@ -123,7 +118,6 @@ export class CatalogoComponent implements OnInit {
       this.platos = res;
       this.platosAux = res;
     }, err => {
-      console.log('Error al traer categorias: ', err);
     });
   }
 
@@ -200,14 +194,12 @@ export class CatalogoComponent implements OnInit {
   }
 
   updatePedido() {
-    console.log('Entre a updatePedido');
     const arreglofinal = this.carritoFinal.concat(this.carritoBebidas);
     arreglofinal.forEach(element => {
       element.pedido = this.pedidos[0];
       this.detalleService.post(element).subscribe(
         () => { },
         err => {
-          console.log('Error seteando detalles: ', err);
         }
       );
     });
@@ -215,7 +207,6 @@ export class CatalogoComponent implements OnInit {
   }
 
   setearPedido() {
-    console.log('Entre a setear pedidos.');
     let estado: Estado = {
       id: 7,
       eliminado: false,
@@ -227,18 +218,18 @@ export class CatalogoComponent implements OnInit {
     this.servicioPedido.post(this.pedidoNuevo).subscribe(res => {
       this.ultimopedido = res;
       this.setearDetalles();
-    }, err => console.log(err));
+    });
   }
 
   setearDetalles() {
-    console.log('Entre a setearDetalles');
+    
     const arreglofinal = this.carritoFinal.concat(this.carritoBebidas);
     arreglofinal.forEach(element => {
       element.pedido = this.ultimopedido;
       this.detalleService.post(element).subscribe(
         () => { },
         err => {
-          console.log('Error seteando detalles: ', err);
+          
         }
       );
     });
@@ -252,7 +243,6 @@ export class CatalogoComponent implements OnInit {
   agregarAlPedido(plato: Plato) {
     this.servicioPlato.consultarStock(plato.id, 1).subscribe(
       res => {
-        console.log('respuesta consultarStock ', res);
         this.stock = res;
         if (res === true) {
           let nuevoDetalle: Detalle = {};
@@ -275,10 +265,8 @@ export class CatalogoComponent implements OnInit {
             } else {
               this.carritoFinal[indice].cantidad++;
               let nuevaCantidad = this.carritoFinal[indice].cantidad;
-              console.log('Se consulto stock por cantidad', nuevaCantidad);
               this.servicioPlato.consultarStock(plato.id, nuevaCantidad).subscribe(
                 ref => {
-                  console.log('Se consulto por cantidad ' + nuevaCantidad + ' respuesta back ' + ref);
                   if (ref === true) {
                     this.total += plato.precioVenta;
                   } else {
@@ -291,7 +279,7 @@ export class CatalogoComponent implements OnInit {
                     })
                   }
                 },
-                err => { console.log('error ', err) }
+                err => { }
               );
             }
           }
@@ -306,7 +294,6 @@ export class CatalogoComponent implements OnInit {
         }
       },
       err => {
-        console.log('error ', err);
       }
     );
   }

@@ -49,7 +49,6 @@ export class CategoriaComponent implements OnInit {
   getAll() {
     this.service.getAll().subscribe(response => {
         this.dataSource.data = response;
-        console.log(this.dataSource.data);
     },
       error => {
         alert("Error en getAll" + error);
@@ -125,7 +124,6 @@ export class CategoriaComponent implements OnInit {
           this.dataSource._updateChangeSubscription();
         },
           error => {
-            console.log(error);
             Swal.fire('¡Error!', "Algo salió mal en la operación.", "error");
           })
       }

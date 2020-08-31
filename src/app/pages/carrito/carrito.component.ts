@@ -120,14 +120,11 @@ export class CarritoComponent implements OnInit {
     this.detalleService.buscarPorPedido(id).subscribe(res => {
       if (this.primeraVuelta === false) {
         this.detallesEnPreparacion = res;
-        console.log('Detalles en Preparacion PV: ', this.detallesEnPreparacion);
         this.primeraVuelta = true;
       } else {
         if (this.detallesEnPreparacion.length > 0 || this.detallesEnPreparacion !== undefined) {
           this.detallesEnPreparacion = this.detallesEnPreparacion.concat(res);
-          console.log('Detalles en Preparacion SV if: ', this.detallesEnPreparacion);
         } else {
-          console.log('Detalles en Preparacion SV else: ', this.detallesEnPreparacion);
         }
       }
     },
@@ -158,7 +155,6 @@ export class CarritoComponent implements OnInit {
   }
 
   getTotalNeto(): number {
-    console.log('Detalles: ',this.detalles);
     let totalNeto = 0;
     var precioTotalXProducto = 0;
     for (let i = 0; i < this.detalles.length; i++) {
@@ -288,7 +284,6 @@ export class CarritoComponent implements OnInit {
     if (this.flagRadioDireccion === true) {
       this.tiempoPedido += 10;
     }
-    console.log('Tiempo de preparacion final: ', this.tiempoPedido);
     return this.tiempoPedido;
   }
 
@@ -304,7 +299,6 @@ export class CarritoComponent implements OnInit {
       this.pedidos[0].domicilio = this.direccionElegida[0];
     }
     this.pedidos[0].monto = this.getTotalFinal();
-    console.log('Pedido enviado a Cajero: ', this.pedidos[0]);
     this.generarFactura();
     this.pedidoService.put(this.pedidos[0].id, this.pedidos[0]).subscribe(() => {
       this.sweetAlertEnviado();
@@ -330,7 +324,6 @@ export class CarritoComponent implements OnInit {
       eliminado: false
     }
     this.facturaService.post(factura).subscribe(res => {
-      console.log('Factura generada: ', res);
     })
   }
 
