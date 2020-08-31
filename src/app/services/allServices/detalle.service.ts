@@ -12,6 +12,7 @@ export class DetalleService extends BaseService<Detalle> {
   protected miUrl3 = 'http://localhost:9000/api/v1/detalle/buscarPorPlato/';
   protected miUrl4 = 'http://localhost:9000/api/v1/detalle/buscarPorInsumo/';
   protected miUrl5 = 'http://localhost:9000/api/v1/detalle/subirPlato/';
+  protected miUrl6 = 'http://localhost:9000/api/v1/detalle/descontarPlatos/';
 
   constructor(protected http: HttpClient) {
     super(http);
@@ -26,8 +27,10 @@ export class DetalleService extends BaseService<Detalle> {
   buscarPorInsumo(id: number, id2: number): Observable<Detalle[]> {
     return this.http.get<Detalle[]>(this.miUrl3 + id + '/' + id2);
   }
-
   subirPlato(id: number, detalle: Detalle): Observable<Detalle> {
     return this.http.put<Detalle>(this.miUrl5 + id, detalle);
+  }
+  descontarPlatos(id: number): Observable<Detalle> {
+    return this.http.put<Detalle>(this.miUrl6 + id, null);
   }
 }

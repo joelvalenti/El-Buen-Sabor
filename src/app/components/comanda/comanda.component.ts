@@ -58,13 +58,9 @@ export class ComandaComponent implements OnInit {
   }
   terminarPedido(id: number): void {
     this.pedidoService.updateEstado(1, this.comanda).subscribe(() => {
-      this.detalleService.getOne(id).subscribe((detalle) => {
-        this.detalleService
-          .subirPlato(detalle.plato.id, detalle)
-          .subscribe(() => {
+          this.detalleService.descontarPlatos(id).subscribe(() => {
             this.onEliminarComanda(id);
           });
-      });
     });
   }
 

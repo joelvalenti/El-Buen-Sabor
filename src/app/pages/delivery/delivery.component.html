@@ -19,7 +19,7 @@
                 </option>
               </select>
             </div>
-            <div class="background">
+            <div>
               <table class="table">
                 <thead class="thead-dark">
                   <tr>
@@ -28,7 +28,7 @@
                     <th scope="col">Acciones</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody class="background">
                   <tr *ngFor="let pedido of pedidos | filterBuscarLocalidad:filterB; let i = index">
                     <th>{{ pedido.id }}</th>
                     <td>
@@ -54,7 +54,7 @@
         <mat-tab label="Mis Pedidos">
           <div *ngIf="pedidosAceptados.length === 0">
             <i class="fas fa-sync-alt fa-spin fa-5x m-5"></i>
-            <h2>Cargando Pedidos</h2>
+            <h2>Cargando Pedidos Aceptados</h2>
           </div>
           <div class="mt-3 row background" *ngIf="pedidosAceptados.length > 0">
             <app-comanda *ngFor="let pedido of pedidosAceptados; let i = index" [comanda]="pedido" [delivery]="true"

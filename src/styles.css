@@ -9,10 +9,12 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 .background {
-  background-color: cyan;
+  background: -webkit-linear-gradient(360deg, #50c9c3 10%, #96deda 360%);
+  background: -o-linear-gradient(360deg, #50c9c3 10%, #96deda 360%);
+  background: linear-gradient(360deg, #50c9c3 10%, #96deda 360%);
 }
 .centrar {
   text-align: center !important;
 }
 
-@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import "@angular/material/prebuilt-themes/deeppurple-amber.css";
