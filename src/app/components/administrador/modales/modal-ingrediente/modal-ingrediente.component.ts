@@ -1,3 +1,5 @@
+import { UnidadMedidaService } from './../../../../services/allServices/unidadMedida.service';
+import { UnidadMedida } from './../../../../models/UnidadMedida';
 import { InsumoService } from './../../../../services/allServices/insumo.service';
 import { Insumo } from './../../../../models/Insumo';
 import { Component, OnInit, Inject, Optional } from '@angular/core';
@@ -13,6 +15,7 @@ import { DatePipe } from '@angular/common';
 export class ModalIngredienteComponent implements OnInit {
 
 
+  public localDataUnidadMedida: any;
   public localData: any;
   public localDataInsumo: any;
   public action: string;
@@ -22,10 +25,11 @@ export class ModalIngredienteComponent implements OnInit {
   public um:String;
   disableSelect = true;
   opciones:String;
+  opcionesUm:String;
 
   constructor(public dialogRef: MatDialogRef<ModalIngredienteComponent>,
     public formBuilder: FormBuilder,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any, private datePipe: DatePipe, private service:InsumoService) {
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any, private datePipe: DatePipe, private service:InsumoService, private serviceUnidadMedida:UnidadMedidaService) {
     console.log("DATA INGREDIENTES: " + data.id + data.plato.id);
     if(data.object!=undefined){
       this.localData = data.object;
@@ -41,8 +45,14 @@ export class ModalIngredienteComponent implements OnInit {
     this.buildForm();
     this.form.controls['plato'].setValue(this.plato);
     this.setAction();
+    this.getAllUnidadMedida()
   }
 
+getAllUnidadMedida():void{
+  this.serviceUnidadMedida.getAll().subscribe(data=>{
+    this.localDataUnidadMedida=data;
+  });
+}
 
   getAll():void{
     this.service.buscarInsumoporCategoria().subscribe(data => {
@@ -56,7 +66,8 @@ export class ModalIngredienteComponent implements OnInit {
       ingrediente: [this.localData.ingrediente],
       cantidad: [this.localData.cantidad, [Validators.required]],
       opcionesIngrediente:[this.opciones],
-      unidadMedida:[this.um],
+      unidadMedidaOpciones:[this.opcionesUm],
+      unidadMedida:[this.localData.UnidadMedida],
       plato:[this.localData.plato]
     });
     
@@ -78,11 +89,12 @@ export class ModalIngredienteComponent implements OnInit {
     return this.form.controls[control].hasError(error);
   }
 
-  cargarIngrediente(ingrediente:Insumo,um:String):void{
+  cargarIngrediente(ingrediente:Insumo):void{
     this.form.controls['ingrediente'].setValue(ingrediente);
+  }
+  agregarUnidadMedida(um:UnidadMedida){
     this.form.controls['unidadMedida'].setValue(um);
   }
-  
 
 
 }

@@ -35,7 +35,7 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header  [ngClass]="'TCClass'"> Ingredientes </th>
                     <td mat-cell *matCellDef="let element" class="pointer" [ngClass]="'TCClass'" (click)="verDetalles(element)">
                         <ng-container *ngFor="let i of element.detalle">
-                                {{i.ingrediente.nombre}} {{i.cantidad}} <span *ngIf="i.ingrediente.unidadMedida!=null">{{i.ingrediente.unidadMedida.abreviatura}}</span>
+                                {{i.ingrediente.nombre}} {{i.cantidad}} <span *ngIf="i.ingrediente.unidadMedida!=null">{{i.unidadMedida.abreviatura}}</span>
                                 <br>
                         </ng-container>
                     </td>
