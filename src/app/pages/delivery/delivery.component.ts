@@ -48,7 +48,10 @@ export class DeliveryComponent implements OnInit {
   public ver(): void {
     if (this.usuario === null) {
       setTimeout(() => this.r(), 500);
-    } else if (this.usuario.rol.toLocaleLowerCase() !== 'delivery' && this.usuario.rol.toLocaleLowerCase() !== 'administrador') {
+    } else if (
+      this.usuario.rol.toLocaleLowerCase() !== 'delivery' &&
+      this.usuario.rol.toLocaleLowerCase() !== 'administrador'
+    ) {
       setTimeout(() => this.r(), 500);
     } else {
       this.cargarLocalidades();
