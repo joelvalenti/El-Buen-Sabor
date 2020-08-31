@@ -7,18 +7,17 @@
 
         <input hidden formControlName="id">
         <input hidden formControlName="ingrediente">
+        <input hidden formControlName="unidadMedida">
         <input hidden formControlName="plato">
 
         <div class="form-row">
 
-            
+
 
             <mat-form-field class="form-group col-md-4">
-                <mat-select matInput formControlName="opcionesIngrediente"
-                    placeholder="Ingrediente">
+                <mat-select matInput formControlName="opcionesIngrediente" placeholder="Ingrediente">
                     <span *ngFor="let ingredientes of this.localDataInsumo">
-                        <mat-option
-                            (click)="cargarIngrediente(ingredientes,ingredientes.unidadMedida.abreviatura)"
+                        <mat-option (click)="cargarIngrediente(ingredientes,ingredientes.unidadMedida.abreviatura)"
                             value="ingredientes.id">{{ingredientes.nombre}}</mat-option>
                     </span>
                 </mat-select>
@@ -32,9 +31,14 @@
                 </mat-error>
             </mat-form-field>
 
-            <mat-form-field class="form-group col-md-4" readonly>
-                <mat-label>Unidad Medida</mat-label>
-                <input matInput placeholder="Unidad Medida" formControlName="unidadMedida" readonly>
+
+            <mat-form-field class="form-group col-md-4">
+                <mat-select formControlName="unidadMedidaOpciones" placeholder="Unidad Medida">
+                    <span *ngFor="let unidadMedida of this.localDataUnidadMedida">
+                        <mat-option (click)="agregarUnidadMedida(unidadMedida)" value="unidadMedida.id">
+                            {{unidadMedida.nombre}}</mat-option>
+                    </span>
+                </mat-select>
             </mat-form-field>
 
 
