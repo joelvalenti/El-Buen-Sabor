@@ -52,7 +52,10 @@ export class CocinaComponent implements OnInit {
   public ver(): void {
     if (this.usuario === null) {
       setTimeout(() => this.r(), 500);
-    } else if (this.usuario.rol.toLocaleLowerCase() !== 'cocinero' && this.usuario.rol.toLocaleLowerCase() !== 'administrador') {
+    } else if (
+      this.usuario.rol.toLocaleLowerCase() !== 'cocinero' &&
+      this.usuario.rol.toLocaleLowerCase() !== 'administrador'
+    ) {
       setTimeout(() => this.r(), 500);
     } else {
       setInterval(() => {
@@ -73,8 +76,13 @@ export class CocinaComponent implements OnInit {
     this.pedidoService.getPedidos().subscribe((pedidos) => {
       pedidos.forEach((pedido) => {
         let bol = true;
-        for (const comUnit of this.comandas) {
-          if (pedido.id === comUnit.id) {
+        for (let iCom = 0; iCom < this.comandas.length; iCom++) {
+          if (pedido.id === this.comandas[iCom].id) {
+            this.pedidoService.getOne(pedido.id).subscribe((pedidoUnit) => {
+              if (pedidoUnit.estado.nombre === 'Cancelado') {
+                this.comandas.splice(iCom, 1);
+              }
+            });
             bol = false;
             break;
           }
