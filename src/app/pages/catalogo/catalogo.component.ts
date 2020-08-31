@@ -215,19 +215,19 @@ export class CatalogoComponent implements OnInit {
   }
 
   setearPedido() {
-            console.log('Entre a setear pedidos.');
-            let estado: Estado = {
-              id: 7,
-              eliminado: false,
-              nombre: 'En Pedido'
-            };
-            this.pedidoNuevo.usuario = this.usuario;
-            this.pedidoNuevo.estado = estado;
-            this.pedidoNuevo.eliminado = false;
-            this.servicioPedido.post(this.pedidoNuevo).subscribe(res => {
-              this.ultimopedido = res;
-              this.setearDetalles();
-            }, err => console.log(err));
+    console.log('Entre a setear pedidos.');
+    let estado: Estado = {
+      id: 7,
+      eliminado: false,
+      nombre: 'En Pedido'
+    };
+    this.pedidoNuevo.usuario = this.usuario;
+    this.pedidoNuevo.estado = estado;
+    this.pedidoNuevo.eliminado = false;
+    this.servicioPedido.post(this.pedidoNuevo).subscribe(res => {
+      this.ultimopedido = res;
+      this.setearDetalles();
+    }, err => console.log(err));
   }
 
   setearDetalles() {
@@ -277,11 +277,11 @@ export class CatalogoComponent implements OnInit {
               let nuevaCantidad = this.carritoFinal[indice].cantidad;
               console.log('Se consulto stock por cantidad', nuevaCantidad);
               this.servicioPlato.consultarStock(plato.id, nuevaCantidad).subscribe(
-                ref=>{
+                ref => {
                   console.log('Se consulto por cantidad ' + nuevaCantidad + ' respuesta back ' + ref);
-                   if(ref === true){
-                      this.total += plato.precioVenta;
-                   }else{
+                  if (ref === true) {
+                    this.total += plato.precioVenta;
+                  } else {
                     this.carritoFinal[indice].cantidad--;
                     Swal.fire({
                       icon: 'error',
@@ -289,20 +289,20 @@ export class CatalogoComponent implements OnInit {
                       showConfirmButton: false,
                       timer: 1500
                     })
-                   }
+                  }
                 },
-                err=>{ console.log('error ', err)}
+                err => { console.log('error ', err) }
               );
             }
           }
-        }else{
+        } else {
           Swal.fire({
             icon: 'error',
             title: 'No hay suficiente stock para ' + plato.nombre,
             showConfirmButton: false,
             timer: 1500
           })
-          
+
         }
       },
       err => {
@@ -310,5 +310,5 @@ export class CatalogoComponent implements OnInit {
       }
     );
   }
-  
+
 }
