@@ -39,7 +39,6 @@ export class ComandaComponent implements OnInit {
       .subscribe((detalles) => {
         detalles.forEach((detalle) => {
           this.detalleService.getOne(detalle.id).subscribe((detalleData) => {
-            console.log('hola',detalleData);
             this.platoService
               .getOne(detalleData.plato.id)
               .subscribe((plato) => {
