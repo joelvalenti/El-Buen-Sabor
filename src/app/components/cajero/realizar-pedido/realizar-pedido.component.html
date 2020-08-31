@@ -9,7 +9,7 @@
 <div *ngIf="this.paso==2" class="botonesUsuario">
     <button class="myButton" (click)="onSubmitDomicilio(true)">Seleccionar Domicilio</button>
     &nbsp;&nbsp;
-    <button class="myButton" (click)="onSubmitDomicilio(false)">Retirar en Local</button>
+    <button class="myButton" (click)="onSubmitDomicilio(false)">Retirar en Local (10% Descuento)</button>
 </div>
 <div *ngIf="this.paso==3 || this.paso==4" class="botonesUsuario">
     <div class="alert alert-success" role="alert">
@@ -42,10 +42,12 @@
                     aria-describedby="inputGroup-sizing-2">
             </div>
         </div>
+        <br>
+        <br>
+        <span style="font-weight: bold;">O sino:</span>
+        <br>
+        <br>
     </div>
-    <span style="font-weight: bold;">O sino:</span>
-    <br>
-    <br>
     &nbsp;&nbsp;
     <button class="myButton" (click)="pagar(false)">Pagar en Efectivo</button>
 </div>
