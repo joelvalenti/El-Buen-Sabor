@@ -38,7 +38,8 @@ export class ConfirmarPedidoComponent implements OnInit {
   }
 
   cargarFacturas(): void {
-    this.facturaService.getAll().subscribe((facturas) => {
+    this.facturaService.getAllEnLocal().subscribe((facturas) => {
+      this.facturas=facturas;
       facturas.forEach((fact) => {
         if (this.facturas.length === 0) {
           this.cargarUnPedido(fact.id, false, 0);
@@ -88,7 +89,16 @@ export class ConfirmarPedidoComponent implements OnInit {
             if (bool) {
               this.facturas.splice(idx, 1, ped);
             } else {
-              this.facturas.push(ped);
+              let bandera:boolean=false;
+              this.facturas.forEach(element => {
+                if(element.id===ped.id){
+                  bandera=true;
+                }
+                if(!bandera){
+                  this.facturas.push(ped);
+                }
+              });
+              
             }
           } else {
             ped.pedido = cop;
@@ -98,7 +108,15 @@ export class ConfirmarPedidoComponent implements OnInit {
             if (bool) {
               this.facturasConfirmar.splice(idx, 1, ped);
             } else {
-              this.facturasConfirmar.push(ped);
+              let bandera:boolean=false;
+              this.facturas.forEach(element => {
+                if(element.id===ped.id){
+                  bandera=true;
+                }
+                if(!bandera){
+                  this.facturas.push(ped);
+                }
+              });
             }
           }
         }

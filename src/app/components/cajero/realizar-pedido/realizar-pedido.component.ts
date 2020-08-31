@@ -67,6 +67,7 @@ export class RealizarPedidoComponent implements OnInit {
   public detallesEnPreparacion: Detalle[] = [];
   public cocineros;
 
+
   constructor(public dialog: MatDialog, public formBuilder3: FormBuilder, public formBuilder4: FormBuilder,
     public formBuilder5: FormBuilder,
     public service: CategoriaService,
@@ -136,7 +137,7 @@ export class RealizarPedidoComponent implements OnInit {
     var tiempoSinCocineros = 0;
     let key: boolean = false;
     //this detalles en preparacion es lo que se encuentra en cocina, y le concateno el detalle que acabas de armar
-    if (this.detallesEnPreparacion.length === null) {
+    if (this.detallesEnPreparacion.length < 1) {
       this.detallesEnPreparacion.forEach(element => {
         if (element.id == detalle.id) {
           element.cantidad = detalle.cantidad;
@@ -209,16 +210,14 @@ export class RealizarPedidoComponent implements OnInit {
   }
 
   agregarDomicilio(): void {
-    if (this.retirarLocal) {
-      this.form3.controls['domicilio'].setValue(null);
-      this.crearPedido(this.form3.value);
-    } else {
-      this.service6.getOne(this.domId).subscribe(data => {
-        this.domicilio = data;
-        this.form3.controls['domicilio'].setValue(this.domicilio);
-        this.crearPedido(this.form3.value);
-      });
+    if (this.domId == 0 || this.domId == null) {
+      this.domId = 99;
     }
+    this.service6.getOne(this.domId).subscribe(data => {
+      this.domicilio = data;
+      this.form3.controls['domicilio'].setValue(this.domicilio);
+      this.crearPedido(this.form3.value);
+    });
 
   }
 
@@ -341,10 +340,23 @@ export class RealizarPedidoComponent implements OnInit {
   public pagar(op: boolean): void {
     if (op) {
       if ((<HTMLInputElement>document.getElementById("tarjeta")).value.length == 16) {
+        if( (<HTMLInputElement>document.getElementById("dni")).value.length > 6 ){
         this.form5.controls['nroTarjeta'].setValue((<HTMLInputElement>document.getElementById("tarjeta")).value);
         this.form5.controls['dniTitular'].setValue(Number.parseInt((<HTMLInputElement>document.getElementById("dni")).value));
         this.form5.controls['tipoPago'].setValue("Tarjeta");
         this.paso = 4;
+        }else{
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: 'Número de DNI incorrecto!',
+            showConfirmButton: false,
+            timer: 1500
+          }).finally(()=>{
+            (<HTMLInputElement>document.getElementById("dni")).value = "";
+            (<HTMLInputElement>document.getElementById("dni")).focus();
+          });
+        }
       } else {
         Swal.fire({
           position: 'top-end',
@@ -352,8 +364,11 @@ export class RealizarPedidoComponent implements OnInit {
           title: 'Número de tarjeta incorrecto!',
           showConfirmButton: false,
           timer: 1500
+        }).finally(()=>{
+          (<HTMLInputElement>document.getElementById("tarjeta")).value = "";
+          (<HTMLInputElement>document.getElementById("tarjeta")).focus();
         });
-        (<HTMLInputElement>document.getElementById("tarjeta")).value = "";
+        
       }
     } else {
       this.form5.controls['tipoPago'].setValue("Efectivo");

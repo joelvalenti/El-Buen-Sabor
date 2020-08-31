@@ -36,4 +36,7 @@ export class FacturaService extends BaseService<Factura> {
   getAllMenosFacturados():Observable<Factura[]>{
     return this.http.get<Factura[]>(this.miUrl + 'getFacturasMenosFacturados/');
   }
+  getAllEnLocal():Observable<Factura[]>{
+    return this.http.get<Factura[]>(this.miUrl + 'getAllEnLocal/');
+  }
 }
