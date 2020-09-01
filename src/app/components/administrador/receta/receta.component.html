@@ -37,7 +37,13 @@
                     (click)="verDetalles(element)">
                     <ng-container *ngFor="let i of element.detalle">
                         {{i.ingrediente.nombre}} {{i.cantidad}} <span
-                            *ngIf="i.ingrediente.unidadMedida!=null">{{i.unidadMedida.abreviatura}}</span>
+                            *ngIf="i.ingrediente.unidadMedida!=null"> 
+                            <span *ngIf="i.ingrediente.unidadMedida.abreviatura == 'g'"> kg </span>
+                            <span *ngIf="i.ingrediente.unidadMedida.abreviatura == 'kg'"> g </span>
+                            <span *ngIf="i.ingrediente.unidadMedida.abreviatura == 'l'"> ml </span>
+                            <span *ngIf="i.ingrediente.unidadMedida.abreviatura == 'ml'"> l </span>
+                            <span *ngIf="i.ingrediente.unidadMedida.abreviatura == 'u'"> u </span>
+                        </span>
                         <br>
                     </ng-container>
                 </td>

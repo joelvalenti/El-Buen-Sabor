@@ -39,6 +39,7 @@ export class ModalPlatoComponent implements OnInit {
   urlImage : Observable<string>;
   urlString : string;
   bandera : boolean = false;
+  activarSalida:boolean=false;
   @ViewChild('imagenPlato')  imagenPlato : ElementRef;
 
   public localData: any;
@@ -83,6 +84,20 @@ export class ModalPlatoComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  public crearPlato() {
+    let formcontenido=this.form.value;
+    this.form.controls['cantidadVendida'].setValue(0);
+    this.service3.post(this.form.value).subscribe((result) => {
+      this.service3.getOne(result.id).subscribe((resultado) => {
+      let plato:any=resultado;
+      this.dataDetalle = plato.detalle;
+      this.dataSource.data = [ ...plato.detalle];
+      this.localData = { ...plato };
+      this.getAll();
+      this.form.controls['id'].setValue(result.id);
+      });
+    });
+  }
 
 
   onSubmit(object: DetallePlato) {
@@ -90,7 +105,6 @@ export class ModalPlatoComponent implements OnInit {
     this.dialog.open(ModalIngredienteComponent, { data: {object:object,plato:this.localData}})
       .afterClosed().subscribe(result => {
         if (result.event === 'Añadir') {
-          console.log(result.data.id);
           this.agregar(result.data.object);
           Swal.fire({
             position: 'top-end',
@@ -113,15 +127,36 @@ export class ModalPlatoComponent implements OnInit {
   }
 
   public agregar(element: DetallePlato) {
+    console.log("Element");
+    console.log(element);
     this.service2.post(element).subscribe((result) => {
-      this.dataSource.data.push(result);
       this.form.controls['detalle'].setValue(element);
+      if(result.unidadMedida.abreviatura=="g"){
+        result.unidadMedida.abreviatura="kg";
+      }else if(result.unidadMedida.abreviatura=="kg"){
+        result.unidadMedida.abreviatura="g";
+      }else if(result.unidadMedida.abreviatura=="l"){
+        result.unidadMedida.abreviatura="ml";
+      }else if(result.unidadMedida.abreviatura=="ml"){
+        result.unidadMedida.abreviatura="l";
+      }
+      this.dataSource.data.push(result);
       this.notifyTable();
+
     });
   }
 
   public actualizar(element: DetallePlato) {
-    this.service2.put(element.id, element).subscribe(() => {
+    this.service2.put(element.id, element).subscribe((result) => {
+      if(result.unidadMedida.abreviatura=="g"){
+      result.unidadMedida.abreviatura="kg";
+      }else if(result.unidadMedida.abreviatura=="kg"){
+        result.unidadMedida.abreviatura="g";
+      }else if(result.unidadMedida.abreviatura=="l"){
+        result.unidadMedida.abreviatura="ml";
+      }else if(result.unidadMedida.abreviatura=="ml"){
+        result.unidadMedida.abreviatura="l";
+      }
       this.dataSource.data.filter((value) => {
         if (value.id === element.id) {
           const index = this.dataSource.data.indexOf(value);
@@ -131,7 +166,6 @@ export class ModalPlatoComponent implements OnInit {
       this.notifyTable();
     });
   }
-
 
   public eliminar(plato: DetallePlato): void {
     Swal.fire({
@@ -192,7 +226,7 @@ export class ModalPlatoComponent implements OnInit {
   }
 
   onAction() {
-    if(this.bandera || this.localData.imagen!==null){
+    if((this.bandera || this.localData.imagen!==null) && this.dataDetalle!=undefined){
       if(this.imagenPlato.nativeElement.value!=="" && this.imagenPlato.nativeElement.value!==null){
         this.form.controls['imagen'].setValue(this.imagenPlato.nativeElement.value);
       }

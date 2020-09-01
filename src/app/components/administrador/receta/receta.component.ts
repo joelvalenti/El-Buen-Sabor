@@ -58,11 +58,11 @@ export class RecetaComponent implements OnInit {
   }
 
 
-  onSubmit(object: DetallePlato) {
+  onSubmit(object: Plato) {
     this.dialog.open(ModalPlatoComponent, { width:'600px', data: object })
       .afterClosed().subscribe(result => {
         if (result.event === 'Añadir') {
-          this.agregar(result.data);
+          this.actualizar(result.data, true);
           Swal.fire({
             position: 'top-end',
             icon: 'success',
@@ -71,7 +71,7 @@ export class RecetaComponent implements OnInit {
             timer: 1500
           })
         } else if (result.event === 'Editar') {
-          this.actualizar(result.data); 
+          this.actualizar(result.data, false); 
           Swal.fire({
             position: 'top-end',
             icon: 'success',
@@ -83,22 +83,23 @@ export class RecetaComponent implements OnInit {
       });
   }
 
-  public agregar(element: Plato) {
-    element.cantidadVendida=0;
-    this.service.post(element).subscribe((result) => {
-      this.dataSource.data.push(result);
-      this.notifyTable();
-    });
-  }
 
-  public actualizar(element: Plato) {
-    this.service.put(element.id, element).subscribe(() => {
+
+  public actualizar(element: Plato, op:boolean) {
+    this.service.put(element.id, element).subscribe((data) => {
+      console.log(data.detalle);
+      if(op){
+        this.dataSource.data.push(data);
+        this.notifyTable();
+      }else{
+        
       this.dataSource.data.filter((value) => {
         if (value.id === element.id) {
           const index = this.dataSource.data.indexOf(value);
           this.dataSource.data[index] = element;
         }
       });
+      }
       this.notifyTable();
       this.getAll();
     });

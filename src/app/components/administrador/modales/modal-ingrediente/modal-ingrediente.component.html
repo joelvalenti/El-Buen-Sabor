@@ -17,7 +17,7 @@
             <mat-form-field class="form-group col-md-4">
                 <mat-select matInput formControlName="opcionesIngrediente" placeholder="Ingrediente">
                     <span *ngFor="let ingredientes of this.localDataInsumo">
-                        <mat-option (click)="cargarIngrediente(ingredientes,ingredientes.unidadMedida.abreviatura)"
+                        <mat-option (click)="cargarIngrediente(ingredientes)"
                             value="ingredientes.id">{{ingredientes.nombre}}</mat-option>
                     </span>
                 </mat-select>
@@ -25,7 +25,7 @@
 
             <mat-form-field class="form-group col-md-4">
                 <mat-label>Cantidad</mat-label>
-                <input matInput placeholder="Cantidad" formControlName="cantidad" type="number">
+                <input matInput placeholder="Cantidad" formControlName="cantidad">
                 <mat-error *ngIf="errorHandling('cantidad', 'required')">
                     La cantidad es obligatoria.
                 </mat-error>

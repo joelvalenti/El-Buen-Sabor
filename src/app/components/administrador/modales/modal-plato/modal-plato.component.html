@@ -45,7 +45,7 @@
       </mat-form-field>
 
     </div>
-    
+
     <div class="form-row">
       <mat-form-field class="form-group col-md-6">
         <mat-label>Precio de Venta</mat-label>
@@ -73,6 +73,14 @@
         <input #imagenPlato type="text" [value]="urlImage | async" id="urlImagen" hidden>
       </div>
     </div>
+
+    <div *ngIf="dataDetalle==undefined" style="text-align: center;">
+      <br>
+      <button class="myButton" (click)="crearPlato()">Crear Plato</button>
+      <br>
+      <br>
+    </div>
+
     <span *ngIf="dataDetalle!=undefined">
       <mat-sidenav-container>
         <mat-sidenav-content>
@@ -108,7 +116,12 @@
             <ng-container matColumnDef="unidadMedida">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Unidad Medida </th>
               <td mat-cell *matCellDef="let element" class="pointer" (click)="verDetalles(element)">
-                {{element.unidadMedida.abreviatura}} </td>
+                <span *ngIf="element.unidadMedida.abreviatura=='g'"> kg </span>
+                <span *ngIf="element.unidadMedida.abreviatura=='kg'"> g </span>
+                <span *ngIf="element.unidadMedida.abreviatura=='l'"> ml </span>
+                <span *ngIf="element.unidadMedida.abreviatura=='ml'"> l </span>
+                <span *ngIf="element.unidadMedida.abreviatura=='u'"> u </span>
+              </td>
             </ng-container>
 
 

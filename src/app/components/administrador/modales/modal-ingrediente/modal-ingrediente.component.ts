@@ -98,28 +98,39 @@ export class ModalIngredienteComponent implements OnInit {
   };
 
   cargarIngrediente(ingrediente: Insumo): void {
+    console.log(ingrediente);
+    console.log("Terminado");
     this.form.controls['ingrediente'].setValue(ingrediente);
     if (
-      ingrediente.unidadMedida.abreviatura === 'g' ||
+      ingrediente.unidadMedida.abreviatura === 'g'
+    ) {
+      this.localDataUnidadMedida = [
+        { abreviatura: 'kg', eliminado: 'false', id: 2, nombre: 'Kilogramos' }
+      ];
+    } else if (
       ingrediente.unidadMedida.abreviatura === 'kg'
     ) {
       this.localDataUnidadMedida = [
-        { abreviatura: 'g', eliminado: 'false', id: 1, nombre: 'Gramos' },
-        { abreviatura: 'kg', eliminado: 'false', id: 2, nombre: 'Kilogramos' },
+        { abreviatura: 'g', eliminado: 'false', id: 1, nombre: 'Gramos' }
       ];
     } else if (
-      ingrediente.unidadMedida.abreviatura === 'ml' ||
+      ingrediente.unidadMedida.abreviatura === 'ml' 
+    ) {
+      this.localDataUnidadMedida = [
+        { abreviatura: 'l', eliminado: 'false', id: 4, nombre: 'Litros' }
+      ];
+    } else if (
       ingrediente.unidadMedida.abreviatura === 'l'
     ) {
       this.localDataUnidadMedida = [
-        { abreviatura: 'ml', eliminado: 'false', id: 3, nombre: 'Mililitros' },
-        { abreviatura: 'l', eliminado: 'false', id: 4, nombre: 'Litros' },
+        { abreviatura: 'ml', eliminado: 'false', id: 3, nombre: 'Mililitros' }
       ];
     } else if (ingrediente.unidadMedida.abreviatura === 'u') {
       this.localDataUnidadMedida = [
-        { abreviatura: 'u', eliminado: 'false', id: 5, nombre: 'Unidades' },
+        { abreviatura: 'u', eliminado: 'false', id: 5, nombre: 'Unidades' }
       ];
     }
+    
     this.agregarUnidadMedidaOpciones(this.localDataUnidadMedida);
   }
   agregarUnidadMedida(um: UnidadMedida) {
