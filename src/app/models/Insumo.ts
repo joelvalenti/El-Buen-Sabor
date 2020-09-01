@@ -1,3 +1,4 @@
+import { UnidadMedida } from './UnidadMedida';
 export interface Insumo {
   id: number;
   precioCompra: number;
@@ -12,9 +13,6 @@ export interface Insumo {
   categoria: {
     id: number;
   };
-  unidadMedida: {
-    id: number;
-    nombre?: string;
-  };
+  unidadMedida: UnidadMedida;
   eliminado: boolean;
 }

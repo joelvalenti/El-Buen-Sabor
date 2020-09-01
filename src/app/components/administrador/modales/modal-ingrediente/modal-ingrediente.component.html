@@ -25,7 +25,7 @@
 
             <mat-form-field class="form-group col-md-4">
                 <mat-label>Cantidad</mat-label>
-                <input matInput placeholder="Cantidad" formControlName="cantidad">
+                <input matInput placeholder="Cantidad" formControlName="cantidad" type="number">
                 <mat-error *ngIf="errorHandling('cantidad', 'required')">
                     La cantidad es obligatoria.
                 </mat-error>
