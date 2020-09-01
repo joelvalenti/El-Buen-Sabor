@@ -68,6 +68,14 @@ export class FaltanteStockComponent implements OnInit {
       })
   }
 
+  todasCategorias() {
+    this.service.getStocksSinCategoria().subscribe(response => {
+      this.dataSource.data = response;
+    },
+      error => {
+        alert("Error en getAll" + error);
+      });
+  }
 
   onSubmit(object: Insumo) {
     if(!isNaN(parseFloat((<HTMLInputElement>document.getElementById(object.id.toString())).value.toString()))){

@@ -6,7 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { CategoriaInsumoService } from '../../../services/allServices/categoriaInsumo.service'
-import Swal from'sweetalert2';
+import Swal from 'sweetalert2';
 import { InsumoService } from 'src/app/services/allServices/insumo.service';
 @Component({
   selector: 'app-insumo',
@@ -15,14 +15,14 @@ import { InsumoService } from 'src/app/services/allServices/insumo.service';
 })
 export class InsumoComponent implements OnInit {
 
-  public displayedColumns: string[] = ['id','nombre', 'descripcion','precioCosto', 'precioVenta','stockMinimo','stockActual','stockMaximo', 'categoria', 'unidadMedida' ];
+  public displayedColumns: string[] = ['id', 'nombre', 'descripcion', 'precioCosto', 'precioVenta', 'stockMinimo', 'stockActual', 'stockMaximo', 'categoria', 'unidadMedida'];
   public dataSource: MatTableDataSource<Insumo> = new MatTableDataSource();
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   public sidenavOpened: boolean = false;
-  public insumoSeleccionado : Insumo = null;
-  public categorias:any;
-  public id:number=0;
+  public insumoSeleccionado: Insumo = null;
+  public categorias: any;
+  public id: number = 0;
 
 
   constructor(public dialog: MatDialog, public service: InsumoService, public service2: CategoriaInsumoService) { }
@@ -31,12 +31,12 @@ export class InsumoComponent implements OnInit {
   ngOnInit(): void {
     this.getCategoria()
     this.traducirPaginator();
-    this.dataSource.sort = this.sort; 
+    this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
 
-  traducirPaginator(){
-    this.paginator._intl.itemsPerPageLabel ="Registros por Página";
+  traducirPaginator() {
+    this.paginator._intl.itemsPerPageLabel = "Registros por Página";
     this.paginator._intl.nextPageLabel = "Siguiente"
     this.paginator._intl.previousPageLabel = "Anterior";
     this.paginator._intl.firstPageLabel = "Primera Página";
@@ -47,30 +47,38 @@ export class InsumoComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-async getCategoria(){
-   await this.service2.getAll().subscribe(response => {
-    this.categorias = response;
-    console.log(response[0].id);
-    this.getInsumoporCategoria(response[0].id);
-},
-  error => {
-    alert("Error en getAll" + error);
-  })
-}
-
-  getInsumoporCategoria(id:number) {
-    this.service.buscarporCategoria(id).subscribe(response => {
-        this.dataSource.data = response;
-        console.log(this.dataSource.data);
+  async getCategoria() {
+    await this.service2.getAll().subscribe(response => {
+      this.categorias = response;
+      console.log(response[0].id);
+      this.getInsumoporCategoria(response[0].id);
     },
       error => {
         alert("Error en getAll" + error);
       })
   }
 
+  getInsumoporCategoria(id: number) {
+    this.service.buscarporCategoria(id).subscribe(response => {
+      this.dataSource.data = response;
+      console.log(this.dataSource.data);
+    },
+      error => {
+        alert("Error en getAll" + error);
+      })
+  }
+
+  todasCategorias() {
+    this.service.getAll().subscribe(response => {
+      this.dataSource.data = response;
+    },
+      error => {
+        alert("Error en getAll" + error);
+      });
+  }
 
   onSubmit(object: Insumo) {
-    this.dialog.open(ModalInsumoComponent, { width:'600px', data: object })
+    this.dialog.open(ModalInsumoComponent, { width: '600px', data: object })
       .afterClosed().subscribe(result => {
         if (result.event === 'Añadir') {
           this.agregar(result.data.object);
@@ -82,7 +90,7 @@ async getCategoria(){
             timer: 1500
           })
         } else if (result.event === 'Editar') {
-          this.actualizar(result.data.object); 
+          this.actualizar(result.data.object);
           Swal.fire({
             position: 'top-end',
             icon: 'success',
@@ -153,14 +161,14 @@ async getCategoria(){
     this.dataSource.data = [...this.dataSource.data];
   }
 
-  public verDetalles(elemento : Insumo) {
+  public verDetalles(elemento: Insumo) {
     this.insumoSeleccionado = elemento;
     this.sidenavOpened = true;
   }
 
-  cargarCategoria(id:number):void{
+  cargarCategoria(id: number): void {
     this.getInsumoporCategoria(id);
-    this.id=id;
+    this.id = id;
   }
 
 }

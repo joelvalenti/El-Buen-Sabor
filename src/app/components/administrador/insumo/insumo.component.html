@@ -4,6 +4,8 @@
 
         <div class="container-btn-new">
             <mat-select matInput placeholder="Categoria" class="form-group col-md-2">
+                <mat-option (click)="todasCategorias()" value="todas">Todas las categorias
+                </mat-option>
                 <span *ngFor="let categoria of this.categorias">
                     <mat-option (click)="cargarCategoria(categoria.id)" value="categoria.id">{{categoria.nombre}}
                     </mat-option>
