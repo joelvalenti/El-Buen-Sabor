@@ -18,3 +18,4 @@
 * Proyecto de delivery realizado en Spring Boot 5 y Angular 9. 
 * Contiene una rama backend y una rama frontend con sus respectivos archivos.
 * 100% responsive y reactivo.
+* 31-08-2020 - 01/09/2020 días históricos

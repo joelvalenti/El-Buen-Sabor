@@ -171,7 +171,7 @@ export class CarritoComponent implements OnInit {
 
   getTotalFinal(): number {
     let totalNeto = this.getTotalNeto();
-    let totalFinal = totalNeto - totalNeto * 0.1;
+    let totalFinal = totalNeto - (totalNeto * 0.1);
     if (this.flagRadioDireccion) {
       return totalNeto;
     } else {
