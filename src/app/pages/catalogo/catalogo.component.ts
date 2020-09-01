@@ -226,6 +226,7 @@ export class CatalogoComponent implements OnInit {
     const arreglofinal = this.carritoFinal.concat(this.carritoBebidas);
     arreglofinal.forEach(element => {
       element.pedido = this.ultimopedido;
+      element.fecha = new Date (Date.now());
       this.detalleService.post(element).subscribe(
         () => { },
         err => {
