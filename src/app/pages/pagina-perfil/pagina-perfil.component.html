@@ -84,7 +84,7 @@
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th scope="col">Nro. Domicilio</th>
+                        <th scope="col" hidden>Nro. Domicilio</th>
                         <th scope="col">Calle</th>
                         <th scope="col">Número</th>
                         <th scope="col">Piso</th>
@@ -95,7 +95,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of domicilios">
-                        <th scope="row">{{item.id}}</th>
+                        <th scope="row" hidden>{{item.id}}</th>
                         <td>{{item.calle}}</td>
                         <td>{{item.numero}}</td>
                         <td>{{item.piso}}</td>
