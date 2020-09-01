@@ -50,7 +50,6 @@ export class ModalloginComponent implements OnInit {
       //comenzamos a estblecer el rol, buscando al usuario
       this.servicio.getEmail(formLogin.value.email).subscribe( res =>{
         this.usuarioLogeado = res;
-        console.log('Se emite el rol', this.usuarioLogeado.rol);
        this.rol.emit(this.usuarioLogeado.rol); //esta linea emite el Rol de usuario 
        window.location.reload();
       }, err => {
@@ -59,7 +58,6 @@ export class ModalloginComponent implements OnInit {
       this.errormsg = '';
     }).catch( err => {
      this.errormsg =  err.message; 
-     console.log('err',err.message); 
     });
   }
 
@@ -69,7 +67,6 @@ export class ModalloginComponent implements OnInit {
       this.authService.isAuth().subscribe(res=>{
         const correo = res.email;
         this.servicio.getEmail(correo).subscribe( res=>{
-          console.log('Usted ya esta registrado cumpa', res);
           this.rol.emit(res.rol);
           window.location.reload();
         }, err=>{
@@ -84,22 +81,18 @@ export class ModalloginComponent implements OnInit {
             this.nuevoUsuario.esCliente = true;
             // this.nuevoUsuario.telefono = Number.parseInt(res.phoneNumber);
            //post user
-            console.log('nuevo usuario que vamos a postear: ', this.nuevoUsuario);
             this.servicio.post(this.nuevoUsuario).subscribe(res =>{
-            console.log('Succesfully posted', res); 
             this.rol.emit(this.usuarioLogeado.rol);
             window.location.reload();
             }, 
             err=>{
               this.errormsg =  err.message;
-              console.log('Something went wrong.'); 
             });
         });
       });
       this.btnClose.nativeElement.click();
     }).catch(err => {
       this.errormsg =  err.message;
-      console.log('err',err.message)
     });
     
    this.nuevoUsuario = {};

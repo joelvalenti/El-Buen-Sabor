@@ -87,14 +87,12 @@ export class RealizarPedidoComponent implements OnInit {
   getCocineros() {
     this.service5.getCocineros().subscribe(res => {
       this.cocineros = res;
-      console.log("Cocineros: ", res)
     });
   }
 
   getPedidosEnPreparacion() {
     this.service3.getPedidoEstado(this.usuario.id, 2).subscribe(res => {
       this.pedidosEnPreparacion = res;
-      console.log('Pedidos en preparacion...', this.pedidosEnPreparacion);
       res.forEach(element => {
         this.getDetallesXPedidoEnPreparacion(element.id);
       });
@@ -114,11 +112,9 @@ export class RealizarPedidoComponent implements OnInit {
     this.service7.buscarPorPedido(id).subscribe(res => {
       if (this.primeraVuelta === false) {
         this.detallesEnPreparacion = res;
-        console.log('Detalles en Preparacion PV: ', this.detallesEnPreparacion);
         this.primeraVuelta = true;
       } else {
         this.detallesEnPreparacion = this.detallesEnPreparacion.concat(res);
-        console.log('Detalles en Preparacion SV: ', this.detallesEnPreparacion);
       }
     },
       () => {
@@ -162,7 +158,6 @@ export class RealizarPedidoComponent implements OnInit {
     if (this.retirarLocal === true) {
       this.tiempoPedido += 10;
     }
-    console.log('Tiempo de preparacion final: ', this.tiempoPedido);
 
     this.form3.controls['tiempoPreparacion'].setValue(this.tiempoPedido);
 
@@ -222,13 +217,11 @@ export class RealizarPedidoComponent implements OnInit {
   }
 
   public crearPedido(element: Pedido) {
-    console.log(element);
     if (element != null && element != undefined) {
       this.service3.post(element).subscribe((result) => {
         this.localData = { ...result };
         this.pedidoSelec = result;
         this.form3.controls['id'].setValue(result.id);
-        console.log(result.id);
       });
     }
   }
@@ -378,7 +371,6 @@ export class RealizarPedidoComponent implements OnInit {
   }
 
   public inputValidator(event: any) {
-    //console.log(event.target.value);
     const pattern = /^[0-9]*$/;
     //let inputChar = String.fromCharCode(event.charCode)
     if (!pattern.test(event.target.value)) {
@@ -470,9 +462,7 @@ export class RealizarPedidoComponent implements OnInit {
   }
 
   public buscarPlatos(id: number): void {
-    console.log(id);
     this.service2.buscarPlatoPorCategoria(id).subscribe(data => {
-      console.log("Plato: " + data)
       this.localDataPlatos = data;
       this.localDataInsumos = null;
     });
@@ -480,9 +470,7 @@ export class RealizarPedidoComponent implements OnInit {
   }
 
   public buscarInsumos(id: number): void {
-    console.log(id);
     this.service8.buscarPorCategoriaNoInsumo(id).subscribe(data => {
-      console.log("Insumo: " + data)
       this.localDataInsumos = data;
       this.localDataPlatos = null;
     });
@@ -519,11 +507,9 @@ export class RealizarPedidoComponent implements OnInit {
     this.form4.controls['pedido'].setValue(detalle.pedido);
     this.form4.controls['insumo'].setValue(detalle.insumo);
     this.form4.controls['eliminado'].setValue(eliminado);
-    console.log(this.form4.value)
     this.service7.put(detalle.id, this.form4.value).subscribe((data) => {
       this.service7.getOne(detalle.id).subscribe((data2) => {
         this.calcularTiempo(data2);
-        console.log("CALCULO TIEMPO");
       });
       this.getAllDetalles();
       this.llave = true;
