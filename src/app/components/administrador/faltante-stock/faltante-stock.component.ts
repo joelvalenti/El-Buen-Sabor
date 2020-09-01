@@ -17,7 +17,7 @@ import { InsumoService } from 'src/app/services/allServices/insumo.service';
 })
 export class FaltanteStockComponent implements OnInit {
 
-  public displayedColumns: string[] = ['id', 'nombre', 'stockMinimo', 'stockActual', 'stockMaximo', 'unidadMedida', 'pedido'];
+  public displayedColumns: string[] = ['nombre', 'stockMinimo', 'stockActual', 'stockMaximo', 'unidadMedida', 'pedido'];
   public dataSource: MatTableDataSource<Insumo> = new MatTableDataSource();
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
