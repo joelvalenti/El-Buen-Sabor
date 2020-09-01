@@ -16,7 +16,7 @@ export class RankingPlatosComponent implements OnInit {
 
 
   public genExcel:boolean=false;
-  public displayedColumns: string[] = ['id','cantidadVendida', 'nombre' ];
+  public displayedColumns: string[] = ['cantidadVendida', 'nombre' ];
   public dataSource: MatTableDataSource<any> = new MatTableDataSource();
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;

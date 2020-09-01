@@ -16,7 +16,7 @@ import { DetallePlato } from 'src/app/models/DetallePlato';
 })
 export class RecetaComponent implements OnInit {
 
-  public displayedColumns: string[] = ['nombre','categoria','ingredientes','precioCosto' ];
+  public displayedColumns: string[] = ['nombre','categoria','ingredientes','precioCosto','precioVenta' ];
   public dataSource: MatTableDataSource<Plato> = new MatTableDataSource();
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -84,6 +84,7 @@ export class RecetaComponent implements OnInit {
   }
 
   public agregar(element: Plato) {
+    element.cantidadVendida=0;
     this.service.post(element).subscribe((result) => {
       this.dataSource.data.push(result);
       this.notifyTable();

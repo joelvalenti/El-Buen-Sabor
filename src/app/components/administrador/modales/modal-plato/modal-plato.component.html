@@ -30,8 +30,6 @@
         </mat-error>
       </mat-form-field>
 
-      <input hidden formControlName="precioVenta">
-      <input hidden formControlName="tiempoPreparacion">
       <input hidden formControlName="descripcion">
       <input hidden formControlName="imagen">
       <input hidden formControlName="cantidadVendida">
@@ -40,13 +38,32 @@
 
       <mat-form-field class="form-group col-md-6">
         <mat-label>Precio Costo</mat-label>
-        <input matInput placeholder="Precio Costo" formControlName="precioCosto">
+        <input matInput type="number" placeholder="Precio Costo" formControlName="precioCosto">
         <mat-error *ngIf="errorHandling('precioCosto', 'required')">
           El precio costo es obligatorio.
         </mat-error>
       </mat-form-field>
 
     </div>
+    
+    <div class="form-row">
+      <mat-form-field class="form-group col-md-6">
+        <mat-label>Precio de Venta</mat-label>
+        <input matInput type="number" placeholder="Precio de Venta" formControlName="precioVenta">
+        <mat-error *ngIf="errorHandling('precioVenta', 'required')">
+          El precio de venta es obligatorio.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="form-group col-md-6">
+        <mat-label>Tiempo de preparacion</mat-label>
+        <input matInput type="number" placeholder="Tiempo de Preparación" formControlName="tiempoPreparacion">
+        <mat-error *ngIf="errorHandling('tiempoPreparacion', 'required')">
+          El tiempo de preparación es obligatorio.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
     <div class="form-row">
       <div class="form-group">
         <h5><em>Selecciona foto ilustrativa del plato</em></h5>

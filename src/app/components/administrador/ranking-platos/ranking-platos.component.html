@@ -20,18 +20,11 @@
         
             <table mat-table matTableExporter [dataSource]="dataSource" #exporter="matTableExporter" matSort class="mat-elevation-z8">
 
-                <!-- Id Column -->
-                <ng-container matColumnDef="id">
-                    <th mat-header-cell mat-sort-header *matHeaderCellDef> Id </th>
-                    <td mat-cell *matCellDef="let element" class="pointer" >
-                        {{element.id}} </td>
-                </ng-container>
-
                 <!-- Cantidad Vendida Column -->
                 <ng-container matColumnDef="cantidadVendida">
                     <th mat-header-cell mat-sort-header *matHeaderCellDef> Cantidad Vendida </th>
                     <td mat-cell *matCellDef="let element" class="pointer" >
-                        {{element.cantidadVendida}} </td>
+                       <span *ngIf="element.cantidadVendida!=0">{{element.cantidadVendida}} </span></td>
                 </ng-container>
 
                 <!-- Nombre Column -->

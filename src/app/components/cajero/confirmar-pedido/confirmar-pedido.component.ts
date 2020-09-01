@@ -38,7 +38,7 @@ export class ConfirmarPedidoComponent implements OnInit {
   }
 
   cargarFacturas(): void {
-    this.facturaService.getAllEnLocal().subscribe((facturas) => {
+    this.facturaService.getAll().subscribe((facturas) => {
       this.facturas=facturas;
       facturas.forEach((fact) => {
         if (this.facturas.length === 0) {

@@ -21,7 +21,7 @@ export class PedidosAgrupadosPorClienteComponent implements OnInit {
   public genExcel: boolean = false;
   public cargarUsuario: number;
   public usuario: String;
-  public displayedColumns: string[] = ['usuario', 'numero', 'detallePedido', 'fecha', 'envioDelivery', 'domicilio', 'estado'];
+  public displayedColumns: string[] = ['usuario', 'detallePedido', 'fecha', 'envioDelivery', 'domicilio', 'estado'];
   public dataSource: MatTableDataSource<Pedido> = new MatTableDataSource();
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
